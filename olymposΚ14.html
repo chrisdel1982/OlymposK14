@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Όλυμπος Δενδροποτάμου - K14 Δυτικός</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a472a;
+            --secondary-color: #2d5a3d;
+            --accent-color: #ffd700;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --bg-light: #f4f4f4;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-light);
+            box-shadow: 0 4px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .club-info {
+            text-align: center;
+        }
+
+        .club-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .club-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 80%;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem 0.8rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        th:first-child {
+            text-align: center;
+        }
+
+        th:nth-child(2) {
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        td {
+            padding: 0.9rem 0.8rem;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        td:first-child {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        td:nth-child(2) {
+            text-align: left;
+            padding-left: 1rem;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        tr:nth-child(even):hover {
+            background: #f5f5f5;
+        }
+
+        .my-team {
+            background: rgba(255, 215, 0, 0.15) !important;
+            font-weight: 600;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .my-team:hover {
+            background: rgba(255, 215, 0, 0.2) !important;
+        }
+
+        .team-position {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .points {
+            font-weight: bold;
+            font-size: 1.15rem;
+            color: var(--primary-color);
+        }
+
+        /* Match Display - EPS Style */
+        .match {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.2rem;
+            background: #f9f9f9;
+            margin: 0.8rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .match:hover {
+            background: #f0f0f0;
+            transform: translateX(3px);
+        }
+
+        .match-date {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+            grid-column: 1 / -1;
+        }
+
+        .team-left {
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .team-right {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .score {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .vs {
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .repo-text {
+            color: #999;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .btn-success {
+            background: #2e7d32;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .btn-warning {
+            background: #f57c00;
+        }
+
+        .btn-warning:hover {
+            background: #e65100;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            z-index: 999;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            margin: auto;
+        }
+
+        .modal-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .match-input-row {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .score-inputs {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-input {
+            width: 60px !important;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .notice {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .notice strong {
+            color: #1976D2;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            header nav,
+            .admin-btn,
+            .action-buttons,
+            .notice,
+            #results,
+            #fixtures {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .card {
+                box-shadow: none;
+                padding: 1rem;
+                page-break-inside: avoid;
+            }
+
+            .card-header {
+                border-bottom: 2px solid #000;
+            }
+
+            table {
+                min-width: 100%;
+            }
+
+            th {
+                background: #1a472a !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .my-team {
+                background: #fff9c4 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            tr:nth-child(even) {
+                background: #f5f5f5 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .club-info h1 {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li a {
+                padding: 0.8rem 1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 0.6rem 0.4rem;
+            }
+
+            .match {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .team-left,
+            .team-right {
+                text-align: center;
+            }
+
+            .admin-btn {
+                bottom: 10px;
+                right: 10px;
+                padding: 0.8rem 1.2rem;
+            }
+
+            .match-input-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <img src="data:image/png;base64,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" alt="Όλυμπος Δενδροποτάμου">
+            </div>
+            <div class="club-info">
+                <h1>ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h1>
+                <p>Κ14 - ΔΥΤΙΚΟΣ | ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ | Σεζόν 2024-25</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#standings" class="nav-link active">Βαθμολογία</a></li>
+                <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
+                <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="standings" class="page active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Βαθμολογία Κ14 - ΔΥΤΙΚΟΣ</h2>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning" onclick="printStandings()">🖨️ Εκτύπωση</button>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table id="standingsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Θέση</th>
+                                <th style="text-align: left;">Ομάδα</th>
+                                <th style="width: 50px;">Αγ</th>
+                                <th style="width: 50px;">Ν</th>
+                                <th style="width: 50px;">Ι</th>
+                                <th style="width: 50px;">Η</th>
+                                <th style="width: 70px;">ΓΥ-ΓΚ</th>
+                                <th style="width: 60px;">Β</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standingsBody"></tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <strong>Υπόμνημα:</strong> Αγ=Αγώνες, Ν=Νίκες, Ι=Ισοπαλίες, Η=Ήττες, ΓΥ=Γκολ Υπέρ, ΓΚ=Γκολ Κατά, Β=Βαθμοί
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="page">
+            <div class="card">
+                <h2>⚽ Αποτελέσματα Αγώνων</h2>
+                
+                <div class="notice">
+                    <strong>ℹ️ Πληροφορία:</strong> Τα αποτελέσματα εισάγονται χειροκίνητα από το Admin Panel. Η βαθμολογία ενημερώνεται αυτόματα!
+                </div>
+
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+
+        <div id="fixtures" class="page">
+            <div class="card">
+                <h2>📅 Πρόγραμμα Αγώνων</h2>
+                <div id="fixturesContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <button class="admin-btn" onclick="openAdminPanel()">🔧 Admin</button>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2>🔐 Admin Panel</h2>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Κωδικός Admin:</label>
+                    <input type="password" id="adminPassword" placeholder="Εισάγετε κωδικό">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn" onclick="checkPassword()">Είσοδος</button>
+                    <button class="btn btn-secondary" onclick="closeAdminPanel()">Ακύρωση</button>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <strong>Προεπιλεγμένος κωδικός:</strong> olympos2024
+                </p>
+            </div>
+
+            <div id="adminContent" style="display: none;">
+                <div class="form-group">
+                    <label>📦 Διαχείριση Δεδομένων:</label>
+                    <div class="action-buttons">
+                        <button class="btn btn-success" onclick="exportData()">💾 Export Δεδομένων</button>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+                            <label for="importFile" class="file-input-label">📥 Import Δεδομένων</label>
+                        </div>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">
+                        Κάνε backup των δεδομένων σου τακτικά!
+                    </p>
+                </div>
+
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #ddd;">
+
+                <div class="form-group">
+                    <label>Επέλεξε Αγωνιστική:</label>
+                    <select id="roundSelect" onchange="loadMatchesForRound()">
+                        <option value="">-- Επέλεξε --</option>
+                    </select>
+                </div>
+
+                <div id="matchInputs"></div>
+
+                <div class="modal-buttons">
+                    <button class="btn" onclick="saveResults()">💾 Αποθήκευση Αποτελεσμάτων</button>
+                    <button class="btn btn-secondary" onclick="closeAdminPanel()">Κλείσιμο</button>
+                    <button class="btn btn-danger" onclick="resetAllData()">⚠️ Επαναφορά Όλων</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
+        const ADMIN_PASSWORD = 'olympos';
+
+        const TEAMS = [
+            'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ',
+            'ΜΑΚΕΔΟΝΙΚΟΣ (4)',
+            'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ',
+            'ΑΜΣ ΝΙΚΟΠΟΛΗ',
+            'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ',
+            'ΑΕ ΦΙΛΥΡΟΥ',
+            'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ',
+            'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)',
+            'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ',
+            'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ',
+            'ΑΟ ΜΕΣΗΜΒΡΙΑΣ'
+        ];
+
+        const FIXTURES = [
+            {
+                round: 1,
+                matches: [
+                    { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: 2, awayScore: 8 },
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: 5, awayScore: 1 },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: 0, awayScore: 5 },
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: null, homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: 1, awayScore: 5 },
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: 2, awayScore: 2 }
+                ]
+            },
+            {
+                round: 2,
+                matches: [
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 3,
+                matches: [
+                    { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: null, homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 4,
+                matches: [
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 5,
+                matches: [
+                    { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 6,
+                matches: [
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: null, homeScore: null, awayScore: null },
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 7,
+                matches: [
+                    { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 8,
+                matches: [
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: null, homeScore: null, awayScore: null },
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 9,
+                matches: [
+                    { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: null, homeScore: null, awayScore: null },
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 10,
+                matches: [
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
+                    { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 11,
+                matches: [
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
+                    { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: null, homeScore: null, awayScore: null },
+                    { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
+                    { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null }
+                ]
+            },
+            {
+                round: 12,
+                matches: [
+                    { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
+                    { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
+                    { home: null, away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                    { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null }
+                ]
+            }
+        ];
+
+        function loadData() {
+            const saved = localStorage.getItem('footballData');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return { fixtures: JSON.parse(JSON.stringify(FIXTURES)) };
+        }
+
+        function saveData(data) {
+            localStorage.setItem('footballData', JSON.stringify(data));
+        }
+
+        let data = loadData();
+
+        function exportData() {
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `olympos-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Τα δεδομένα εξήχθησαν επιτυχώς!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.fixtures || !Array.isArray(importedData.fixtures)) {
+                        throw new Error('Μη έγκυρη δομή δεδομένων');
+                    }
+
+                    if (confirm('⚠️ ΠΡΟΣΟΧΗ!\n\nΤα τρέχοντα δεδομένα θα αντικατασταθούν.\nΕίσαι σίγουρος;')) {
+                        data = importedData;
+                        saveData(data);
+                        displayStandings();
+                        displayResults();
+                        displayFixtures();
+                        alert('✅ Τα δεδομένα εισήχθησαν επιτυχώς!');
+                        closeAdminPanel();
+                    }
+                } catch (error) {
+                    alert('❌ Σφάλμα: Μη έγκυρο αρχείο δεδομένων!');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function printStandings() {
+            window.print();
+        }
+
+        function calculateStandings() {
+            const standings = {};
+            
+            TEAMS.forEach(team => {
+                standings[team] = {
+                    team: team,
+                    played: 0,
+                    won: 0,
+                    drawn: 0,
+                    lost: 0,
+                    gf: 0,
+                    ga: 0,
+                    gd: 0,
+                    points: 0
+                };
+            });
+
+            data.fixtures.forEach(round => {
+                round.matches.forEach(match => {
+                    if (match.home && match.away && match.homeScore !== null && match.awayScore !== null) {
+                        const home = standings[match.home];
+                        const away = standings[match.away];
+
+                        home.played++;
+                        away.played++;
+
+                        home.gf += match.homeScore;
+                        home.ga += match.awayScore;
+                        away.gf += match.awayScore;
+                        away.ga += match.homeScore;
+
+                        if (match.homeScore > match.awayScore) {
+                            home.won++;
+                            home.points += 3;
+                            away.lost++;
+                        } else if (match.homeScore < match.awayScore) {
+                            away.won++;
+                            away.points += 3;
+                            home.lost++;
+                        } else {
+                            home.drawn++;
+                            away.drawn++;
+                            home.points++;
+                            away.points++;
+                        }
+                    }
+                });
+            });
+
+            Object.values(standings).forEach(team => {
+                team.gd = team.gf - team.ga;
+            });
+
+            const sorted = Object.values(standings).sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if (b.gd !== a.gd) return b.gd - a.gd;
+                return b.gf - a.gf;
+            });
+
+            return sorted;
+        }
+
+        function displayStandings() {
+            const standings = calculateStandings();
+            const tbody = document.getElementById('standingsBody');
+            tbody.innerHTML = '';
+
+            standings.forEach((team, index) => {
+                const row = document.createElement('tr');
+                if (team.team === MY_TEAM) {
+                    row.classList.add('my-team');
+                }
+
+                row.innerHTML = `
+                    <td class="team-position">${index + 1}</td>
+                    <td><strong>${team.team}</strong></td>
+                    <td>${team.played}</td>
+                    <td>${team.won}</td>
+                    <td>${team.drawn}</td>
+                    <td>${team.lost}</td>
+                    <td>${team.gf}-${team.ga}</td>
+                    <td class="points">${team.points}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            const results = [];
+            data.fixtures.forEach(round => {
+                round.matches.forEach(match => {
+                    if (match.home && match.away && match.homeScore !== null && match.awayScore !== null) {
+                        results.push({ ...match, round: round.round });
+                    }
+                });
+            });
+
+            if (results.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>⚽ Δεν υπάρχουν αποτελέσματα ακόμα.</p></div>';
+                return;
+            }
+
+            results.reverse().forEach(match => {
+                const div = document.createElement('div');
+                div.className = 'match';
+                
+                const isMyTeam = match.home === MY_TEAM || match.away === MY_TEAM;
+                if (isMyTeam) {
+                    div.style.borderLeft = '4px solid var(--accent-color)';
+                }
+
+                div.innerHTML = `
+                    <div class="match-date">Αγωνιστική ${match.round}</div>
+                    <div class="team-left">${match.home}</div>
+                    <div class="score">${match.homeScore} - ${match.awayScore}</div>
+                    <div class="team-right">${match.away}</div>
+                `;
+
+                container.appendChild(div);
+            });
+        }
+
+        function displayFixtures() {
+            const container = document.getElementById('fixturesContainer');
+            container.innerHTML = '';
+
+            const fixtures = [];
+            data.fixtures.forEach(round => {
+                round.matches.forEach(match => {
+                    if (match.homeScore === null) {
+                        fixtures.push({ ...match, round: round.round });
+                    }
+                });
+            });
+
+            if (fixtures.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>🏁 Όλοι οι αγώνες έχουν ολοκληρωθεί!</p></div>';
+                return;
+            }
+
+            let currentRound = null;
+            fixtures.forEach(match => {
+                if (currentRound !== match.round) {
+                    currentRound = match.round;
+                    const header = document.createElement('h3');
+                    header.style.marginTop = '2rem';
+                    header.style.color = 'var(--primary-color)';
+                    header.textContent = `Αγωνιστική ${match.round}`;
+                    container.appendChild(header);
+                }
+
+                const div = document.createElement('div');
+                div.className = 'match';
+                
+                const isMyTeam = (match.home === MY_TEAM || match.away === MY_TEAM);
+                if (isMyTeam) {
+                    div.style.borderLeft = '4px solid var(--accent-color)';
+                }
+
+                const homeTeam = match.home || '<span class="repo-text">ΡΕΠΟ</span>';
+                const awayTeam = match.away || '<span class="repo-text">ΡΕΠΟ</span>';
+
+                div.innerHTML = `
+                    <div class="team-left">${homeTeam}</div>
+                    <div class="score vs">VS</div>
+                    <div class="team-right">${awayTeam}</div>
+                `;
+
+                container.appendChild(div);
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                
+                this.classList.add('active');
+                const targetPage = this.getAttribute('href').substring(1);
+                document.getElementById(targetPage).classList.add('active');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('active');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('adminContent').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadRoundSelector();
+            } else {
+                alert('❌ Λάθος κωδικός!');
+            }
+        }
+
+        function loadRoundSelector() {
+            const select = document.getElementById('roundSelect');
+            select.innerHTML = '<option value="">-- Επέλεξε Αγωνιστική --</option>';
+            
+            data.fixtures.forEach(round => {
+                const option = document.createElement('option');
+                option.value = round.round;
+                option.textContent = `Αγωνιστική ${round.round}`;
+                select.appendChild(option);
+            });
+        }
+
+        function loadMatchesForRound() {
+            const roundNum = parseInt(document.getElementById('roundSelect').value);
+            if (!roundNum) {
+                document.getElementById('matchInputs').innerHTML = '';
+                return;
+            }
+
+            const round = data.fixtures.find(r => r.round === roundNum);
+            const container = document.getElementById('matchInputs');
+            container.innerHTML = '<h3 style="margin-bottom: 1rem;">Αποτελέσματα:</h3>';
+
+            round.matches.forEach((match, index) => {
+                const div = document.createElement('div');
+                div.className = 'match-input-row';
+                
+                const homeTeam = match.home || 'ΡΕΠΟ';
+                const awayTeam = match.away || 'ΡΕΠΟ';
+                const isRepo = !match.home || !match.away;
+                
+                div.innerHTML = `
+                    <div>
+                        <input type="text" value="${homeTeam}" disabled style="font-weight: 600; background: #f5f5f5;">
+                    </div>
+                    <div class="score-inputs">
+                        <input type="number" class="score-input" id="home-${roundNum}-${index}" 
+                               value="${match.homeScore !== null ? match.homeScore : ''}" 
+                               min="0" placeholder="0" ${isRepo ? 'disabled' : ''}>
+                        <span>-</span>
+                        <input type="number" class="score-input" id="away-${roundNum}-${index}" 
+                               value="${match.awayScore !== null ? match.awayScore : ''}" 
+                               min="0" placeholder="0" ${isRepo ? 'disabled' : ''}>
+                    </div>
+                    <div>
+                        <input type="text" value="${awayTeam}" disabled style="font-weight: 600; background: #f5f5f5;">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function saveResults() {
+            const roundNum = parseInt(document.getElementById('roundSelect').value);
+            if (!roundNum) {
+                alert('Επέλεξε πρώτα μια αγωνιστική!');
+                return;
+            }
+
+            const round = data.fixtures.find(r => r.round === roundNum);
+            
+            round.matches.forEach((match, index) => {
+                if (!match.home || !match.away) return; // Skip repo matches
+                
+                const homeInput = document.getElementById(`home-${roundNum}-${index}`);
+                const awayInput = document.getElementById(`away-${roundNum}-${index}`);
+                
+                const homeScore = homeInput.value !== '' ? parseInt(homeInput.value) : null;
+                const awayScore = awayInput.value !== '' ? parseInt(awayInput.value) : null;
+
+                match.homeScore = homeScore;
+                match.awayScore = awayScore;
+            });
+
+            saveData(data);
+            
+            displayStandings();
+            displayResults();
+            displayFixtures();
+
+            alert('✅ Τα αποτελέσματα αποθηκεύτηκαν επιτυχώς!');
+            closeAdminPanel();
+        }
+
+        function resetAllData() {
+            if (confirm('⚠️ ΠΡΟΣΟΧΗ! Θα διαγραφούν ΟΛΑ τα αποτελέσματα. Είσαι σίγουρος;')) {
+                if (confirm('Τελευταία επιβεβαίωση - Θα χαθούν όλα τα δεδομένα!')) {
+                    localStorage.removeItem('footballData');
+                    data = { fixtures: JSON.parse(JSON.stringify(FIXTURES)) };
+                    displayStandings();
+                    displayResults();
+                    displayFixtures();
+                    alert('✅ Όλα τα δεδομένα διαγράφηκαν!');
+                    closeAdminPanel();
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            displayStandings();
+            displayResults();
+            displayFixtures();
+        });
+
+        document.getElementById('adminModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAdminPanel();
+            }
+        });
+    </script>
+</body>
+</html>
