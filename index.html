@@ -1037,22 +1037,41 @@
             ]}
         ];
 
-        function loadData() {
+        async function loadData() {
+            // 1. Έλεγχος του localStorage (για τον Admin που έχει κάνει αλλαγές)
             const saved = localStorage.getItem('footballData');
             if (saved) {
+                console.log('Φορτώθηκαν δεδομένα από το localStorage.');
                 return JSON.parse(saved);
             }
+
+            // 2. Αν το localStorage είναι άδειο, φόρτωση του public JSON (για Επισκέπτες)
+            try {
+                // Αυτό υποθέτει ότι το 'olympos-backup.json' είναι στο ίδιο φάκελο
+                const response = await fetch('olympos-backup.json'); 
+                
+                if (response.ok) {
+                    const jsonData = await response.json();
+                    console.log('Φορτώθηκαν δεδομένα από το olympos-backup.json');
+                    return jsonData;
+                } else {
+                    // Το αρχείο δεν βρέθηκε ή υπήρξε άλλο σφάλμα
+                    console.warn(`Σφάλμα ${response.status} κατά τη φόρτωση του olympos-backup.json`);
+                }
+            } catch (e) {
+                // Σφάλμα δικτύου κ.λπ.
+                console.error('Σφάλμα δικτύου κατά τη φόρτωση του olympos-backup.json:', e);
+            }
+
+            // 3. Fallback: Χρήση των "καρφωτών" δεδομένων (Αν αποτύχουν ΚΑΙ τα δύο)
+            console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
             return { 
                 fixtures: JSON.parse(JSON.stringify(FIXTURES)),
                 roster: []
             };
         }
 
-        function saveData(data) {
-            localStorage.setItem('footballData', JSON.stringify(data));
-        }
-
-        let data = loadData();
+        let data; // Απλά δηλώνουμε τη μεταβλητή
 
         function exportData() {
             const dataStr = JSON.stringify(data, null, 2);
@@ -1511,43 +1530,22 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            displayStandings();
-            displayResults();
-            displayFixtures();
-            displayRoster();
-        });
+        document.addEventListener('DOMContentLoaded', async function() {
+    // Περίμενε να φορτώσουν τα δεδομένα (είτε από localStorage, είτε από fetch, είτε από fallback)
+    data = await loadData(); 
+
+    // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
+    displayStandings();
+    displayResults();
+    displayFixtures();
+    displayRoster();
+});
 
         document.getElementById('adminModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeAdminPanel();
             }
         });
-        //------------------------------------------------------
-// 🔹 Αυτόματο φόρτωμα δεδομένων από JSON backup
-//------------------------------------------------------
-fetch('olympos-backup.json?v=' + Date.now())
-  .then(response => {
-    if (!response.ok) throw new Error('Δεν βρέθηκε το JSON αρχείο.');
-    return response.json();
-  })
-  .then(data => {
-    console.log('✅ Δεδομένα φορτώθηκαν επιτυχώς από το JSON:', data);
-
-    // Ενημέρωση μεταβλητών αν υπάρχουν στο JSON
-    if (data.TEAMS) TEAMS.splice(0, TEAMS.length, ...data.TEAMS);
-    if (data.fixtures) FIXTURES.splice(0, FIXTURES.length, ...data.fixtures);
-    if (data.roster) localStorage.setItem('ROSTER', JSON.stringify(data.roster));
-    if (data.results) localStorage.setItem('RESULTS', JSON.stringify(data.results));
-
-    // Ανανεώνει τη σελίδα με τα νέα δεδομένα
-    if (typeof renderStandings === 'function') renderStandings();
-    if (typeof renderFixtures === 'function') renderFixtures();
-    if (typeof renderResults === 'function') renderResults();
-    if (typeof renderRoster === 'function') renderRoster();
-  })
-  .catch(error => console.error('⚠️ Σφάλμα φόρτωσης JSON:', error));
     </script>
-
 </body>
 </html>
