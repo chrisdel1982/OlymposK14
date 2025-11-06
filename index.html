@@ -1524,5 +1524,30 @@
             }
         });
     </script>
+    //------------------------------------------------------
+// 🔹 Αυτόματο φόρτωμα δεδομένων από JSON backup
+//------------------------------------------------------
+fetch('olympos-backup.json?v=' + Date.now())
+  .then(response => {
+    if (!response.ok) throw new Error('Δεν βρέθηκε το JSON αρχείο.');
+    return response.json();
+  })
+  .then(data => {
+    console.log('✅ Δεδομένα φορτώθηκαν επιτυχώς από το JSON:', data);
+
+    // Ενημέρωση μεταβλητών αν υπάρχουν στο JSON
+    if (data.TEAMS) TEAMS.splice(0, TEAMS.length, ...data.TEAMS);
+    if (data.FIXTURES) FIXTURES.splice(0, FIXTURES.length, ...data.FIXTURES);
+    if (data.ROSTER) localStorage.setItem('ROSTER', JSON.stringify(data.ROSTER));
+    if (data.RESULTS) localStorage.setItem('RESULTS', JSON.stringify(data.RESULTS));
+
+    // Ανανεώνει τη σελίδα με τα νέα δεδομένα
+    if (typeof renderStandings === 'function') renderStandings();
+    if (typeof renderFixtures === 'function') renderFixtures();
+    if (typeof renderResults === 'function') renderResults();
+    if (typeof renderRoster === 'function') renderRoster();
+  })
+  .catch(error => console.error('⚠️ Σφάλμα φόρτωσης JSON:', error));
+
 </body>
 </html>
