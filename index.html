@@ -1524,28 +1524,34 @@
             }
         });
     </script>
-    //------------------------------------------------------
-// 🔹 Αυτόματο φόρτωμα δεδομένων από JSON backup
+ //------------------------------------------------------
+// 🔹 Φόρτωση δεδομένων από olympos-backup.json
 //------------------------------------------------------
 fetch('olympos-backup.json?v=' + Date.now())
   .then(response => {
-    if (!response.ok) throw new Error('Δεν βρέθηκε το JSON αρχείο.');
+    if (!response.ok) throw new Error('Δεν βρέθηκε το JSON αρχείο');
     return response.json();
   })
   .then(data => {
-    console.log('✅ Δεδομένα φορτώθηκαν επιτυχώς από το JSON:', data);
+    console.log('✅ Δεδομένα JSON φορτώθηκαν επιτυχώς:', data);
 
-    // Ενημέρωση μεταβλητών αν υπάρχουν στο JSON
-    if (data.TEAMS) TEAMS.splice(0, TEAMS.length, ...data.TEAMS);
-    if (data.FIXTURES) FIXTURES.splice(0, FIXTURES.length, ...data.FIXTURES);
-    if (data.ROSTER) localStorage.setItem('ROSTER', JSON.stringify(data.ROSTER));
-    if (data.RESULTS) localStorage.setItem('RESULTS', JSON.stringify(data.RESULTS));
+    // ➤ Αποθήκευση αγώνων (fixtures)
+    if (Array.isArray(data.fixtures)) {
+      localStorage.setItem('FIXTURES', JSON.stringify(data.fixtures));
+      console.log('📅 Fixtures αποθηκεύτηκαν');
+    }
 
-    // Ανανεώνει τη σελίδα με τα νέα δεδομένα
-    if (typeof renderStandings === 'function') renderStandings();
+    // ➤ Αποθήκευση ρόστερ (roster)
+    if (Array.isArray(data.roster)) {
+      localStorage.setItem('ROSTER', JSON.stringify(data.roster));
+      console.log('👥 Roster αποθηκεύτηκε');
+    }
+
+    // ➤ Ενημέρωση της σελίδας (αν υπάρχουν αυτές οι συναρτήσεις)
     if (typeof renderFixtures === 'function') renderFixtures();
-    if (typeof renderResults === 'function') renderResults();
     if (typeof renderRoster === 'function') renderRoster();
+    if (typeof renderResults === 'function') renderResults();
+    if (typeof renderStandings === 'function') renderStandings();
   })
   .catch(error => console.error('⚠️ Σφάλμα φόρτωσης JSON:', error));
 
