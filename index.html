@@ -1523,9 +1523,7 @@
                 closeAdminPanel();
             }
         });
-    </script>
-<script>
-//------------------------------------------------------
+        //------------------------------------------------------
 // 🔹 Αυτόματο φόρτωμα δεδομένων από JSON backup
 //------------------------------------------------------
 fetch('olympos-backup.json?v=' + Date.now())
@@ -1549,7 +1547,7 @@ fetch('olympos-backup.json?v=' + Date.now())
     if (typeof renderRoster === 'function') renderRoster();
   })
   .catch(error => console.error('⚠️ Σφάλμα φόρτωσης JSON:', error));
-</script>
+    </script>
 
 </body>
 </html>
