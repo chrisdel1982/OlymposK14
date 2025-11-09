@@ -373,6 +373,60 @@
             font-size: 0.85rem;
         }
 
+        /* News Items Styles */
+        #newsContainer {
+            margin-top: 1.5rem;
+        }
+
+        .news-item {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .news-content {
+            color: var(--text-dark);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .no-news {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.1rem;
+        }
+
         /* Buttons */
         .btn {
             background: var(--primary-color);
@@ -750,6 +804,7 @@
                 <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
                 <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
                 <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
+                <li><a href="#news" class="nav-link">Νέα - Ειδήσεις</a></li>
             </ul>
         </nav>
     </header>
@@ -808,6 +863,16 @@
                     <h2>👥 Ρόστερ Ομάδας</h2>
                 </div>
                 <div id="rosterContainer" class="roster-grid"></div>
+            </div>
+        </div>
+
+        <!-- Νέα - Ειδήσεις Page -->
+        <div id="news" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📰 Νέα - Ειδήσεις</h2>
+                </div>
+                <div id="newsContainer"></div>
             </div>
         </div>
     </div>
@@ -912,6 +977,28 @@
                     <div id="rosterList" class="roster-list"></div>
                 </div>
 
+                <h3 style="margin-top: 2rem;">📰 Διαχείριση Νέων - Ειδήσεων</h3>
+
+                <div class="form-group">
+                    <label>Τίτλος Είδησης:</label>
+                    <input type="text" id="newsTitle" placeholder="π.χ. Μεγάλη νίκη επί του...">
+                </div>
+
+                <div class="form-group">
+                    <label>Περιεχόμενο Είδησης:</label>
+                    <textarea id="newsContent" placeholder="Γράψε το περιεχόμενο της είδησης εδώ..." rows="5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn btn-success" onclick="addNews()">➕ Προσθήκη Είδησης</button>
+                    <button class="btn" onclick="clearNewsForm()">🔄 Καθαρισμός</button>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Τρέχουσες Ειδήσεις:</label>
+                    <div id="newsList" class="roster-list"></div>
+                </div>
+
                 <div class="modal-buttons" style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #ddd;">
                     <button class="btn btn-secondary" onclick="closeAdminPanel()">Κλείσιμο</button>
                     <button class="btn btn-danger" onclick="resetAllData()">⚠️ Επαναφορά Όλων</button>
@@ -935,7 +1022,8 @@
             'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)',
             'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ',
             'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ',
-            'ΑΟ ΜΕΣΗΜΒΡΙΑΣ'
+            'ΑΟ ΜΕΣΗΜΒΡΙΑΣ',
+            'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ'
         ];
 
         const FIXTURES = [
@@ -943,7 +1031,7 @@
                 { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: 2, awayScore: 8 },
                 { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: 5, awayScore: 1 },
                 { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: 0, awayScore: 5 },
-                { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: null, homeScore: null, awayScore: null },
+                { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: 1, awayScore: 5 },
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: 2, awayScore: 2 }
             ]},
@@ -952,7 +1040,7 @@
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
-                { home: null, away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null }
             ]},
             {round: 3, matches: [
@@ -961,7 +1049,7 @@
                 { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
-                { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: null, homeScore: null, awayScore: null }
+                { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null }
             ]},
             {round: 4, matches: [
                 { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
@@ -969,42 +1057,42 @@
                 { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
-                { home: null, away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null }
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null }
             ]},
             {round: 5, matches: [
                 { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
-                { home: null, away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null }
             ]},
             {round: 6, matches: [
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
                 { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
-                { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: null, homeScore: null, awayScore: null },
+                { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null }
             ]},
             {round: 7, matches: [
                 { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
-                { home: null, away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null }
             ]},
             {round: 8, matches: [
                 { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
-                { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: null, homeScore: null, awayScore: null },
+                { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
                 { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
                 { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null }
             ]},
             {round: 9, matches: [
-                { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: null, homeScore: null, awayScore: null },
+                { home: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null },
@@ -1013,7 +1101,7 @@
             ]},
             {round: 10, matches: [
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
-                { home: null, away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
                 { home: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
@@ -1022,7 +1110,7 @@
             {round: 11, matches: [
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', homeScore: null, awayScore: null },
-                { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: null, homeScore: null, awayScore: null },
+                { home: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', away: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΕ ΦΙΛΥΡΟΥ', away: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', homeScore: null, awayScore: null },
                 { home: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', away: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null }
@@ -1031,7 +1119,7 @@
                 { home: 'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ', away: 'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΜΕΣΗΜΒΡΙΑΣ', away: 'ΜΑΚΕΔΟΝΙΚΟΣ (4)', homeScore: null, awayScore: null },
                 { home: 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', away: 'ΑΕ ΦΙΛΥΡΟΥ', homeScore: null, awayScore: null },
-                { home: null, away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
+                { home: 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ', away: 'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΜΣ ΝΙΚΟΠΟΛΗ', away: 'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ', homeScore: null, awayScore: null },
                 { home: 'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ', away: 'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ', homeScore: null, awayScore: null }
             ]}
@@ -1067,11 +1155,16 @@
             console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
             return { 
                 fixtures: JSON.parse(JSON.stringify(FIXTURES)),
-                roster: []
+                roster: [],
+                news: []
             };
         }
 
         let data; // Απλά δηλώνουμε τη μεταβλητή
+
+        function saveData(dataToSave) {
+            localStorage.setItem('footballData', JSON.stringify(dataToSave));
+        }
 
         function exportData() {
             const dataStr = JSON.stringify(data, null, 2);
@@ -1098,18 +1191,47 @@
                         throw new Error('Μη έγκυρη δομή δεδομένων');
                     }
 
+                    // Μετατροπή παλιών null (ΡΕΠΟ) σε ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ
+                    importedData.fixtures.forEach(round => {
+                        if (round.matches) {
+                            round.matches.forEach(match => {
+                                if (match.home === null) {
+                                    match.home = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                                }
+                                if (match.away === null) {
+                                    match.away = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                                }
+                            });
+                        }
+                    });
+
                     if (confirm('⚠️ ΠΡΟΣΟΧΗ!\n\nΤα τρέχοντα δεδομένα θα αντικατασταθούν.\nΕίσαι σίγουρος;')) {
                         data = importedData;
+                        
+                        // Εξασφάλιση ότι υπάρχει το news array
+                        if (!data.news) {
+                            data.news = [];
+                        }
+                        if (!data.roster) {
+                            data.roster = [];
+                        }
+                        
                         saveData(data);
                         displayStandings();
                         displayResults();
                         displayFixtures();
                         displayRoster();
-                        alert('✅ Τα δεδομένα εισήχθησαν επιτυχώς!');
+                        displayNews();
+                        updateRosterList();
+                        updateNewsList();
+                        alert('✅ Τα δεδομένα εισήχθησαν επιτυχώς!\n\n' + 
+                              'Roster: ' + (data.roster ? data.roster.length : 0) + ' παίκτες\n' +
+                              'Ειδήσεις: ' + (data.news ? data.news.length : 0));
                         closeAdminPanel();
                     }
                 } catch (error) {
-                    alert('❌ Σφάλμα: Μη έγκυρο αρχείο δεδομένων!');
+                    console.error('Import Error:', error);
+                    alert('❌ Σφάλμα: Μη έγκυρο αρχείο δεδομένων!\n\nΛεπτομέρειες: ' + error.message);
                 }
             };
             reader.readAsText(file);
@@ -1283,8 +1405,8 @@
                     div.style.borderLeft = '4px solid var(--accent-color)';
                 }
 
-                const homeTeam = match.home || '<span class="repo-text">ΡΕΠΟ</span>';
-                const awayTeam = match.away || '<span class="repo-text">ΡΕΠΟ</span>';
+                const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
 
                 div.innerHTML = `
                     <div class="team-left">${homeTeam}</div>
@@ -1393,6 +1515,122 @@
             });
         }
 
+        // ===== ΔΙΑΧΕΙΡΙΣΗ ΝΕΩΝ - ΕΙΔΗΣΕΩΝ =====
+        
+        function displayNews() {
+            const container = document.getElementById('newsContainer');
+            container.innerHTML = '';
+
+            if (!data.news) {
+                data.news = [];
+            }
+
+            if (data.news.length === 0) {
+                container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
+                return;
+            }
+
+            // Ταξινόμηση με τα νεότερα πρώτα
+            const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedNews.forEach(newsItem => {
+                const div = document.createElement('div');
+                div.className = 'news-item';
+                const formattedDate = new Date(newsItem.date).toLocaleDateString('el-GR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                div.innerHTML = `
+                    <div class="news-header">
+                        <h3 class="news-title">${newsItem.title}</h3>
+                        <span class="news-date">${formattedDate}</span>
+                    </div>
+                    <div class="news-content">${newsItem.content}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addNews() {
+            const title = document.getElementById('newsTitle').value.trim();
+            const content = document.getElementById('newsContent').value.trim();
+
+            if (!title || !content) {
+                alert('⚠️ Συμπλήρωσε τίτλο και περιεχόμενο!');
+                return;
+            }
+
+            if (!data.news) {
+                data.news = [];
+            }
+
+            const newsItem = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                date: new Date().toISOString()
+            };
+
+            data.news.push(newsItem);
+            saveData(data);
+            displayNews();
+            updateNewsList();
+            clearNewsForm();
+            alert('✅ Η είδηση προστέθηκε επιτυχώς!');
+        }
+
+        function deleteNews(id) {
+            if (confirm('⚠️ Θέλεις να διαγράψεις αυτή την είδηση;')) {
+                data.news = data.news.filter(n => n.id !== id);
+                saveData(data);
+                displayNews();
+                updateNewsList();
+                alert('✅ Η είδηση διαγράφηκε!');
+            }
+        }
+
+        function clearNewsForm() {
+            document.getElementById('newsTitle').value = '';
+            document.getElementById('newsContent').value = '';
+        }
+
+        function updateNewsList() {
+            const container = document.getElementById('newsList');
+            container.innerHTML = '';
+
+            if (!data.news) {
+                data.news = [];
+            }
+
+            if (data.news.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;">Δεν υπάρχουν ειδήσεις</div>';
+                return;
+            }
+
+            const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedNews.forEach(newsItem => {
+                const div = document.createElement('div');
+                div.className = 'roster-item';
+                const shortContent = newsItem.content.length > 50 
+                    ? newsItem.content.substring(0, 50) + '...' 
+                    : newsItem.content;
+                
+                div.innerHTML = `
+                    <div>
+                        <strong>${newsItem.title}</strong><br>
+                        <span style="color: #666; font-size: 0.85rem;">${shortContent}</span>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deleteNews(${newsItem.id})">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1426,6 +1664,7 @@
                 document.getElementById('adminContent').style.display = 'block';
                 loadRoundSelector();
                 updateRosterList();
+                updateNewsList();
             } else {
                 alert('❌ Λάθος κωδικός!');
             }
@@ -1458,9 +1697,8 @@
                 const div = document.createElement('div');
                 div.className = 'match-input-row';
                 
-                const homeTeam = match.home || 'ΡΕΠΟ';
-                const awayTeam = match.away || 'ΡΕΠΟ';
-                const isRepo = !match.home || !match.away;
+                const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
                 
                 div.innerHTML = `
                     <div>
@@ -1469,11 +1707,11 @@
                     <div class="score-inputs">
                         <input type="number" class="score-input" id="home-${roundNum}-${index}" 
                                value="${match.homeScore !== null ? match.homeScore : ''}" 
-                               min="0" placeholder="0" ${isRepo ? 'disabled' : ''}>
+                               min="0" placeholder="0">
                         <span>-</span>
                         <input type="number" class="score-input" id="away-${roundNum}-${index}" 
                                value="${match.awayScore !== null ? match.awayScore : ''}" 
-                               min="0" placeholder="0" ${isRepo ? 'disabled' : ''}>
+                               min="0" placeholder="0">
                     </div>
                     <div>
                         <input type="text" value="${awayTeam}" disabled style="font-weight: 600; background: #f5f5f5;">
@@ -1518,12 +1756,14 @@
             if (confirm('⚠️ ΠΡΟΣΟΧΗ! Θα διαγραφούν ΟΛΑ τα δεδομένα (αποτελέσματα & ρόστερ). Είσαι σίγουρος;')) {
                 if (confirm('Τελευταία επιβεβαίωση - Θα χαθούν όλα τα δεδομένα!')) {
                     localStorage.removeItem('footballData');
-                    data = { fixtures: JSON.parse(JSON.stringify(FIXTURES)), roster: [] };
+                    data = { fixtures: JSON.parse(JSON.stringify(FIXTURES)), roster: [], news: [] };
                     displayStandings();
                     displayResults();
                     displayFixtures();
                     displayRoster();
+                    displayNews();
                     updateRosterList();
+                    updateNewsList();
                     alert('✅ Όλα τα δεδομένα διαγράφηκαν!');
                     closeAdminPanel();
                 }
@@ -1534,11 +1774,17 @@
     // Περίμενε να φορτώσουν τα δεδομένα (είτε από localStorage, είτε από fetch, είτε από fallback)
     data = await loadData(); 
 
+    // Έλεγχος αν υπάρχει το news array, αν όχι το προσθέτουμε
+    if (!data.news) {
+        data.news = [];
+    }
+
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
     displayResults();
     displayFixtures();
     displayRoster();
+    displayNews();
 });
 
         document.getElementById('adminModal').addEventListener('click', function(e) {
