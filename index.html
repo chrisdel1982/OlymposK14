@@ -487,26 +487,16 @@
             flex-wrap: wrap;
         }
 
-        .admin-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--accent-color);
-            color: var(--primary-color);
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--shadow);
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            z-index: 999;
+        /* Admin link styling */
+        .admin-link {
+            opacity: 0.6;
+            font-size: 1.1rem !important;
+            padding: 1rem 1.5rem !important;
         }
 
-        .admin-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px var(--shadow);
+        .admin-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15) !important;
         }
 
         .modal {
@@ -670,7 +660,6 @@
             }
 
             header nav,
-            .admin-btn,
             .action-buttons,
             #results,
             #fixtures,
@@ -760,6 +749,12 @@
                 padding: 0.8rem 1.2rem;
                 font-size: 0.9rem;
                 white-space: nowrap;
+            }
+
+            .admin-link {
+                font-size: 1rem !important;
+                padding: 0.8rem 1rem !important;
+                opacity: 0.7;
             }
 
             .container {
@@ -858,14 +853,6 @@
 
             .vs {
                 font-size: 0.8rem;
-            }
-
-            .admin-btn {
-                bottom: 15px;
-                right: 15px;
-                padding: 0.7rem 1rem;
-                font-size: 0.85rem;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             }
 
             .modal {
@@ -1111,6 +1098,7 @@
                 <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
                 <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
                 <li><a href="#news" class="nav-link">Νέα - Ειδήσεις</a></li>
+                <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
             </ul>
         </nav>
     </header>
@@ -1179,8 +1167,6 @@
             </div>
         </div>
     </div>
-
-    <button class="admin-btn" onclick="openAdminPanel()">🔧 Admin</button>
 
     <div id="adminModal" class="modal">
         <div class="modal-content">
