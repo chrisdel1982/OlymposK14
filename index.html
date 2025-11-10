@@ -719,70 +719,354 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
             .header-top {
                 flex-direction: column;
                 padding: 1rem;
+                gap: 10px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                border: 3px solid var(--accent-color);
             }
 
             .club-info h1 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .club-info p {
+                font-size: 0.75rem;
             }
 
             nav ul {
-                flex-direction: column;
+                flex-direction: row;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+                gap: 0;
+            }
+
+            nav ul li {
+                flex-shrink: 0;
             }
 
             nav ul li a {
-                padding: 0.8rem 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+
+            .container {
+                padding: 0 0.5rem;
+                margin: 1rem auto;
+            }
+
+            .card {
+                padding: 1rem;
+                margin: 1rem 0;
+                border-radius: 8px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .card h2 {
+                font-size: 1.3rem;
+            }
+
+            .table-wrapper {
+                margin-top: 0.5rem;
+                border-radius: 8px;
+                overflow: hidden;
             }
 
             table {
-                font-size: 0.85rem;
+                font-size: 0.75rem;
                 min-width: 600px;
             }
 
             th, td {
-                padding: 0.6rem 0.4rem;
+                padding: 0.5rem 0.3rem;
+            }
+
+            th {
+                font-size: 0.7rem;
+            }
+
+            td:first-child {
+                font-size: 0.9rem;
+            }
+
+            .team-position {
+                font-size: 0.8rem;
+            }
+
+            .points {
+                font-size: 1rem;
             }
 
             .match {
                 grid-template-columns: 1fr;
                 text-align: center;
                 gap: 0.5rem;
+                padding: 1rem;
+                margin: 0.8rem 0;
             }
 
             .team-left,
             .team-right {
                 text-align: center;
+                font-size: 0.9rem;
+                padding: 0.3rem;
+            }
+
+            .score {
+                font-size: 1.2rem;
+                padding: 0.5rem;
+            }
+
+            .vs {
+                font-size: 0.8rem;
             }
 
             .admin-btn {
-                bottom: 10px;
-                right: 10px;
-                padding: 0.8rem 1.2rem;
+                bottom: 15px;
+                right: 15px;
+                padding: 0.7rem 1rem;
+                font-size: 0.85rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            }
+
+            .modal {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                padding: 1.2rem;
+                width: 95%;
+                max-width: 95vw;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+
+            .modal-content h2 {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .modal-content h3 {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
+
+            .form-group label {
+                font-size: 0.85rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 0.9rem;
+                padding: 0.6rem;
             }
 
             .match-input-row {
                 grid-template-columns: 1fr;
                 gap: 0.5rem;
+                padding: 0.8rem;
+                margin-bottom: 0.8rem;
             }
 
-            .modal-content {
-                padding: 1.5rem;
-                width: 95%;
+            .score-inputs {
+                justify-content: center;
+            }
+
+            .score-input {
+                width: 60px;
+                height: 45px;
+                font-size: 1.1rem;
             }
 
             .action-buttons {
                 flex-direction: column;
+                gap: 0.5rem;
             }
 
-            .action-buttons .btn {
+            .action-buttons .btn,
+            .modal-buttons .btn {
                 width: 100%;
                 justify-content: center;
+                padding: 0.8rem;
+                font-size: 0.9rem;
             }
 
             .roster-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .player-card {
+                padding: 1.2rem;
+            }
+
+            .player-photo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .player-number {
+                font-size: 2rem;
+            }
+
+            .player-name {
+                font-size: 1.1rem;
+            }
+
+            .player-position {
+                font-size: 0.85rem;
+                padding: 0.25rem 0.6rem;
+            }
+
+            /* Νέα - Ειδήσεις mobile styling */
+            .news-item {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .news-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .news-title {
+                font-size: 1.1rem;
+            }
+
+            .news-date {
+                font-size: 0.75rem;
+            }
+
+            .news-content {
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            /* Roster List in Admin */
+            .roster-item {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .roster-item button {
+                align-self: flex-end;
+            }
+
+            /* Better button styling */
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1rem;
+            }
+
+            .btn-small {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.8rem;
+            }
+
+            /* File input wrapper */
+            .file-input-wrapper {
+                width: 100%;
+            }
+
+            .file-input-label {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+
+            /* Scrollbar για horizontal scroll */
+            .table-wrapper::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .table-wrapper::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+
+            .table-wrapper::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: 4px;
+            }
+
+            /* Navigation scrollbar */
+            nav ul::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            nav ul::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            nav ul::-webkit-scrollbar-thumb {
+                background: var(--accent-color);
+                border-radius: 2px;
+            }
+        }
+
+        /* Extra small devices (phones < 375px) */
+        @media (max-width: 375px) {
+            .club-info h1 {
+                font-size: 1.1rem;
+            }
+
+            .club-info p {
+                font-size: 0.7rem;
+            }
+
+            nav ul li a {
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            table {
+                font-size: 0.7rem;
+            }
+
+            th, td {
+                padding: 0.4rem 0.25rem;
+            }
+
+            .card {
+                padding: 0.8rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .score-input {
+                width: 50px;
+                height: 40px;
+                font-size: 1rem;
             }
         }
     </style>
