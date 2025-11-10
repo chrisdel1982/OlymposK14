@@ -167,6 +167,19 @@
         .table-wrapper {
             overflow-x: auto;
             margin-top: 1rem;
+            position: relative;
+        }
+
+        /* Visual hint για horizontal scrolling */
+        .table-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+            pointer-events: none;
         }
 
         table {
@@ -768,9 +781,37 @@
             }
 
             .card {
-                padding: 1rem;
+                padding: 1rem 0.5rem;
                 margin: 1rem 0;
                 border-radius: 8px;
+            }
+
+            /* Για τα tables, δώσε ακόμα λιγότερο padding */
+            #standings .card,
+            #results .card,
+            #fixtures .card {
+                padding: 1rem 0;
+            }
+
+            #standings .card-header,
+            #results .card-header,
+            #fixtures .card-header {
+                padding: 0 0.5rem;
+                position: relative;
+            }
+
+            /* Scroll hint για πίνακες */
+            #standings .card-header::after,
+            #results .card-header::after,
+            #fixtures .card-header::after {
+                content: '← Σύρε για περισσότερα →';
+                display: block;
+                width: 100%;
+                text-align: center;
+                font-size: 0.7rem;
+                color: #999;
+                margin-top: 0.3rem;
+                font-style: italic;
             }
 
             .card-header {
@@ -786,7 +827,15 @@
             .table-wrapper {
                 margin-top: 0.5rem;
                 border-radius: 8px;
-                overflow: hidden;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                /* Hint για touch scrolling */
+                cursor: grab;
+            }
+
+            .table-wrapper:active {
+                cursor: grabbing;
             }
 
             table {
