@@ -167,19 +167,6 @@
         .table-wrapper {
             overflow-x: auto;
             margin-top: 1rem;
-            position: relative;
-        }
-
-        /* Visual hint για horizontal scrolling */
-        .table-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 30px;
-            background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
-            pointer-events: none;
         }
 
         table {
@@ -1133,9 +1120,6 @@
             <div class="card">
                 <div class="card-header">
                     <h2>📊 Βαθμολογία Κ14 - ΔΥΤΙΚΟΣ</h2>
-                    <div class="action-buttons">
-                        <button class="btn btn-warning" onclick="printStandings()">🖨️ Εκτύπωση</button>
-                    </div>
                 </div>
                 
                 <div class="table-wrapper">
@@ -1555,10 +1539,6 @@
             };
             reader.readAsText(file);
             event.target.value = '';
-        }
-
-        function printStandings() {
-            window.print();
         }
 
         function calculateStandings() {
