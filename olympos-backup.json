@@ -106,8 +106,8 @@
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 3,
+          "awayScore": 0
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
@@ -129,8 +129,8 @@
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 1,
+          "awayScore": 3
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
@@ -141,8 +141,8 @@
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 3,
+          "awayScore": 0
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
