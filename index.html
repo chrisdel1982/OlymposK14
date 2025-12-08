@@ -420,7 +420,14 @@
             line-height: 1.8;
             white-space: pre-wrap;
         }
-
+.news-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 1rem;
+    border: 2px solid #ddd;
+}
         .no-news {
             text-align: center;
             padding: 3rem;
@@ -1310,22 +1317,34 @@
                     <div id="rosterList" class="roster-list"></div>
                 </div>
 
-                <h3 style="margin-top: 2rem;">📰 Διαχείριση Νέων - Ειδήσεων</h3>
+            <h3 style="margin-top: 2rem;">📰 Διαχείριση Νέων - Ειδήσεων</h3>
 
-                <div class="form-group">
-                    <label>Τίτλος Είδησης:</label>
-                    <input type="text" id="newsTitle" placeholder="π.χ. Μεγάλη νίκη επί του...">
-                </div>
+<div class="form-group">
+    <label>Τίτλος Είδησης:</label>
+    <input type="text" id="newsTitle" placeholder="π.χ. Μεγάλη νίκη επί του...">
+</div>
 
-                <div class="form-group">
-                    <label>Περιεχόμενο Είδησης:</label>
-                    <textarea id="newsContent" placeholder="Γράψε το περιεχόμενο της είδησης εδώ..." rows="5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
-                </div>
+<div class="form-group">
+    <label>Περιεχόμενο Είδησης:</label>
+    <textarea id="newsContent" placeholder="Γράψε το περιεχόμενο της είδησης εδώ..." rows="5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
+</div>
 
-                <div class="modal-buttons">
-                    <button class="btn btn-success" onclick="addNews()">➕ Προσθήκη Είδησης</button>
-                    <button class="btn" onclick="clearNewsForm()">🔄 Καθαρισμός</button>
-                </div>
+<div class="form-group">
+    <label>Φωτογραφία (Προαιρετικό):</label>
+    <div class="file-input-wrapper">
+        <input type="file" id="newsPhoto" accept="image/*" onchange="previewNewsPhoto(event)">
+        <label for="newsPhoto" class="file-input-label">📷 Επιλογή Φωτογραφίας</label>
+    </div>
+    <div id="newsPhotoPreview" style="margin-top: 1rem; display: none;">
+        <img id="newsPhotoPreviewImg" style="max-width: 100%; max-height: 300px; border-radius: 10px; border: 2px solid #ddd;">
+        <button class="btn btn-danger btn-small" onclick="removeNewsPhoto()" style="margin-top: 0.5rem;">🗑️ Αφαίρεση Φωτογραφίας</button>
+    </div>
+</div>
+
+<div class="modal-buttons">
+    <button class="btn btn-success" onclick="addNews()">➕ Προσθήκη Είδησης</button>
+    <button class="btn" onclick="clearNewsForm()">🔄 Καθαρισμός</button>
+</div>
 
                 <div style="margin-top: 1.5rem;">
                     <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Τρέχουσες Ειδήσεις:</label>
@@ -1845,7 +1864,39 @@
         }
 
         // ===== ΔΙΑΧΕΙΡΙΣΗ ΝΕΩΝ - ΕΙΔΗΣΕΩΝ =====
-        
+        let newsPhotoBase64 = null;
+
+function previewNewsPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('⚠️ Παρακαλώ επίλεξε μόνο εικόνες!');
+        event.target.value = '';
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert('⚠️ Η φωτογραφία είναι πολύ μεγάλη! Μέγιστο μέγεθος: 5MB');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        newsPhotoBase64 = e.target.result;
+        document.getElementById('newsPhotoPreview').style.display = 'block';
+        document.getElementById('newsPhotoPreviewImg').src = newsPhotoBase64;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeNewsPhoto() {
+    newsPhotoBase64 = null;
+    document.getElementById('newsPhoto').value = '';
+    document.getElementById('newsPhotoPreview').style.display = 'none';
+    document.getElementById('newsPhotoPreviewImg').src = '';
+}
         function displayNews() {
             const container = document.getElementById('newsContainer');
             container.innerHTML = '';
@@ -1873,13 +1924,19 @@
                     minute: '2-digit'
                 });
                 
-                div.innerHTML = `
-                    <div class="news-header">
-                        <h3 class="news-title">${newsItem.title}</h3>
-                        <span class="news-date">${formattedDate}</span>
-                    </div>
-                    <div class="news-content">${newsItem.content}</div>
-                `;
+                let imageHTML = '';
+if (newsItem.photo) {
+    imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="${newsItem.title}">`;
+}
+
+div.innerHTML = `
+    <div class="news-header">
+        <h3 class="news-title">${newsItem.title}</h3>
+        <span class="news-date">${formattedDate}</span>
+    </div>
+    <div class="news-content">${newsItem.content}</div>
+    ${imageHTML}
+`;
                 container.appendChild(div);
             });
         }
@@ -1897,12 +1954,13 @@
                 data.news = [];
             }
 
-            const newsItem = {
-                id: Date.now(),
-                title: title,
-                content: content,
-                date: new Date().toISOString()
-            };
+          const newsItem = {
+    id: Date.now(),
+    title: title,
+    content: content,
+    date: new Date().toISOString(),
+    photo: newsPhotoBase64
+};
 
             data.news.push(newsItem);
             saveData(data);
@@ -1923,9 +1981,10 @@
         }
 
         function clearNewsForm() {
-            document.getElementById('newsTitle').value = '';
-            document.getElementById('newsContent').value = '';
-        }
+    document.getElementById('newsTitle').value = '';
+    document.getElementById('newsContent').value = '';
+    removeNewsPhoto();
+}
 
         function updateNewsList() {
             const container = document.getElementById('newsList');
