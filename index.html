@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Όλυμπος FC</title>
+    <title><link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">Όλυμπος FC</title>
 	<link rel="icon" type="image/png" href="favicon.png">
     <style>
         * {
@@ -23,11 +23,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--bg-light);
-        }
+    font-family: 'Roboto Condensed', sans-serif; /* Αλλαγή εδώ */
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: var(--bg-light);
+}
 
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -165,83 +165,118 @@
             margin: 0;
         }
 
+/* --- ΜΟΝΤΕΡΝΟΣ ΠΙΝΑΚΑΣ (ΝΟΥΜΕΡΟ 4) --- */
+        
         .table-wrapper {
             overflow-x: auto;
             margin-top: 1rem;
+            border-radius: 12px; /* Στρογγυλεμένες γωνίες στο πλαίσιο */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Απαλή σκιά */
+            border: 1px solid #eee;
+            background: white;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate; /* Απαραίτητο για τις γωνίες */
+            border-spacing: 0;
             min-width: 650px;
         }
 
+        /* Επικεφαλίδες */
         th {
             background: var(--primary-color);
-            color: var(--text-light);
+            color: white;
             padding: 1rem 0.8rem;
             text-align: center;
-            font-weight: bold;
-            font-size: 0.95rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky; /* Κρατάει την επικεφαλίδα σταθερή στο scroll */
+            top: 0;
+            z-index: 10;
         }
 
-        th:first-child {
-            text-align: center;
-        }
-
+        /* Δεύτερη στήλη (Ομάδα) - Στοίχιση αριστερά */
         th:nth-child(2) {
             text-align: left;
-            padding-left: 1rem;
+            padding-left: 1.2rem;
         }
 
+        /* Γραμμές και κελιά */
         td {
-            padding: 0.9rem 0.8rem;
-            border-bottom: 1px solid #ddd;
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid #f0f0f0;
             text-align: center;
+            color: #555;
+            transition: background 0.2s;
         }
 
-        td:first-child {
-            text-align: center;
-            font-weight: bold;
-        }
-
+        /* Όνομα Ομάδας */
         td:nth-child(2) {
             text-align: left;
-            padding-left: 1rem;
+            padding-left: 1.2rem;
             font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Zebra Striping (Εναλλάξ χρώματα) */
+        tr:nth-child(even) {
+            background: #fcfcfc;
         }
 
         tr:hover {
-            background: #f9f9f9;
+            background: #f1f8f4; /* Πολύ απαλό πράσινο όταν περνάει το ποντίκι */
         }
 
-        tr:nth-child(even) {
-            background: #fafafa;
-        }
-
-        tr:nth-child(even):hover {
-            background: #f5f5f5;
-        }
-
+        /* Η ΟΜΑΔΑ ΜΑΣ */
         .my-team {
-            background: rgba(255, 215, 0, 0.15) !important;
-            font-weight: 600;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.02)) !important;
             border-left: 4px solid var(--accent-color);
         }
 
-        .my-team:hover {
-            background: rgba(255, 215, 0, 0.2) !important;
+        .my-team td {
+            color: var(--primary-color); /* Πράσινα γράμματα για εμάς */
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
         }
 
+        /* Θέση και Βαθμοί */
         .team-position {
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 700;
+            color: #888;
+        }
+        
+       .my-team .team-position {
+            font-weight: 700;
+            color: #888; /* Γκρι χρώμα για όλους */
         }
 
-        .points {
-            font-weight: bold;
-            font-size: 1.15rem;
-            color: var(--primary-color);
+       /* Γενική στοίχιση για όλα τα κελιά - Κεντράρισμα παντού */
+        th, td {
+            text-align: center; /* Οριζόντιο κεντράρισμα */
+            vertical-align: middle; /* Κάθετο κεντράρισμα */
+            padding: 1rem 0.5rem; /* Λίγο μικρότερο padding για να χωράνε */
+        }
+
+        /* Εξαίρεση: Η στήλη της Ομάδας (2η) πάει αριστερά */
+        th:nth-child(2), td:nth-child(2) {
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        /* Το στυλ για τον αριθμό των βαθμών (Ίδιο μέγεθος, μόνο Bold) */
+        .points-number {
+            font-weight: 900;       /* Πολύ έντονο (Bold) */
+            color: var(--primary-color); /* Το χρώμα της ομάδας */
+            font-size: inherit;     /* Παίρνει το ίδιο μέγεθος με τα υπόλοιπα */
+            border: none;           /* Καμία γραμμή */
+        }
+
+        /* Αφαίρεση γραμμής στο τέλος */
+        tr:last-child td {
+            border-bottom: none;
         }
 
         /* Match Display */
@@ -301,73 +336,100 @@
             font-size: 0.9rem;
         }
 
-        /* Roster Grid */
+      /* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE) --- */
+
         .roster-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem; /* Μεγαλύτερη απόσταση μεταξύ τους */
+            margin-top: 2rem;
+            padding: 1rem;
         }
 
         .player-card {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 1.5rem;
+            background: white;
+            border-radius: 16px; /* Πιο στρογγυλές γωνίες */
+            padding: 2rem 1.5rem;
             text-align: center;
-            border: 2px solid #ddd;
-            transition: all 0.3s ease;
+            position: relative; /* Απαραίτητο για το εφέ της μπάρας */
+            /* Μοντέρνα σκιά που δίνει βάθος */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* "Ελαστική" κίνηση */
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
+            z-index: 1;
         }
 
+        /* Η χρυσή μπάρα στο πάνω μέρος της κάρτας */
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px; /* Το πάχος της γραμμής */
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+            z-index: 2;
+        }
+
+        /* Εφέ όταν περνάει το ποντίκι από πάνω */
         .player-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px var(--shadow);
-            border-color: var(--primary-color);
+            transform: translateY(-12px) scale(1.02); /* Σηκώνεται και μεγαλώνει λίγο */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); /* Η σκιά γίνεται πιο έντονη */
         }
 
         .player-photo {
-            width: 120px;
-            height: 120px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            margin: 0 auto 1rem;
+            /* Σκούρο πράσινο φόντο στη φωτογραφία */
+            background: linear-gradient(135deg, var(--primary-color), #0f2b19);
+            margin: 0 auto 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: white;
-            font-weight: bold;
-            border: 4px solid var(--accent-color);
+            /* Διπλό περίγραμμα: Λευκό μέσα, Χρυσό έξω */
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px var(--accent-color); 
         }
 
         .player-number {
-            font-size: 2.5rem;
-            font-weight: bold;
+            font-size: 3.5rem; /* Μεγαλύτερο νούμερο */
+            font-weight: 800;
             color: white;
+            /* Σκιά στο νούμερο για να ξεχωρίζει */
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1;
         }
 
         .player-name {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.4rem;
+            font-weight: 700;
             color: var(--text-dark);
-            margin: 0.5rem 0;
+            margin: 0.8rem 0 0.4rem;
+            /* Αφαιρέθηκε το text-transform: uppercase */
+            letter-spacing: normal;
         }
 
         .player-position {
-    color: #666;
-    font-size: 0.85rem;
-    padding: 0.3rem 0.8rem;
-    background: #e0e0e0;
-    border-radius: 15px;
-    display: inline-block;
-    margin-top: 0.5rem;
-    line-height: 1.4;
-}
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            background: rgba(255, 215, 0, 0.15); /* Αχνό χρυσό φόντο */
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
         .player-actions {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             display: flex;
             gap: 0.5rem;
             justify-content: center;
+            opacity: 0.8; 
+            transition: opacity 0.3s;
         }
 
         .btn-small {
@@ -1178,12 +1240,11 @@
                             <tr>
                                 <th style="width: 50px;">Θέση</th>
                                 <th style="text-align: left;">Ομάδα</th>
-                                <th style="width: 50px;">Αγ</th>
+                                <th style="width: 60px;">Β</th> <th style="width: 50px;">Αγ</th>
                                 <th style="width: 50px;">Ν</th>
                                 <th style="width: 50px;">Ι</th>
                                 <th style="width: 50px;">Η</th>
                                 <th style="width: 70px;">ΓΥ-ΓΚ</th>
-                                <th style="width: 60px;">Β</th>
                             </tr>
                         </thead>
                         <tbody id="standingsBody"></tbody>
@@ -1229,7 +1290,15 @@
             </div>
         </div>
     </div>
-
+<footer style="background: var(--primary-color); color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h3>
+        <p style="opacity: 0.8; font-size: 0.9rem;">Μια οικογένεια, μια ομάδα, ένα πάθος.</p>
+        <div style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.6;">
+            &copy; 2025 Created for K14 Team
+        </div>
+    </div>
+</footer>
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <h2>🔐 Admin Panel</h2>
@@ -1688,15 +1757,14 @@
                     row.classList.add('my-team');
                 }
 
-                row.innerHTML = `
+               row.innerHTML = `
                     <td class="team-position">${index + 1}</td>
                     <td><strong>${team.team}</strong></td>
-                    <td>${team.played}</td>
+                    <td><span class="points-number">${team.points}</span></td> <td>${team.played}</td>
                     <td>${team.won}</td>
                     <td>${team.drawn}</td>
                     <td>${team.lost}</td>
                     <td>${team.gf}-${team.ga}</td>
-                    <td class="points">${team.points}</td>
                 `;
 
                 tbody.appendChild(row);
