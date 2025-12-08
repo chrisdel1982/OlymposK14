@@ -1199,6 +1199,34 @@
                 font-size: 1rem;
             }
         }
+/* --- Στυλ για το σήμα του Αρχηγού (New & Improved) --- */
+        .captain-badge {
+            position: absolute;
+            bottom: 5px;   /* Τοποθέτηση */
+            right: 5px;    /* Τοποθέτηση */
+            width: 32px;
+            height: 32px;
+            /* Χρυσό Gradient για να γυαλίζει */
+            background: linear-gradient(45deg, #FFD700, #FFA500); 
+            color: #000;   /* Μαύρο γράμμα για αντίθεση */
+            border: 2px solid white; /* Λευκό περίγραμμα */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Σκιά για βάθος */
+            z-index: 10;
+        }
+
+        /* --- Στυλ για τη φωτογραφία του ΠΡΟΠΟΝΗΤΗ --- */
+        .coach-photo-bg {
+            /* Σκούρο Γκρι/Μαύρο (Dark Slate) - Πιο επίσημο */
+            background: linear-gradient(135deg, #2c3e50, #000000) !important;
+            border-color: #95a5a6 !important; /* Ασημί περίγραμμα */
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -1400,6 +1428,11 @@
         💡 Συμβουλή: Κράτα το Ctrl (ή Cmd σε Mac) και κλικ για να επιλέξεις πολλές θέσεις
     </small>
 </div>
+
+<div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 1rem;">
+                    <input type="checkbox" id="isCaptainPlayer" style="width: 20px; height: 20px;">
+                    <label for="isCaptainPlayer" style="margin: 0; cursor: pointer;">©️ Είναι Αρχηγός (Captain);</label>
+                </div>
 
                 <div class="modal-buttons">
                     <button class="btn btn-success" onclick="addPlayer()">➕ Προσθήκη Παίκτη</button>
@@ -1859,7 +1892,7 @@
             });
         }
 
-        function displayRoster() {
+    function displayRoster() {
             const container = document.getElementById('rosterContainer');
             container.innerHTML = '';
 
@@ -1868,31 +1901,52 @@
                 return;
             }
 
-            const sortedRoster = [...data.roster].sort((a, b) => a.number - b.number);
+            // Ταξινόμηση: Πρώτα ο Coach, μετά οι παίκτες με νούμερο
+            const sortedRoster = [...data.roster].sort((a, b) => {
+                const isCoachA = a.position.includes('COACH') || a.position.includes('Προπονητής');
+                const isCoachB = b.position.includes('COACH') || b.position.includes('Προπονητής');
+                if (isCoachA && !isCoachB) return -1;
+                if (!isCoachA && isCoachB) return 1;
+                return (a.number || 999) - (b.number || 999);
+            });
 
             sortedRoster.forEach(player => {
                 const div = document.createElement('div');
                 div.className = 'player-card';
-                const isCoach = player.position.includes('Προπονητής');
-const displayNumber = player.number || (isCoach ? '👨‍🏫' : '—');
+                
+                // Έλεγχος αν είναι προπονητής
+                const isCoach = player.position.includes('Προπονητής') || player.position.includes('COACH');
+                
+                // Αν είναι προπονητής βάζουμε γραβάτα, αλλιώς το νούμερο ή παύλα
+                const displayNumber = player.number || (isCoach ? '👔' : '—');
+                
+                // Αν είναι αρχηγός, φτιάχνουμε το σήμα
+                const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
 
-div.innerHTML = `
-    <div class="player-photo" style="${isCoach ? 'background: linear-gradient(135deg, #d32f2f, #b71c1c);' : ''}">
-        <div class="player-number">${displayNumber}</div>
-    </div>
-    <div class="player-name">${player.name}</div>
-    <div class="player-position">${player.position}</div>
-`;
+                // Προσθήκη ειδικής κλάσης αν είναι προπονητής
+                const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
+
+                div.innerHTML = `
+                    <div class="${photoClass}">
+                        <div class="player-number">${displayNumber}</div>
+                        ${captainBadge}
+                    </div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-position">${player.position}</div>
+                `;
                 container.appendChild(div);
             });
         }
-
-        function addPlayer() {
+      
+function addPlayer() {
             const number = parseInt(document.getElementById('playerNumber').value);
             const name = document.getElementById('playerName').value.trim();
             const positionSelect = document.getElementById('playerPosition');
-const selectedOptions = Array.from(positionSelect.selectedOptions).map(opt => opt.value);
-const position = selectedOptions.filter(p => p !== '').join(' / ');
+            const selectedOptions = Array.from(positionSelect.selectedOptions).map(opt => opt.value);
+            const position = selectedOptions.filter(p => p !== '').join(' / ');
+            
+            // ΝΕΟ: Διαβάζουμε αν είναι αρχηγός
+            const isCaptain = document.getElementById('isCaptainPlayer').checked;
 
             if (!name || !position) {
                 alert('⚠️ Συμπλήρωσε όλα τα πεδία!');
@@ -1914,10 +1968,12 @@ const position = selectedOptions.filter(p => p !== '').join(' / ');
             }
 
             data.roster.push({ 
-    number: number || null, 
-    name, 
-    position 
-});
+                number: number || null, 
+                name, 
+                position,
+                isCaptain: isCaptain // Αποθήκευση της ιδιότητας
+            });
+            
             saveData(data);
             displayRoster();
             updateRosterList();
@@ -1946,14 +2002,15 @@ const position = selectedOptions.filter(p => p !== '').join(' / ');
     }
 }
 
-        function clearPlayerForm() {
-    document.getElementById('playerNumber').value = '';
-    document.getElementById('playerName').value = '';
-    const select = document.getElementById('playerPosition');
-    for (let option of select.options) {
-        option.selected = false;
-    }
-}
+       function clearPlayerForm() {
+            document.getElementById('playerNumber').value = '';
+            document.getElementById('playerName').value = '';
+            document.getElementById('isCaptainPlayer').checked = false; // Καθαρισμός checkbox
+            const select = document.getElementById('playerPosition');
+            for (let option of select.options) {
+                option.selected = false;
+            }
+        }
 
         function updateRosterList() {
             const container = document.getElementById('rosterList');
