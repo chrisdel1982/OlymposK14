@@ -2296,16 +2296,20 @@ function displayTopScorers() {
         return;
     }
 
+    // 1. Δημιουργία του Wrapper (Το κουτί που κάνει το scroll)
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-wrapper'; // Χρησιμοποιούμε το ίδιο στυλ με τη βαθμολογία
+
     const table = document.createElement('table');
     table.className = 'scorers-table';
     
-    // ΠΡΟΣΘΗΚΗ: Επικεφαλίδα Πίνακα
+    // Επικεφαλίδα Πίνακα
     const thead = document.createElement('thead');
     thead.innerHTML = `
         <tr style="background: #f9f9f9; font-size: 0.85rem;">
             <th style="width: 40px; text-align: center; color: #888; font-weight: 400;">#</th>
             <th style="text-align: left; color: #888; font-weight: 400; padding-left: 0.5rem;">Παίκτης</th>
-            <th style="width: 60px; text-align: center; color: #888; font-weight: 400;">Γκολ</th>
+            <th style="width: 60px; text-align: center; color: #888; font-weight: 400;">Goals</th>
         </tr>
     `;
     table.appendChild(thead);
@@ -2329,7 +2333,12 @@ function displayTopScorers() {
     });
 
     table.appendChild(tbody);
-    container.appendChild(table);
+    
+    // 2. Βάζουμε τον πίνακα ΜΕΣΑ στο wrapper
+    wrapper.appendChild(table);
+    
+    // 3. Βάζουμε το wrapper στη σελίδα
+    container.appendChild(wrapper);
 }
 function addPlayer() {
     const number = parseInt(document.getElementById('playerNumber').value);
