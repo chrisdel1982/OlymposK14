@@ -281,6 +281,13 @@ td:nth-child(2) {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    /* Διόρθωση για το κουτί του σκορ στα κινητά */
+    .match-score-box {
+        padding: 0.2rem 0.5rem !important; /* Πολύ λιγότερο "φούσκωμα" */
+        min-width: 40px !important;       /* Μικρότερο ελάχιστο πλάτος */
+        font-size: 0.9rem !important;     /* Πιο διακριτικά γράμματα */
+        letter-spacing: 0 !important;     /* Πιο κοντά οι αριθμοί */
+    }
 
     table { min-width: 100%; }
 }
