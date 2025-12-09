@@ -1858,19 +1858,19 @@ td:nth-child(2) {
 function displayStandings() {
     const standings = calculateStandings();
     
-    // Ανανέωση Headers Πίνακα για να προσθέσουμε το "Form"
+    // ΕΠΙΚΕΦΑΛΙΔΕΣ: Αφαιρέσαμε το γκρι φόντο και το bold από το 'Β'
     const tableHead = document.querySelector('#standingsTable thead tr');
     tableHead.innerHTML = `
-        <th style="width: 50px;">Θέση</th>
+        <th style="width: 40px;">Θέση</th>
         <th style="text-align: left;">Ομάδα</th>
-        <th style="width: 50px;">Αγ</th>
+        <th style="width: 40px;">Β</th>  <th style="width: 40px;">Αγ</th>
         <th style="width: 40px;">Ν</th>
         <th style="width: 40px;">Ι</th>
         <th style="width: 40px;">Η</th>
-        <th style="width: 60px;">ΓΥ-ΓΚ</th>
+        <th style="width: 40px;">ΓΥ</th>
+        <th style="width: 40px;">ΓΚ</th>
         <th style="width: 40px;">ΔΤ</th>
-        <th style="width: 50px;">Β</th>
-        <th style="width: 130px;">Φόρμα</th>
+        <th style="width: 110px;">Φόρμα</th>
     `;
 
     const tbody = document.getElementById('standingsBody');
@@ -1882,46 +1882,39 @@ function displayStandings() {
             row.classList.add('my-team');
         }
 
-        // --- ΥΠΟΛΟΓΙΣΜΟΣ ΧΡΩΜΑΤΩΝ (Left Border) ---
+        // Χρώματα Μπάρας
         let indicatorClass = '';
         const totalTeams = standings.length;
-        
-        if (index === 0) {
-            indicatorClass = 'indicator-green'; // 1ος -> Πράσινο
-        } else if (index === 1 || index === 2) {
-            indicatorClass = 'indicator-blue';  // 2ος & 3ος -> Μπλε
-        } else if (index >= totalTeams - 2) {
-            indicatorClass = 'indicator-red';   // 2 Τελευταίοι -> Κόκκινο
-        }
+        if (index === 0) indicatorClass = 'indicator-green';
+        else if (index === 1 || index === 2) indicatorClass = 'indicator-blue';
+        else if (index >= totalTeams - 2) indicatorClass = 'indicator-red';
 
-        // --- ΥΠΟΛΟΓΙΣΜΟΣ ΦΟΡΜΑΣ (Τελευταίοι 5 αγώνες) ---
-        // Παίρνουμε τα τελευταία 5 στοιχεία του history και τα αντιστρέφουμε (το πιο πρόσφατο δεξιά)
+        // Φόρμα (Form)
         const last5 = team.history.slice(-5);
-        
         let formHTML = '<div class="form-container">';
-        // Αν έχει παίξει λιγότερους από 5 αγώνες, γεμίζουμε με κενά αν θέλουμε, ή δείχνουμε όσα έχει
-        // Εδώ δείχνουμε όσα έχει.
         last5.forEach(result => {
             let badgeClass = '';
             let letter = '';
             if (result === 'W') { badgeClass = 'form-win'; letter = 'N'; }
             else if (result === 'D') { badgeClass = 'form-draw'; letter = 'I'; }
             else if (result === 'L') { badgeClass = 'form-loss'; letter = 'H'; }
+            else if (result === 'A') { badgeClass = 'form-postponed'; letter = 'A'; }
             
             formHTML += `<span class="form-badge ${badgeClass}">${letter}</span>`;
         });
         formHTML += '</div>';
 
+        // ΔΕΔΟΜΕΝΑ: Αφαιρέσαμε το γκρι φόντο και το bold από τους βαθμούς
         row.innerHTML = `
-            <td class="team-position pos-cell ${indicatorClass}">${index + 1}</td>
+            <td class="pos-cell ${indicatorClass}">${index + 1}</td>
             <td>${team.team}</td>
-            <td>${team.played}</td>
+            <td style="font-size: 1.1rem;">${team.points}</td> <td>${team.played}</td>
             <td>${team.won}</td>
             <td>${team.drawn}</td>
             <td>${team.lost}</td>
-            <td>${team.gf}-${team.ga}</td>
+            <td>${team.gf}</td>
+            <td>${team.ga}</td>
             <td>${team.gd > 0 ? '+' + team.gd : team.gd}</td>
-            <td><span class="points-number">${team.points}</span></td>
             <td>${formHTML}</td>
         `;
 
