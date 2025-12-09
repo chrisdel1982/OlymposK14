@@ -2121,10 +2121,11 @@ function displayFixtures() {
 
                 // ΥΠΟΛΟΓΙΣΜΟΣ ΗΛΙΚΙΑΣ
                 let ageHTML = '';
-                if (player.birthYear && !isCoach) { // Αν δεν είναι προπονητής και έχει έτος
-                    const age = currentYear - player.birthYear;
-                    ageHTML = `<div class="player-age">(${age} ετών)</div>`;
-                }
+if (player.birthYear && !isCoach) { 
+    const age = currentYear - player.birthYear;
+    // ΑΛΛΑΓΗ ΕΔΩ: Εμφανίζουμε ΚΑΙ το έτος ΚΑΙ την ηλικία
+    ageHTML = `<div class="player-age">${player.birthYear} <span style="font-weight: normal; opacity: 0.8;">(${age} ετών)</span></div>`;
+}
 
                 card.innerHTML = `
                     <div class="${photoClass}">
