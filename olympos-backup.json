@@ -7,37 +7,43 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "homeScore": 2,
-          "awayScore": 8
+          "awayScore": 8,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": 5,
-          "awayScore": 1
+          "awayScore": 1,
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": 0,
-          "awayScore": 5
+          "awayScore": 5,
+          "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": 1,
-          "awayScore": 5
+          "awayScore": 5,
+          "isPostponed": false
         },
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": 2,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         }
       ]
     },
@@ -48,37 +54,43 @@
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": 6,
-          "awayScore": 4
+          "awayScore": 4,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": 3,
-          "awayScore": 3
+          "awayScore": 3,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": 4,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": 2,
-          "awayScore": 7
+          "awayScore": 7,
+          "isPostponed": false
         }
       ]
     },
@@ -89,37 +101,43 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": 0,
-          "awayScore": 6
+          "awayScore": 6,
+          "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": 3,
-          "awayScore": 0
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": 1,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": 6,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         }
       ]
     },
@@ -130,37 +148,43 @@
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": 1,
-          "awayScore": 3
+          "awayScore": 3,
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": 5,
-          "awayScore": 0
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": 3,
-          "awayScore": 0
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": 3,
-          "awayScore": 3
+          "awayScore": 3,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": 2,
-          "awayScore": 4
+          "awayScore": 4,
+          "isPostponed": false
         }
       ]
     },
@@ -171,37 +195,43 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "homeScore": 3,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": 1,
-          "awayScore": 3
+          "awayScore": 3,
+          "isPostponed": false
         }
       ]
     },
@@ -212,37 +242,43 @@
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         }
       ]
     },
@@ -497,84 +533,99 @@
     {
       "number": 1,
       "name": "Σάββας Αβραμίδης",
+      "birthYear": 2014,
       "position": "Τερματοφύλακας (GK)"
     },
     {
       "number": 2,
       "name": "Άγγελος Κλαδάς",
+      "birthYear": 2013,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB)"
     },
     {
       "number": 9,
       "name": "Φάνης Βότσης",
+      "birthYear": 2012,
       "position": "Κεντρικός Αμυντικός (CB)",
       "goals": 1
     },
     {
       "number": 5,
       "name": "Παρασκευάς Τυρεκιδης",
+      "birthYear": 2012,
       "position": "Κεντρικός Αμυντικός (CB)"
     },
     {
       "number": 3,
       "name": "Ορέστης Δεληγιώργης",
+      "birthYear": 2013,
       "position": "Πλάγιος Αμυντικός - Δεξιός (RB)"
     },
     {
       "number": 14,
       "name": "Λεωνίδας Τσιοτσικας",
+      "birthYear": 2014,
       "position": "Πλάγιος Επιθετικός - Αριστερός (LW)",
       "goals": 1
     },
     {
       "number": 11,
       "name": "Βασίλης Ανδριτσούδης",
+      "birthYear": 2012,
       "position": "Κεντρικός Μέσος (CM)/ Επιθετικός Μέσος (AM)",
       "goals": 2
     },
     {
       "number": 12,
       "name": "Χρήστος Μπατσακίδης",
+      "birthYear": 2012,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Αμυντικός Μέσος (DM)",
       "goals": 1
     },
     {
       "number": 15,
       "name": "Γιώργος Βότσης",
+      "birthYear": 2012,
       "position": "Πλάγιος Επιθετικός - Αριστερός (LW)",
       "goals": 2
     },
     {
       "number": 8,
       "name": "Παναγιώτης Παπαδόπουλος",
+      "birthYear": 2013,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Επιθετικός Μέσος (AM)"
     },
     {
       "number": 7,
       "name": "Μιχάλης Τσοτουλίδης",
+      "birthYear": 2012,
       "position": "Πλάγιος Μέσος - Δεξιός (RM)/ Δεύτερος Επιθετικός (SS)",
       "goals": 1
     },
     {
       "number": 10,
       "name": "Μάνος Σαράτσογλου",
+      "birthYear": 2012,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Κεντρικός Επιθετικός (CF)",
       "goals": 3
     },
     {
       "number": 99,
       "name": "Δημήτρης Χριστοφίδης",
+      "birthYear": 2012,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Κεντρικός Επιθετικός (CF)",
       "goals": 2
     },
     {
       "number": 27,
       "name": "Άγγελος Μπατσακίδης",
+      "birthYear": 2015,
       "position": "Επιθετικός Μέσος (AM)/ Αμυντικός Μέσος (DM)"
     },
     {
       "number": 4,
       "name": "Νίκος Τσοτουλίδης",
+      "birthYear": 2014,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB)"
     },
     {
@@ -585,6 +636,7 @@
     {
       "number": 21,
       "name": "Νίκος Κυρτζαλιώτης",
+      "birthYear": 2012,
       "position": "Κεντρικός Μέσος (CM) / Αμυντικός Μέσος (DM) / Επιθετικός Μέσος (AM)",
       "isCaptain": true,
       "goals": 3
