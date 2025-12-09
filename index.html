@@ -2081,7 +2081,7 @@ function displayFixtures() {
         return;
     }
 
-    const currentYear = new Date().getFullYear(); // Παίρνουμε το τρέχον έτος (π.χ. 2025)
+    const currentYear = new Date().getFullYear(); 
 
     const categories = [
         { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['gk'], icon: '🧤' },
@@ -2119,13 +2119,14 @@ function displayFixtures() {
                 const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
 
-                // ΥΠΟΛΟΓΙΣΜΟΣ ΗΛΙΚΙΑΣ
+                // --- Η ΑΛΛΑΓΗ ΕΓΙΝΕ ΕΔΩ ---
                 let ageHTML = '';
-if (player.birthYear && !isCoach) { 
-    const age = currentYear - player.birthYear;
-    // ΑΛΛΑΓΗ ΕΔΩ: Εμφανίζουμε ΚΑΙ το έτος ΚΑΙ την ηλικία
-    ageHTML = `<div class="player-age">${player.birthYear} <span style="font-weight: normal; opacity: 0.8;">(${age} ετών)</span></div>`;
-}
+                if (player.birthYear && !isCoach) { 
+                    const age = currentYear - player.birthYear;
+                    // Εμφάνιση με παύλα: "2012 - 13 ετών"
+                    ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
+                }
+                // --------------------------
 
                 card.innerHTML = `
                     <div class="${photoClass}">
@@ -2159,11 +2160,10 @@ if (player.birthYear && !isCoach) {
              card.className = 'player-card';
              const displayNumber = player.number || '—';
              
-             // ΥΠΟΛΟΓΙΣΜΟΣ ΗΛΙΚΙΑΣ ΚΑΙ ΕΔΩ
              let ageHTML = '';
              if (player.birthYear) {
                 const age = currentYear - player.birthYear;
-                ageHTML = `<div class="player-age">(${age} ετών)</div>`;
+                ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
              }
 
              card.innerHTML = `
