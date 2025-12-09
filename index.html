@@ -1322,6 +1322,69 @@ td:nth-child(2) {
 #rosterContainer {
     display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
 }
+/* --- TOP SCORERS STYLES --- */
+.scorers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.scorers-table tr {
+    border-bottom: 1px solid #eee;
+}
+.scorers-table td {
+    padding: 0.8rem;
+    vertical-align: middle;
+}
+.scorer-rank {
+    font-weight: 700;
+    color: #888;
+    width: 40px;
+    text-align: center;
+}
+.rank-1 { color: #FFD700; font-size: 1.2rem; } /* Χρυσό */
+.rank-2 { color: #C0C0C0; font-size: 1.1rem; } /* Ασημένιο */
+.rank-3 { color: #CD7F32; font-size: 1.1rem; } /* Χάλκινο */
+
+.scorer-goals {
+    font-weight: 700;
+    color: var(--primary-color);
+    background: #f0f8f0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    text-align: center;
+    width: 50px;
+}
+.scorer-name {
+    font-weight: 600;
+    text-align: left;
+}
+/* Admin Goal Controls */
+.goal-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px;
+}
+.goal-btn {
+    width: 25px;
+    height: 25px;
+    background: #eee;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    border-radius: 3px;
+}
+.goal-btn:hover { background: #ddd; }
+.goal-display {
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    border: none;
+}
     </style>
 </head>
 <body>
@@ -1377,6 +1440,13 @@ td:nth-child(2) {
                 <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
                     <strong>Υπόμνημα:</strong> Αγ=Αγώνες, Ν=Νίκες, Ι=Ισοπαλίες, Η=Ήττες, ΓΥ=Γκολ Υπέρ, ΓΚ=Γκολ Κατά, Β=Βαθμοί
                 </div>
+                <div class="card">
+    <div class="card-header">
+        <h2>👟 Πρώτοι Σκόρερ</h2>
+    </div>
+    <div id="scorersContainer">
+        </div>
+</div>
             </div>
         </div>
 
@@ -2179,11 +2249,49 @@ function displayFixtures() {
         container.appendChild(gridDiv);
     }
 }
-      
+function displayTopScorers() {
+    const container = document.getElementById('scorersContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (!data.roster) return;
+
+    // Φιλτράρισμα παικτών που έχουν έστω 1 γκολ
+    const scorers = data.roster
+        .filter(p => p.goals && p.goals > 0)
+        .sort((a, b) => b.goals - a.goals); // Ταξινόμηση φθίνουσα
+
+    if (scorers.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #999;">Δεν έχουν σημειωθεί γκολ ακόμα.</div>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'scorers-table';
+    
+    scorers.forEach((player, index) => {
+        const rank = index + 1;
+        let rankClass = '';
+        if (rank === 1) rankClass = 'rank-1';
+        else if (rank === 2) rankClass = 'rank-2';
+        else if (rank === 3) rankClass = 'rank-3';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="scorer-rank ${rankClass}">#${rank}</td>
+            <td class="scorer-name">${player.name}</td>
+            <td style="text-align: right;"><div class="scorer-goals">${player.goals}</div></td>
+        `;
+        table.appendChild(row);
+    });
+
+    container.appendChild(table);
+}    
 function addPlayer() {
     const number = parseInt(document.getElementById('playerNumber').value);
     const name = document.getElementById('playerName').value.trim();
-    const birthYear = parseInt(document.getElementById('playerBirthYear').value); // ΝΕΟ
+    const birthYear = parseInt(document.getElementById('playerBirthYear').value);
     const positionSelect = document.getElementById('playerPosition');
     const selectedOptions = Array.from(positionSelect.selectedOptions).map(opt => opt.value);
     const position = selectedOptions.filter(p => p !== '').join(' / ');
@@ -2193,27 +2301,27 @@ function addPlayer() {
         alert('⚠️ Συμπλήρωσε Όνομα και Θέση!');
         return;
     }
-
-    // Έλεγχος αριθμού φανέλας (προαιρετικός αριθμός, αλλά αν μπει πρέπει να είναι μοναδικός)
+    
+    // Έλεγχος αριθμού
     if (number && data.roster && data.roster.some(p => p.number === number)) {
         alert('⚠️ Ο αριθμός φανέλας υπάρχει ήδη!');
         return;
     }
 
-    if (!data.roster) {
-        data.roster = [];
-    }
+    if (!data.roster) data.roster = [];
 
     data.roster.push({ 
         number: number || null, 
         name, 
-        birthYear: birthYear || null, // Αποθήκευση έτους
+        birthYear: birthYear || null,
         position,
-        isCaptain: isCaptain 
+        isCaptain: isCaptain,
+        goals: 0 // ΝΕΟ: Αρχικοποίηση γκολ
     });
     
     saveData(data);
     displayRoster();
+    displayTopScorers(); // ΝΕΟ
     updateRosterList();
     clearPlayerForm();
     alert('✅ Ο παίκτης προστέθηκε επιτυχώς!');
@@ -2230,33 +2338,55 @@ function clearPlayerForm() {
     }
 }
 
-        function updateRosterList() {
-            const container = document.getElementById('rosterList');
-            container.innerHTML = '';
+  function updateRosterList() {
+    const container = document.getElementById('rosterList');
+    container.innerHTML = '';
 
-            if (!data.roster || data.roster.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;">Δεν υπάρχουν παίκτες</div>';
-                return;
-            }
+    if (!data.roster || data.roster.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999;">Δεν υπάρχουν παίκτες</div>';
+        return;
+    }
 
-            const sortedRoster = [...data.roster].sort((a, b) => a.number - b.number);
+    const sortedRoster = [...data.roster].sort((a, b) => a.number - b.number);
 
-            sortedRoster.forEach(player => {
-                const div = document.createElement('div');
-                div.className = 'roster-item';
-                const displayNum = player.number ? `#${player.number}` : '—';
-const isCoach = player.position.includes('Προπονητής');
-div.innerHTML = `
-    <div>
-        <strong>${displayNum}</strong> ${player.name} 
-        ${isCoach ? '<span style="color: #d32f2f;">👨‍🏫</span>' : ''} 
-        <span style="color: #666;">(${player.position})</span>
-    </div>
-    <button class="btn btn-danger btn-small" onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
-`;
-                container.appendChild(div);
-            });
-        }
+    sortedRoster.forEach((player, index) => { // Προσθέσαμε το index
+        const div = document.createElement('div');
+        div.className = 'roster-item';
+        const displayNum = player.number ? `#${player.number}` : '—';
+        const currentGoals = player.goals || 0; // Αν δεν έχει γκολ, βάλε 0
+
+        div.innerHTML = `
+            <div style="flex: 1;">
+                <strong>${displayNum}</strong> ${player.name} 
+                <div style="font-size: 0.8rem; color: #666;">${player.position}</div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="goal-control">
+                    <button class="goal-btn" onclick="changeGoals('${player.name}', -1)">-</button>
+                    <input type="text" class="goal-display" value="${currentGoals}" readonly>
+                    <button class="goal-btn" onclick="changeGoals('${player.name}', 1)">+</button>
+                </div>
+                <button class="btn btn-danger btn-small" onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
+function changeGoals(playerName, change) {
+    const player = data.roster.find(p => p.name === playerName);
+    if (player) {
+        if (!player.goals) player.goals = 0;
+        player.goals += change;
+        if (player.goals < 0) player.goals = 0; // Όχι αρνητικά γκολ
+        
+        saveData(data);
+        updateRosterList(); // Ενημέρωση λίστας admin
+        displayTopScorers(); // Ενημέρωση πίνακα σκόρερ
+    }
+}
 
         // ===== ΔΙΑΧΕΙΡΙΣΗ ΝΕΩΝ - ΕΙΔΗΣΕΩΝ =====
         let newsPhotoBase64 = null;
@@ -2637,6 +2767,7 @@ function saveResults() {
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
+    displayTopScorers();
     displayResults();
     displayFixtures();
     displayRoster();
