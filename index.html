@@ -1322,12 +1322,12 @@ td:nth-child(2) {
 #rosterContainer {
     display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
 }
-/* --- TOP SCORERS STYLES (MOBILE FIXED) --- */
+/* --- TOP SCORERS STYLES (NO SCROLL) --- */
 .scorers-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 0.5rem;
-    table-layout: fixed; /* ΚΛΕΙΔΙ: Κρατάει σταθερό το πλάτος */
+    table-layout: fixed; /* Υποχρεωτικό πλάτος */
 }
 
 .scorers-table tr {
@@ -1337,19 +1337,25 @@ td:nth-child(2) {
 .scorers-table td, .scorers-table th {
     padding: 0.6rem;
     vertical-align: middle;
-    overflow: hidden; /* Κρύβει οτιδήποτε περισσεύει */
+    overflow: hidden;
 }
 
-/* Mobile Optimization */
+/* Mobile Optimization: ΑΥΣΤΗΡΗ ΠΡΟΣΑΡΜΟΓΗ */
 @media (max-width: 768px) {
+    /* Μηδενίζουμε τα περιθώρια της κάρτας ΜΟΝΟ για τους σκόρερ αν χρειαστεί, 
+       αλλά εδώ μικραίνουμε τα κελιά */
+    
     .scorers-table td, .scorers-table th {
-        padding: 0.5rem 0.1rem; /* Ελάχιστο padding */
-        font-size: 0.9rem;
+        padding: 0.5rem 2px; /* Σχεδόν καθόλου κενό δεξιά-αριστερά */
+        font-size: 0.85rem;
     }
     
-    /* Μικραίνουμε τη γραμματοσειρά στα ονόματα για να χωράνε */
+    /* Ειδική ρύθμιση για το όνομα για να μην βγαίνει έξω */
     .scorer-name {
-        font-size: 0.85rem; 
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Βάζει ... αν το όνομα είναι τεράστιο */
     }
 }
 
@@ -1358,6 +1364,7 @@ td:nth-child(2) {
     text-align: center;
     font-size: 1.1rem;
     color: #000000;
+    /* Σταθερό πλάτος θα δοθεί από το HTML */
 }
 
 .rank-1 { color: #FFD700; text-shadow: 1px 1px 0 rgba(0,0,0,0.1); } 
@@ -1368,7 +1375,7 @@ td:nth-child(2) {
     font-weight: 700;
     color: white;
     background: var(--primary-color);
-    padding: 0.1rem 0.5rem; /* Πιο μικρό κουτάκι */
+    padding: 2px 6px;
     border-radius: 10px;
     text-align: center;
     display: inline-block;
@@ -1380,9 +1387,6 @@ td:nth-child(2) {
     font-weight: 600;
     text-align: left;
     color: var(--text-dark);
-    white-space: nowrap; /* Απαγορεύει την αλλαγή γραμμής */
-    overflow: hidden;    /* Κρύβει το όνομα αν είναι τεράστιο */
-    text-overflow: ellipsis; /* Βάζει ... στο τέλος αν δεν χωράει */
 }
 
 /* Admin Goal Controls */
@@ -2296,19 +2300,18 @@ function displayTopScorers() {
         return;
     }
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'table-wrapper'; 
-
+    // ΣΗΜΑΝΤΙΚΟ: Αφαιρέσαμε το wrapper div που προκαλούσε το scroll
+    
     const table = document.createElement('table');
     table.className = 'scorers-table';
     
-    // ΕΔΩ Η ΑΛΛΑΓΗ: Χρήση ποσοστών (%) για τέλεια προσαρμογή
+    // ΕΔΩ Η ΑΛΛΑΓΗ: Σταθερά pixels για τα μικρά, auto για το όνομα
     const thead = document.createElement('thead');
     thead.innerHTML = `
         <tr style="background: #f9f9f9; font-size: 0.8rem;">
-            <th style="width: 12%; text-align: center; color: #888; font-weight: 400;">#</th>
-            <th style="width: 73%; text-align: left; color: #888; font-weight: 400; padding-left: 0.2rem;">Παίκτης</th>
-            <th style="width: 15%; text-align: center; color: #888; font-weight: 400;">Goals</th>
+            <th style="width: 30px; text-align: center; color: #888; font-weight: 400;">#</th>
+            <th style="width: auto; text-align: left; color: #888; font-weight: 400; padding-left: 2px;">Παίκτης</th>
+            <th style="width: 45px; text-align: center; color: #888; font-weight: 400;">Goals</th>
         </tr>
     `;
     table.appendChild(thead);
@@ -2332,8 +2335,9 @@ function displayTopScorers() {
     });
 
     table.appendChild(tbody);
-    wrapper.appendChild(table);
-    container.appendChild(wrapper);
+    
+    // Πλέον βάζουμε τον πίνακα απευθείας στο container
+    container.appendChild(table);
 }
 function addPlayer() {
     const number = parseInt(document.getElementById('playerNumber').value);
