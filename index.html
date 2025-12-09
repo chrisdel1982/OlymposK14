@@ -275,9 +275,7 @@ td:nth-child(2) {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .form-container {
-        display: none; /* Κρύβουμε τη φόρμα στα πολύ μικρά κινητά αν δεν χωράει */
-    }
+
     table { min-width: 100%; }
 }
 /* --- Match Display (New Grouped Style) --- */
@@ -1291,6 +1289,19 @@ td:nth-child(2) {
             border-color: #95a5a6 !important; /* Ασημί περίγραμμα */
             color: white;
         }
+        /* --- Mobile Fix για Φόρμα --- */
+@media (max-width: 768px) {
+    .form-container {
+        display: flex !important; /* Εμφάνιση της φόρμας */
+        gap: 2px; /* Μικρότερο κενό μεταξύ τους */
+    }
+
+    .form-badge {
+        width: 18px;  /* Πιο μικρά κυκλάκια */
+        height: 18px;
+        font-size: 0.6rem; /* Μικρότερα γράμματα */
+    }
+}
     </style>
 </head>
 <body>
@@ -1669,42 +1680,47 @@ td:nth-child(2) {
         ];
 
         async function loadData() {
-            // 1. Έλεγχος του localStorage (για τον Admin που έχει κάνει αλλαγές)
-            const saved = localStorage.getItem('footballData');
-            if (saved) {
-                console.log('Φορτώθηκαν δεδομένα από το localStorage.');
-                return JSON.parse(saved);
-            }
+    let localData = null;
+    const saved = localStorage.getItem('footballData');
+    if (saved) {
+        localData = JSON.parse(saved);
+        console.log('Βρέθηκαν τοπικά δεδομένα.');
+    }
 
-            // 2. Αν το localStorage είναι άδειο, φόρτωση του public JSON (για Επισκέπτες)
-            try {
-                // Αυτό υποθέτει ότι το 'olympos-backup.json' είναι στο ίδιο φάκελο
-                const response = await fetch('olympos-backup.json'); 
-                
-                if (response.ok) {
-                    const jsonData = await response.json();
-                    console.log('Φορτώθηκαν δεδομένα από το olympos-backup.json');
-                    return jsonData;
-                } else {
-                    // Το αρχείο δεν βρέθηκε ή υπήρξε άλλο σφάλμα
-                    console.warn(`Σφάλμα ${response.status} κατά τη φόρτωση του olympos-backup.json`);
-                }
-            } catch (e) {
-                // Σφάλμα δικτύου κ.λπ.
-                console.error('Σφάλμα δικτύου κατά τη φόρτωση του olympos-backup.json:', e);
-            }
-
-            // 3. Fallback: Χρήση των "καρφωτών" δεδομένων (Αν αποτύχουν ΚΑΙ τα δύο)
-            console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
-            return { 
-                fixtures: JSON.parse(JSON.stringify(FIXTURES)),
-                roster: [],
-                news: []
-            };
+    try {
+        // Προσπάθεια φόρτωσης από το GitHub (ή τοπικό server)
+        // Βάζουμε και ένα timestamp για να μην κρατάει cache ο browser
+        const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
+        
+        if (response.ok) {
+            const serverData = await response.json();
+            console.log('Φορτώθηκαν δεδομένα από το olympos-backup.json');
+            
+            // ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ:
+            // Αν τα δεδομένα του server (GitHub) φαίνονται πιο καινούργια ή έγκυρα, τα χρησιμοποιούμε.
+            // Σε αυτή την απλή έκδοση, δίνουμε προτεραιότητα στο αρχείο JSON για τους επισκέπτες.
+            
+            // Αν είμαστε Admin και έχουμε κάνει αλλαγές που δεν ανέβηκαν ακόμα, ίσως θέλουμε τα τοπικά.
+            // Αλλά για να βλέπουν όλοι τα ίδια, επιστρέφουμε του server.
+            return serverData;
         }
+    } catch (e) {
+        console.warn('Δεν βρέθηκε το olympos-backup.json ή υπάρχει σφάλμα δικτύου.', e);
+    }
 
-        let data; // Απλά δηλώνουμε τη μεταβλητή
+    // Αν αποτύχει η φόρτωση από το αρχείο, επιστρέφουμε τα τοπικά (αν υπάρχουν)
+    if (localData) {
+        return localData;
+    }
 
+    // Fallback: Αν δεν υπάρχει τίποτα πουθενά, φόρτωσε τα hardcoded
+    console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
+    return { 
+        fixtures: JSON.parse(JSON.stringify(FIXTURES)),
+        roster: [],
+        news: []
+    };
+}
         function saveData(dataToSave) {
             localStorage.setItem('footballData', JSON.stringify(dataToSave));
         }
