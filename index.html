@@ -372,89 +372,86 @@ td:nth-child(2) {
       /* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE) --- */
 
         .roster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 2rem; /* Μεγαλύτερη απόσταση μεταξύ τους */
-            margin-top: 2rem;
-            padding: 1rem;
-        }
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
 
-        .player-card {
-            background: white;
-            border-radius: 16px; /* Πιο στρογγυλές γωνίες */
-            padding: 2rem 1.5rem;
-            text-align: center;
-            position: relative; /* Απαραίτητο για το εφέ της μπάρας */
-            /* Μοντέρνα σκιά που δίνει βάθος */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* "Ελαστική" κίνηση */
-            border: 1px solid rgba(0,0,0,0.05);
-            overflow: hidden;
-            z-index: 1;
-        }
+.player-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    overflow: visible;
+}
 
         /* Η χρυσή μπάρα στο πάνω μέρος της κάρτας */
         .player-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px; /* Το πάχος της γραμμής */
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
-            z-index: 2;
-        }
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    z-index: 2;
+}
 
         /* Εφέ όταν περνάει το ποντίκι από πάνω */
         .player-card:hover {
-            transform: translateY(-12px) scale(1.02); /* Σηκώνεται και μεγαλώνει λίγο */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); /* Η σκιά γίνεται πιο έντονη */
-        }
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    border-color: var(--accent-color);
+}
 
         .player-photo {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            /* Σκούρο πράσινο φόντο στη φωτογραφία */
-            background: linear-gradient(135deg, var(--primary-color), #0f2b19);
-            margin: 0 auto 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Διπλό περίγραμμα: Λευκό μέσα, Χρυσό έξω */
-            border: 4px solid white;
-            box-shadow: 0 0 0 4px var(--accent-color); 
-        }
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), #0f2b19);
+    margin: 0 auto 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
 
         .player-number {
-            font-size: 3.5rem; /* Μεγαλύτερο νούμερο */
-            font-weight: 800;
-            color: white;
-            /* Σκιά στο νούμερο για να ξεχωρίζει */
-            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-            font-family: 'Segoe UI', sans-serif;
-            line-height: 1;
-        }
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1;
+}
 
         .player-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0.8rem 0 0.4rem;
-            /* Αφαιρέθηκε το text-transform: uppercase */
-            letter-spacing: normal;
-        }
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0.5rem 0 0.3rem;
+    letter-spacing: normal;
+    line-height: 1.3;
+}
 
         .player-position {
-            color: var(--primary-color);
-            font-size: 0.85rem;
-            padding: 0.4rem 1rem;
-            background: rgba(255, 215, 0, 0.15); /* Αχνό χρυσό φόντο */
-            border-radius: 20px;
-            display: inline-block;
-            font-weight: 600;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
+    color: var(--primary-color);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    background: rgba(255, 215, 0, 0.15);
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 600;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    line-height: 1.2;
+}
 
         .player-actions {
             margin-top: 1.5rem;
@@ -1105,31 +1102,31 @@ td:nth-child(2) {
             }
 
             .roster-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
 
-            .player-card {
-                padding: 1.2rem;
-            }
+.player-card {
+    padding: 0.8rem;
+}
 
-            .player-photo {
-                width: 100px;
-                height: 100px;
-            }
+.player-photo {
+    width: 70px;
+    height: 70px;
+}
 
-            .player-number {
-                font-size: 2rem;
-            }
+.player-number {
+    font-size: 1.5rem;
+}
 
-            .player-name {
-                font-size: 1.1rem;
-            }
+.player-name {
+    font-size: 0.9rem;
+}
 
-            .player-position {
-                font-size: 0.85rem;
-                padding: 0.25rem 0.6rem;
-            }
+.player-position {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+}
 
             /* Νέα - Ειδήσεις mobile styling */
             .news-item {
@@ -1263,24 +1260,23 @@ td:nth-child(2) {
         }
 /* --- Στυλ για το σήμα του Αρχηγού (New & Improved) --- */
         .captain-badge {
-            position: absolute;
-            bottom: 5px;   /* Τοποθέτηση */
-            right: 5px;    /* Τοποθέτηση */
-            width: 32px;
-            height: 32px;
-            /* Χρυσό Gradient για να γυαλίζει */
-            background: linear-gradient(45deg, #FFD700, #FFA500); 
-            color: #000;   /* Μαύρο γράμμα για αντίθεση */
-            border: 2px solid white; /* Λευκό περίγραμμα */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Σκιά για βάθος */
-            z-index: 10;
-        }
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #000;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 10;
+}
 
         /* --- Στυλ για τη φωτογραφία του ΠΡΟΠΟΝΗΤΗ --- */
         .coach-photo-bg {
@@ -1301,6 +1297,24 @@ td:nth-child(2) {
         height: 18px;
         font-size: 0.6rem; /* Μικρότερα γράμματα */
     }
+}
+/* Νέο στυλ για τους τίτλους των θέσεων στο Ρόστερ */
+.roster-category-title {
+    width: 100%;
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    clear: both; /* Για σιγουριά */
+}
+
+/* Διόρθωση: Το rosterContainer δεν πρέπει να είναι grid πια, 
+   αλλά να περιέχει grids */
+#rosterContainer {
+    display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
 }
     </style>
 </head>
@@ -2048,41 +2062,84 @@ function displayFixtures() {
     }
 }
 
-    function displayRoster() {
-            const container = document.getElementById('rosterContainer');
-            container.innerHTML = '';
+   function displayRoster() {
+    const container = document.getElementById('rosterContainer');
+    container.className = ''; 
+    container.innerHTML = '';
 
-            if (!data.roster || data.roster.length === 0) {
-                container.innerHTML = '<div class="empty-state"><p>👥 Δεν υπάρχουν παίκτες στο ρόστερ.</p><p style="font-size: 0.9rem; margin-top: 0.5rem;">Χρησιμοποίησε το Admin Panel για να προσθέσεις!</p></div>';
-                return;
-            }
+    if (!data.roster || data.roster.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>👥 Δεν υπάρχουν παίκτες στο ρόστερ.</p><p style="font-size: 0.9rem; margin-top: 0.5rem;">Χρησιμοποίησε το Admin Panel για να προσθέσεις!</p></div>';
+        return;
+    }
 
-            // Ταξινόμηση: Πρώτα ο Coach, μετά οι παίκτες με νούμερο
-            const sortedRoster = [...data.roster].sort((a, b) => {
-                const isCoachA = a.position.includes('COACH') || a.position.includes('Προπονητής');
-                const isCoachB = b.position.includes('COACH') || b.position.includes('Προπονητής');
-                if (isCoachA && !isCoachB) return -1;
-                if (!isCoachA && isCoachB) return 1;
-                return (a.number || 999) - (b.number || 999);
-            });
+    // ΟΡΙΣΜΟΣ ΚΑΤΗΓΟΡΙΩΝ ΜΕ ΑΥΣΤΗΡΑ KEYWORDS (ΜΟΝΟ ΚΩΔΙΚΟΙ)
+    const categories = [
+        { 
+            title: 'TECHNICAL STAFF', 
+            // Εδώ κρατάμε το 'προπονητής' γιατί συνήθως δεν έχει συντομογραφία τύπου (HC) στο σύστημά σου
+            keywords: ['προπονητής', 'coach', 'manager'],
+            icon: '👨‍🏫' 
+        },
+        { 
+            title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', 
+            keywords: ['gk'], // Μόνο αν βρει "gk"
+            icon: '🧤' 
+        },
+        { 
+            title: 'ΑΜΥΝΤΙΚΟΙ', 
+            // ΑΦΑΙΡΕΘΗΚΕ ΤΟ 'αμυντικός'. Τώρα ψάχνει μόνο τους κωδικούς.
+            keywords: ['cb', 'lb', 'rb', 'sw', 'lwb', 'rwb', 'wb'],
+            icon: '🛡️' 
+        },
+        { 
+            title: 'ΜΕΣΟΙ', 
+            // ΑΦΑΙΡΕΘΗΚΕ ΤΟ 'μέσος'.
+            keywords: ['cm', 'dm', 'am', 'lm', 'rm'],
+            icon: '⚙️' 
+        },
+        { 
+            title: 'ΕΠΙΘΕΤΙΚΟΙ', 
+            // ΑΦΑΙΡΕΘΗΚΕ ΤΟ 'επιθετικός'.
+            keywords: ['cf', 'ss', 'lw', 'rw', 'st'],
+            icon: '⚡' 
+        }
+    ];
 
-            sortedRoster.forEach(player => {
-                const div = document.createElement('div');
-                div.className = 'player-card';
+    let availablePlayers = [...data.roster];
+
+    categories.forEach(category => {
+        const groupPlayers = availablePlayers.filter(p => {
+            const pos = (p.position || '').toLowerCase();
+            
+            // Έλεγχος: Αν η θέση περιέχει ΕΣΤΩ ΕΝΑΝ από τους κωδικούς
+            return category.keywords.some(keyword => pos.includes(keyword));
+        });
+
+        if (groupPlayers.length > 0) {
+            // 1. Τίτλος
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'roster-category-title';
+            titleDiv.innerHTML = `${category.icon} ${category.title}`;
+            container.appendChild(titleDiv);
+
+            // 2. Grid
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'roster-grid';
+            
+            // Ταξινόμηση
+            groupPlayers.sort((a, b) => (a.number || 999) - (b.number || 999));
+
+            // 3. Κάρτες
+            groupPlayers.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
                 
-                // Έλεγχος αν είναι προπονητής
-                const isCoach = player.position.includes('Προπονητής') || player.position.includes('COACH');
-                
-                // Αν είναι προπονητής βάζουμε γραβάτα, αλλιώς το νούμερο ή παύλα
+                const isCoach = category.title === 'TECHNICAL STAFF';
                 const displayNumber = player.number || (isCoach ? '👔' : '—');
-                
-                // Αν είναι αρχηγός, φτιάχνουμε το σήμα
                 const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
-
-                // Προσθήκη ειδικής κλάσης αν είναι προπονητής
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
 
-                div.innerHTML = `
+                card.innerHTML = `
                     <div class="${photoClass}">
                         <div class="player-number">${displayNumber}</div>
                         ${captainBadge}
@@ -2090,9 +2147,42 @@ function displayFixtures() {
                     <div class="player-name">${player.name}</div>
                     <div class="player-position">${player.position}</div>
                 `;
-                container.appendChild(div);
+                gridDiv.appendChild(card);
             });
+
+            container.appendChild(gridDiv);
+            
+            // Αφαίρεση από τη λίστα διαθέσιμων
+            availablePlayers = availablePlayers.filter(p => !groupPlayers.includes(p));
         }
+    });
+
+    // Ορφανοί παίκτες (που δεν έχουν κανένα από τα παραπάνω tags)
+    if (availablePlayers.length > 0) {
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'roster-category-title';
+        titleDiv.innerText = 'ΑΛΛΟΙ';
+        container.appendChild(titleDiv);
+
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'roster-grid';
+        
+        availablePlayers.forEach(player => {
+             const card = document.createElement('div');
+             card.className = 'player-card';
+             const displayNumber = player.number || '—';
+             card.innerHTML = `
+                <div class="player-photo">
+                    <div class="player-number">${displayNumber}</div>
+                </div>
+                <div class="player-name">${player.name}</div>
+                <div class="player-position">${player.position}</div>
+            `;
+            gridDiv.appendChild(card);
+        });
+        container.appendChild(gridDiv);
+    }
+}
       
 function addPlayer() {
             const number = parseInt(document.getElementById('playerNumber').value);
