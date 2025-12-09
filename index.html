@@ -1322,68 +1322,97 @@ td:nth-child(2) {
 #rosterContainer {
     display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
 }
-/* --- TOP SCORERS STYLES --- */
+/* --- TOP SCORERS STYLES (ΒΕΛΤΙΩΜΕΝΟ) --- */
 .scorers-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
+
 .scorers-table tr {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f0;
 }
+
+/* Κινητά: Μικρότερα κενά για να χωράει άνετα */
 .scorers-table td {
     padding: 0.8rem;
     vertical-align: middle;
 }
-.scorer-rank {
-    font-weight: 700;
-    color: #888;
-    width: 40px;
-    text-align: center;
+
+@media (max-width: 768px) {
+    .scorers-table td {
+        padding: 0.6rem 0.3rem; /* Λιγότερο "φούσκωμα" στα πλάγια */
+        font-size: 0.95rem;
+    }
 }
-.rank-1 { color: #FFD700; font-size: 1.2rem; } /* Χρυσό */
-.rank-2 { color: #C0C0C0; font-size: 1.1rem; } /* Ασημένιο */
-.rank-3 { color: #CD7F32; font-size: 1.1rem; } /* Χάλκινο */
+
+.scorer-rank {
+    font-weight: 800;
+    width: 35px;
+    text-align: center;
+    font-size: 1.1rem; /* Κοινό μέγεθος για ΟΛΟΥΣ */
+    color: #000000;    /* Μαύρο για τους υπόλοιπους (4ος και κάτω) */
+}
+
+/* Τα χρώματα παραμένουν, αλλά αφαιρέσαμε τα διαφορετικά μεγέθη */
+.rank-1 { 
+    color: #FFD700; /* Χρυσό */
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+} 
+.rank-2 { 
+    color: #546E7A; /* Μεταλλικό Μπλε-Γκρι */
+} 
+.rank-3 { 
+    color: #D84315; /* Κεραμιδί */
+}
 
 .scorer-goals {
     font-weight: 700;
-    color: var(--primary-color);
-    background: #f0f8f0;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
+    color: white;
+    background: var(--primary-color); /* Πράσινο φόντο για τα γκολ */
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
     text-align: center;
-    width: 50px;
+    min-width: 30px;
+    display: inline-block;
+    font-size: 0.9rem;
 }
+
 .scorer-name {
     font-weight: 600;
     text-align: left;
+    color: var(--text-dark);
 }
-/* Admin Goal Controls */
+
+/* Admin Goal Controls - Mobile Friendly */
 .goal-control {
     display: flex;
     align-items: center;
-    gap: 5px;
-    background: #fff;
-    border: 1px solid #ddd;
+    gap: 2px;
+    background: #f5f5f5;
     border-radius: 4px;
     padding: 2px;
 }
 .goal-btn {
-    width: 25px;
-    height: 25px;
-    background: #eee;
-    border: none;
+    width: 28px;
+    height: 28px;
+    background: white;
+    border: 1px solid #ddd;
     cursor: pointer;
     font-weight: bold;
-    color: #333;
-    border-radius: 3px;
+    color: var(--primary-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.goal-btn:hover { background: #ddd; }
 .goal-display {
-    width: 30px;
+    width: 25px;
     text-align: center;
     font-weight: bold;
     border: none;
+    background: transparent;
+    font-size: 1rem;
 }
     </style>
 </head>
@@ -1442,7 +1471,7 @@ td:nth-child(2) {
                 </div>
                 <div class="card">
     <div class="card-header">
-        <h2>👟 Πρώτοι Σκόρερ</h2>
+        <h2>👟 Σκόρερ</h2>
     </div>
     <div id="scorersContainer">
         </div>
@@ -2260,7 +2289,7 @@ function displayTopScorers() {
     // Φιλτράρισμα παικτών που έχουν έστω 1 γκολ
     const scorers = data.roster
         .filter(p => p.goals && p.goals > 0)
-        .sort((a, b) => b.goals - a.goals); // Ταξινόμηση φθίνουσα
+        .sort((a, b) => b.goals - a.goals);
 
     if (scorers.length === 0) {
         container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #999;">Δεν έχουν σημειωθεί γκολ ακόμα.</div>';
@@ -2269,6 +2298,19 @@ function displayTopScorers() {
 
     const table = document.createElement('table');
     table.className = 'scorers-table';
+    
+    // ΠΡΟΣΘΗΚΗ: Επικεφαλίδα Πίνακα
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr style="background: #f9f9f9; font-size: 0.85rem;">
+            <th style="width: 40px; text-align: center; color: #888; font-weight: 400;">#</th>
+            <th style="text-align: left; color: #888; font-weight: 400; padding-left: 0.5rem;">Παίκτης</th>
+            <th style="width: 60px; text-align: center; color: #888; font-weight: 400;">Γκολ</th>
+        </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
     
     scorers.forEach((player, index) => {
         const rank = index + 1;
@@ -2281,13 +2323,14 @@ function displayTopScorers() {
         row.innerHTML = `
             <td class="scorer-rank ${rankClass}">#${rank}</td>
             <td class="scorer-name">${player.name}</td>
-            <td style="text-align: right;"><div class="scorer-goals">${player.goals}</div></td>
+            <td style="text-align: center;"><div class="scorer-goals">${player.goals}</div></td>
         `;
-        table.appendChild(row);
+        tbody.appendChild(row);
     });
 
+    table.appendChild(tbody);
     container.appendChild(table);
-}    
+}
 function addPlayer() {
     const number = parseInt(document.getElementById('playerNumber').value);
     const name = document.getElementById('playerName').value.trim();
