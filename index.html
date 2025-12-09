@@ -1322,12 +1322,12 @@ td:nth-child(2) {
 #rosterContainer {
     display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
 }
-/* --- TOP SCORERS STYLES (COMPACT) --- */
+/* --- TOP SCORERS STYLES (MOBILE FIXED) --- */
 .scorers-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 0.5rem;
-    table-layout: auto; /* Αφήνει τον browser να υπολογίσει το πλάτος */
+    table-layout: fixed; /* ΚΛΕΙΔΙ: Κρατάει σταθερό το πλάτος */
 }
 
 .scorers-table tr {
@@ -1337,35 +1337,29 @@ td:nth-child(2) {
 .scorers-table td, .scorers-table th {
     padding: 0.6rem;
     vertical-align: middle;
+    overflow: hidden; /* Κρύβει οτιδήποτε περισσεύει */
 }
 
-/* Mobile Optimization: Σφίξιμο για να χωράει στην οθόνη */
+/* Mobile Optimization */
 @media (max-width: 768px) {
     .scorers-table td, .scorers-table th {
-        padding: 0.6rem 0.2rem; /* Ελάχιστο κενό αριστερά-δεξιά */
+        padding: 0.5rem 0.1rem; /* Ελάχιστο padding */
+        font-size: 0.9rem;
     }
     
-    .scorer-rank {
-        width: 25px !important; /* Πολύ στενή στήλη για το # */
-        font-size: 1rem !important;
-    }
-    
-    .scorer-goals {
-        min-width: 25px; /* Πιο μικρό κουτάκι γκολ */
-        padding: 0.2rem 0.4rem;
-        font-size: 0.85rem;
+    /* Μικραίνουμε τη γραμματοσειρά στα ονόματα για να χωράνε */
+    .scorer-name {
+        font-size: 0.85rem; 
     }
 }
 
 .scorer-rank {
     font-weight: 800;
-    width: 35px;
     text-align: center;
     font-size: 1.1rem;
     color: #000000;
 }
 
-/* Χρώματα μεταλλίων */
 .rank-1 { color: #FFD700; text-shadow: 1px 1px 0 rgba(0,0,0,0.1); } 
 .rank-2 { color: #546E7A; } 
 .rank-3 { color: #D84315; }
@@ -1374,22 +1368,21 @@ td:nth-child(2) {
     font-weight: 700;
     color: white;
     background: var(--primary-color);
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.1rem 0.5rem; /* Πιο μικρό κουτάκι */
+    border-radius: 10px;
     text-align: center;
-    min-width: 30px;
     display: inline-block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    min-width: 25px;
 }
 
 .scorer-name {
     font-weight: 600;
     text-align: left;
     color: var(--text-dark);
-    /* Κόλπο για να μην σπρώχνει τα γκολ εκτός οθόνης αν το όνομα είναι τεράστιο */
-    white-space: normal;
-    word-break: break-word; 
-    line-height: 1.2;
+    white-space: nowrap; /* Απαγορεύει την αλλαγή γραμμής */
+    overflow: hidden;    /* Κρύβει το όνομα αν είναι τεράστιο */
+    text-overflow: ellipsis; /* Βάζει ... στο τέλος αν δεν χωράει */
 }
 
 /* Admin Goal Controls */
@@ -1402,8 +1395,8 @@ td:nth-child(2) {
     padding: 2px;
 }
 .goal-btn {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
     background: white;
     border: 1px solid #ddd;
     cursor: pointer;
@@ -1415,12 +1408,12 @@ td:nth-child(2) {
     justify-content: center;
 }
 .goal-display {
-    width: 25px;
+    width: 20px;
     text-align: center;
     font-weight: bold;
     border: none;
     background: transparent;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
     </style>
 </head>
@@ -2309,13 +2302,13 @@ function displayTopScorers() {
     const table = document.createElement('table');
     table.className = 'scorers-table';
     
-    // ΕΔΩ ΕΙΝΑΙ Η ΑΛΛΑΓΗ: Μικρότερα πλάτη (width) στις επικεφαλίδες
+    // ΕΔΩ Η ΑΛΛΑΓΗ: Χρήση ποσοστών (%) για τέλεια προσαρμογή
     const thead = document.createElement('thead');
     thead.innerHTML = `
-        <tr style="background: #f9f9f9; font-size: 0.85rem;">
-            <th style="width: 25px; text-align: center; color: #888; font-weight: 400;">#</th>
-            <th style="text-align: left; color: #888; font-weight: 400; padding-left: 0.2rem;">Παίκτης</th>
-            <th style="width: 45px; text-align: center; color: #888; font-weight: 400;">Goals</th>
+        <tr style="background: #f9f9f9; font-size: 0.8rem;">
+            <th style="width: 12%; text-align: center; color: #888; font-weight: 400;">#</th>
+            <th style="width: 73%; text-align: left; color: #888; font-weight: 400; padding-left: 0.2rem;">Παίκτης</th>
+            <th style="width: 15%; text-align: center; color: #888; font-weight: 400;">Goals</th>
         </tr>
     `;
     table.appendChild(thead);
