@@ -1394,6 +1394,52 @@ td:nth-child(2) {
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+    /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ ΚΟΥΤΑΚΙ ΤΩΝ ΓΚΟΛ (ADMIN) --- */
+.goal-control {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin-right: 10px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important; /* Σημαντικό: Να μην πιάνει 100% */
+}
+
+.goal-btn {
+    width: 35px !important;
+    height: 35px !important;
+    background: #e0e0e0 !important;
+    border: 1px solid #999 !important;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-radius: 4px 0 0 4px !important; /* Γωνίες αριστερά */
+}
+
+.goal-btn:last-child {
+    border-radius: 0 4px 4px 0 !important; /* Γωνίες δεξιά */
+}
+
+.goal-display {
+    width: 50px !important; /* ΣΤΑΘΕΡΟ ΠΛΑΤΟΣ */
+    height: 35px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    border-top: 1px solid #999 !important;
+    border-bottom: 1px solid #999 !important;
+    border-left: none !important;
+    border-right: none !important;
+    background: white !important;
+    font-size: 1.1rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
     </style>
 </head>
 <body>
@@ -2370,7 +2416,7 @@ function clearPlayerForm() {
     }
 }
 
-  function updateRosterList() {
+ function updateRosterList() {
     const container = document.getElementById('rosterList');
     container.innerHTML = '';
 
@@ -2381,11 +2427,11 @@ function clearPlayerForm() {
 
     const sortedRoster = [...data.roster].sort((a, b) => a.number - b.number);
 
-    sortedRoster.forEach((player, index) => { // Προσθέσαμε το index
+    sortedRoster.forEach((player) => {
         const div = document.createElement('div');
         div.className = 'roster-item';
         const displayNum = player.number ? `#${player.number}` : '—';
-        const currentGoals = player.goals || 0; // Αν δεν έχει γκολ, βάλε 0
+        const currentGoals = player.goals || 0;
 
         div.innerHTML = `
             <div style="flex: 1;">
@@ -2393,19 +2439,25 @@ function clearPlayerForm() {
                 <div style="font-size: 0.8rem; color: #666;">${player.position}</div>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div class="goal-control">
-                    <button class="goal-btn" onclick="changeGoals('${player.name}', -1)">-</button>
-                    <input type="text" class="goal-display" value="${currentGoals}" readonly>
-                    <button class="goal-btn" onclick="changeGoals('${player.name}', 1)">+</button>
+            <div style="display: flex; align-items: center;">
+                
+                <div style="display: flex; align-items: center; margin-right: 10px;">
+                    <button onclick="changeGoals('${player.name}', -1)" 
+                            style="width: 30px; height: 30px; padding: 0; border: 1px solid #ccc; background: #eee; cursor: pointer; font-weight: bold; border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center;">-</button>
+                    
+                    <input type="text" value="${currentGoals}" readonly 
+                           style="width: 40px !important; height: 30px !important; text-align: center; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-left: none; border-right: none; margin: 0; padding: 0; background: white;">
+                    
+                    <button onclick="changeGoals('${player.name}', 1)" 
+                            style="width: 30px; height: 30px; padding: 0; border: 1px solid #ccc; background: #eee; cursor: pointer; font-weight: bold; border-radius: 0 4px 4px 0; display: flex; align-items: center; justify-content: center;">+</button>
                 </div>
-                <button class="btn btn-danger btn-small" onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
+
+                <button class="btn btn-danger btn-small" style="height: 30px; width: 30px; padding: 0; display: flex; align-items: center; justify-content: center;" onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
             </div>
         `;
         container.appendChild(div);
     });
 }
-
 // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
 function changeGoals(playerName, change) {
     const player = data.roster.find(p => p.name === playerName);
