@@ -1611,6 +1611,19 @@ td:nth-child(2) {
         background: transparent !important; /* Όχι φόντο */
     }
 }
+/* --- CLEANEST MENU (Χωρίς καμία γραμμή) --- */
+@media (max-width: 768px) {
+    /* Αφαιρεί τη γραμμή από όλα τα λινκ */
+    .nav-link {
+        border-bottom: none !important;
+    }
+
+    /* Ρυθμίζει την εμφάνιση όταν πατάς (Μόνο κίτρινα γράμματα, τίποτα άλλο) */
+    .nav-link:hover, .nav-link.active {
+        border-bottom: none !important;
+        background: transparent !important;
+        color: #ffd700 !important;
+    }
 }
     </style>
 </head>
