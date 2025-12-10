@@ -1670,7 +1670,8 @@ td:nth-child(2) {
                         Κάνε backup των δεδομένων σου τακτικά!
                     </p>
                 </div>
-<h3 style="margin-top: 1.5rem;">📢 Ανακοίνωση (Ticker)</h3>style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
+<h3 style="margin-top: 1.5rem;">📢 Ανακοίνωση (Ticker)</h3>
+<h3 style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
 
 <div class="form-group">
     <label>Κυλιόμενη Ανακοίνωση (Ticker):</label>
@@ -2869,9 +2870,10 @@ function displayNextMatch() {
     container.innerHTML = `
         <div class="next-match-card">
             <div class="nm-header">
-                <span>📅 ${mDate}</span>
-                <span>⏰ ${mTime}</span>
-            </div>
+    <span>📅 ${mDate}</span>
+    <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">⚽ NEXT MATCH</span>
+    <span>⏰ ${mTime}</span>
+</div>
             
             <div class="nm-body">
                 <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
