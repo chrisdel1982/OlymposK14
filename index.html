@@ -1533,6 +1533,96 @@ td:nth-child(2) {
     .nm-body { flex-direction: column; gap: 0.5rem; }
     .nm-team { text-align: center !important; font-size: 1.3rem; }
 }
+/* --- MOBILE MENU STYLES --- */
+
+/* Το κουμπί Hamburger (αρχικά κρυμμένο στα PC) */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 15px; /* Προσαρμογή ανάλογα με το ύψος της μπάρας */
+    z-index: 1100;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white; /* Άσπρες γραμμές */
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- MOBILE STYLES (LEFT ALIGN & SMALLER) --- */
+        @media (max-width: 768px) {
+            /* Το κουμπί (Χ) μένει πάνω δεξιά */
+            .hamburger { 
+                display: block;
+                position: fixed;
+                top: 25px;
+                right: 20px;
+                z-index: 1200;
+            }
+
+            /* Καθαρίζουμε την μπάρα */
+            nav {
+                background: transparent;
+                position: static;
+                min-height: 0;
+                padding: 0;
+            }
+
+            /* ΤΟ ΜΕΝΟΥ */
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                background-color: var(--primary-color);
+                width: 100%;
+                height: 100vh;
+                
+                /* ΑΛΛΑΓΗ: Στοίχιση Αριστερά */
+                justify-content: flex-start; /* Ξεκινάει από πάνω */
+                align-items: flex-start;     /* Κολλάει αριστερά */
+                padding-top: 100px;          /* Αφήνουμε κενό πάνω για να μην πέφτει στο Χ */
+                padding-left: 40px;          /* Κενό από τα αριστερά της οθόνης */
+                
+                transition: 0.4s ease;
+                z-index: 1050;
+            }
+
+            .nav-menu.active { left: 0; }
+
+            .nav-menu li { 
+                width: 100%; 
+                text-align: left;
+                margin: 0; 
+            }
+            
+            .nav-link {
+                padding: 10px 0; /* Μικρότερα κενά πάνω-κάτω */
+                font-size: 1.2rem; /* ΑΛΛΑΓΗ: Πιο μικρά γράμματα (ήταν 1.5rem) */
+                font-weight: 600;  /* Λίγο πιο έντονα για να διαβάζονται */
+                display: block;
+                color: rgba(255,255,255,0.9);
+                border-bottom: 1px solid rgba(255,255,255,0.1); /* Λεπτή γραμμή από κάτω */
+                width: 85%; /* Η γραμμή να μην πηγαίνει μέχρι τέρμα δεξιά */
+            }
+
+            /* Ειδικά για το γρανάζι του Admin */
+            .admin-link {
+                font-size: 1.4rem; /* Λίγο μεγαλύτερο το εικονίδιο */
+                border-bottom: none; /* Χωρίς γραμμή από κάτω */
+                margin-top: 10px;
+            }
+
+            /* Εφέ "Χ" στο κουμπί */
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        }
     </style>
 </head>
 <body>
@@ -1546,19 +1636,25 @@ td:nth-child(2) {
             </div>
             <div class="club-info">
                 <h1>ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h1>
-                <p>Κ14 - ΔΥΤΙΚΟΣ | ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ | Σεζόν 2025-26</p>
+                <p>Κ14 | ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ | Σεζόν 2025-26</p>
             </div>
         </div>
         <nav>
-            <ul>
-                <li><a href="#standings" class="nav-link active">My Όλυμπος</a></li>
-                <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
-                <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
-                <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
-                <li><a href="#news" class="nav-link">Νέα - Ειδήσεις</a></li>
-                <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
-            </ul>
-        </nav>
+    <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="#standings" class="nav-link active">My Όλυμπος</a></li>
+        <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
+        <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
+        <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
+        <li><a href="#news" class="nav-link">Νέα - Ειδήσεις</a></li>
+        <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
+    </ul>
+</nav>
     </header>
 
     <div class="container">
@@ -3078,6 +3174,26 @@ function saveResults() {
                 closeAdminPanel();
             }
         });
+        // --- MOBILE MENU LOGIC ---
+const hamburger = document.querySelector(".hamburger");
+const navMenu = document.querySelector(".nav-menu");
+const navLinks = document.querySelectorAll(".nav-link");
+
+// Όταν πατάς τις 3 γραμμές
+if(hamburger) {
+    hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
+}
+
+// Όταν πατάς ένα λινκ (π.χ. Ρόστερ), να κλείνει το μενού αυτόματα
+navLinks.forEach(n => n.addEventListener("click", () => {
+    if(hamburger) {
+        hamburger.classList.remove("active");
+        navMenu.classList.remove("active");
+    }
+}));
     </script>
 </body>
 </html>
