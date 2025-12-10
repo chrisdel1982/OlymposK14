@@ -73,7 +73,6 @@
         .club-info h1 {
             font-size: 2rem;
             margin-bottom: 0.3rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .club-info p {
@@ -99,23 +98,6 @@
             padding: 1rem 2rem;
             transition: all 0.3s ease;
             position: relative;
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 3px;
-            background: var(--accent-color);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after,
-        nav ul li a.active::after {
-            width: 80%;
         }
 
         nav ul li a:hover,
