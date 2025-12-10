@@ -1401,6 +1401,7 @@ td:nth-child(2) {
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+    }
     /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ ΚΟΥΤΑΚΙ ΤΩΝ ΓΚΟΛ (ADMIN) --- */
 .goal-control {
     display: flex !important;
@@ -1447,6 +1448,91 @@ td:nth-child(2) {
     margin: 0 !important;
     border-radius: 0 !important;
 }
+/* --- LA LIGA STYLE BANNER (FINAL FIX) --- */
+.next-match-card {
+    background: #ffffff;
+    border: 1px solid #ccc; /* Γκρι περίγραμμα */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    font-family: 'Roboto Condensed', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ΠΑΝΩ ΜΕΡΟΣ: Γκρι μπάρα */
+.nm-header {
+    background: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    justify-content: space-between; /* Αυτό στέλνει την Ημερομηνία Αριστερά και την Ώρα Δεξιά */
+    align-items: center;
+    color: #333;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* ΚΕΝΤΡΟ: Ομάδες */
+.nm-body {
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nm-team {
+    flex: 1;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 1.2;
+}
+
+.nm-team.home { text-align: right; }
+.nm-team.away { text-align: left; }
+.nm-team.my-team { color: var(--primary-color); }
+
+.nm-vs {
+    font-size: 1.2rem;
+    color: #999;
+    font-weight: 300;
+}
+
+/* ΓΗΠΕΔΟ */
+.nm-stadium {
+    text-align: center;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* ΚΑΤΩ ΜΠΑΡΑ: WHERE TO GO */
+.nm-footer {
+    display: block;
+    width: 100%;
+    background: var(--primary-color); /* Πράσινο φόντο */
+    color: white !important;
+    text-align: center;
+    padding: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.nm-footer:hover { opacity: 0.9; }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .nm-body { flex-direction: column; gap: 0.5rem; }
+    .nm-team { text-align: center !important; font-size: 1.3rem; }
+}
     </style>
 </head>
 <body>
@@ -1477,6 +1563,7 @@ td:nth-child(2) {
 
     <div class="container">
         <div id="standings" class="page active">
+            <div id="nextMatchContainer"></div>
             <div class="card">
                 <div class="card-header">
                     <h2>📊 Βαθμολογία Κ14 - ΔΥΤΙΚΟΣ</h2>
@@ -1583,14 +1670,37 @@ td:nth-child(2) {
                         Κάνε backup των δεδομένων σου τακτικά!
                     </p>
                 </div>
-<h3 style="margin-top: 1.5rem;">📢 Ανακοίνωση (Ticker)</h3>
-                <div class="form-group">
-                    <label for="announcementInput">Κείμενο Ανακοίνωσης (αφήστε κενό για απόκρυψη):</label>
-                    <input type="text" id="announcementInput" placeholder="π.χ. Επόμενος αγώνας Κυριακή...">
-                </div>
-                <div class="modal-buttons" style="margin-bottom: 1.5rem;">
-                    <button class="btn btn-success" onclick="saveAnnouncement()">💾 Αποθήκευση Ανακοίνωσης</button>
-                </div>
+<h3 style="margin-top: 1.5rem;">📢 Ανακοίνωση (Ticker)</h3>style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
+
+<div class="form-group">
+    <label>Κυλιόμενη Ανακοίνωση (Ticker):</label>
+    <input type="text" id="announcementInput" placeholder="π.χ. Καλή επιτυχία...">
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div class="form-group">
+        <label>Ημερομηνία (Πάνω Αριστερά):</label>
+        <input type="text" id="matchDateInput" placeholder="π.χ. ΣΑΒ 13/12">
+    </div>
+    <div class="form-group">
+        <label>Ώρα (Πάνω Δεξιά):</label>
+        <input type="text" id="matchTimeInput" placeholder="π.χ. 10:45">
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Γήπεδο (Κάτω από ομάδες):</label>
+    <input type="text" id="matchStadiumInput" placeholder="π.χ. Γήπεδο Αμπελοκήπων">
+</div>
+
+<div class="form-group">
+    <label>Link Χάρτη (Google Maps):</label>
+    <input type="text" id="matchMapLinkInput" placeholder="Επικόλληση link...">
+</div>
+
+<div class="modal-buttons" style="margin-bottom: 1.5rem;">
+    <button class="btn btn-success" onclick="saveGeneralSettings()">💾 Αποθήκευση</button>
+</div>
                     
                 <h3>⚽ Αποτελέσματα Αγώνων</h3>
 
@@ -2423,7 +2533,7 @@ function clearPlayerForm() {
     }
 }
 
- function updateRosterList() {
+function updateRosterList() {
     const container = document.getElementById('rosterList');
     container.innerHTML = '';
 
@@ -2439,31 +2549,47 @@ function clearPlayerForm() {
         div.className = 'roster-item';
         const displayNum = player.number ? `#${player.number}` : '—';
         const currentGoals = player.goals || 0;
+        
+        const isCoach = player.position && player.position.includes('Προπονητής');
+        const icon = isCoach ? '👨‍🏫' : '';
 
         div.innerHTML = `
             <div style="flex: 1;">
-                <strong>${displayNum}</strong> ${player.name} 
+                <strong>${displayNum}</strong> ${player.name} ${icon}
                 <div style="font-size: 0.8rem; color: #666;">${player.position}</div>
             </div>
             
-            <div style="display: flex; align-items: center;">
-                
-                <div style="display: flex; align-items: center; margin-right: 10px;">
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: center;">
                     <button onclick="changeGoals('${player.name}', -1)" 
-                            style="width: 30px; height: 30px; padding: 0; border: 1px solid #ccc; background: #eee; cursor: pointer; font-weight: bold; border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center;">-</button>
+                            style="width: 35px !important; height: 35px !important; min-width: 35px !important; padding: 0 !important; border: 1px solid #ccc; background: #e0e0e0; cursor: pointer; font-weight: bold; border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center;">-</button>
                     
                     <input type="text" value="${currentGoals}" readonly 
-                           style="width: 40px !important; height: 30px !important; text-align: center; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-left: none; border-right: none; margin: 0; padding: 0; background: white;">
+                           style="width: 50px !important; min-width: 50px !important; max-width: 50px !important; height: 35px !important; text-align: center; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-left: none; border-right: none; margin: 0 !important; padding: 0 !important; background: white; font-weight: bold;">
                     
                     <button onclick="changeGoals('${player.name}', 1)" 
-                            style="width: 30px; height: 30px; padding: 0; border: 1px solid #ccc; background: #eee; cursor: pointer; font-weight: bold; border-radius: 0 4px 4px 0; display: flex; align-items: center; justify-content: center;">+</button>
+                            style="width: 35px !important; height: 35px !important; min-width: 35px !important; padding: 0 !important; border: 1px solid #ccc; background: #e0e0e0; cursor: pointer; font-weight: bold; border-radius: 0 4px 4px 0; display: flex; align-items: center; justify-content: center;">+</button>
                 </div>
 
-                <button class="btn btn-danger btn-small" style="height: 30px; width: 30px; padding: 0; display: flex; align-items: center; justify-content: center;" onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
+                <button class="btn btn-danger btn-small" 
+                        style="height: 35px !important; width: 35px !important; min-width: 35px !important; padding: 0 !important; display: flex; align-items: center; justify-content: center; margin-left: 5px;" 
+                        onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
             </div>
         `;
         container.appendChild(div);
     });
+}
+function deletePlayer(identifier) {
+    if (confirm('⚠️ Θέλεις να διαγράψεις αυτόν τον παίκτη;')) {
+        data.roster = data.roster.filter(p => 
+            p.number !== identifier && p.name !== identifier
+        );
+        saveData(data);
+        displayRoster();
+        displayTopScorers();
+        updateRosterList();
+        alert('✅ Ο παίκτης διαγράφηκε!');
+    }
 }
 // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
 function changeGoals(playerName, change) {
@@ -2692,24 +2818,102 @@ function removeNewsPhoto() {
             
             alert('✅ Η ανακοίνωση αποθηκεύτηκε!');
         }
-        function checkPassword() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('adminContent').style.display = 'block';
-                loadRoundSelector();
-                updateRosterList();
-                updateNewsList();
-           // (NEO) Φόρτωση αποθηκευμένης ανακοίνωσης στο input
-                if (data && data.announcement) {
-                    document.getElementById('announcementInput').value = data.announcement;
-                } else {
-                    document.getElementById('announcementInput').value = '';
-                }
-		 } else {
-                alert('❌ Λάθος κωδικός!');
-            }
+     function saveGeneralSettings() {
+    if (!data) return;
+    
+    // Αποθήκευση
+    data.announcement = document.getElementById('announcementInput').value.trim();
+    data.matchDate = document.getElementById('matchDateInput').value.trim();
+    data.matchTime = document.getElementById('matchTimeInput').value.trim();
+    data.matchStadium = document.getElementById('matchStadiumInput').value.trim();
+    data.matchMapLink = document.getElementById('matchMapLinkInput').value.trim();
+    
+    saveData(data);
+    
+    // Ενημέρωση Ticker
+    const tickerBar = document.getElementById('announcement-ticker');
+    tickerBar.style.display = data.announcement ? 'block' : 'none';
+    document.getElementById('announcement-text').textContent = data.announcement;
+    
+    // Ενημέρωση Banner
+    displayNextMatch();
+    
+    alert('✅ Οι ρυθμίσεις αποθηκεύτηκαν!');
+}
+function displayNextMatch() {
+    const container = document.getElementById('nextMatchContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (!data || !data.fixtures) return;
+
+    // 1. Βρες τον επόμενο αγώνα
+    let nextMatch = null;
+    for (const round of data.fixtures) {
+        const myMatch = round.matches.find(m => 
+            (m.home === MY_TEAM || m.away === MY_TEAM) && 
+            (m.homeScore === null && m.awayScore === null) && !m.isPostponed
+        );
+        if (myMatch) { nextMatch = myMatch; break; }
+    }
+
+    if (!nextMatch) return; 
+
+    // 2. Πληροφορίες από Admin
+    const mDate = data.matchDate || '-';
+    const mTime = data.matchTime || '-';
+    const mStadium = data.matchStadium || '';
+    const mMap = data.matchMapLink || '#';
+
+    // 3. Εμφάνιση (Το Layout που ζήτησες)
+    container.innerHTML = `
+        <div class="next-match-card">
+            <div class="nm-header">
+                <span>📅 ${mDate}</span>
+                <span>⏰ ${mTime}</span>
+            </div>
+            
+            <div class="nm-body">
+                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
+                    ${nextMatch.home}
+                </div>
+                
+                <div class="nm-vs">VS</div>
+                
+                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">
+                    ${nextMatch.away}
+                </div>
+            </div>
+
+            <div class="nm-stadium">🏟️ ${mStadium}</div>
+
+            <a href="${mMap}" target="_blank" class="nm-footer">
+                📍 WHERE TO GO
+            </a>
+        </div>
+    `;
+}
+     function checkPassword() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        loadRoundSelector();
+        updateRosterList();
+        updateNewsList();
+        
+        // Φόρτωση Πεδίων
+        if (data) {
+            document.getElementById('announcementInput').value = data.announcement || '';
+            document.getElementById('matchDateInput').value = data.matchDate || '';
+            document.getElementById('matchTimeInput').value = data.matchTime || '';
+            document.getElementById('matchStadiumInput').value = data.matchStadium || '';
+            document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
         }
+    } else {
+        alert('❌ Λάθος κωδικός!');
+    }
+}
 
         function loadRoundSelector() {
             const select = document.getElementById('roundSelect');
@@ -2858,11 +3062,13 @@ function saveResults() {
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
+    displayNextMatch();
     displayTopScorers();
     displayResults();
     displayFixtures();
     displayRoster();
     displayNews();
+
 });
 
         document.getElementById('adminModal').addEventListener('click', function(e) {
