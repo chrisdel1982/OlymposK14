@@ -401,7 +401,7 @@ td:nth-child(2) {
     background: var(--primary-color);
     z-index: 2;
 }
-/* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE) --- */
+/* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE - CLEAN) --- */
 .roster-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -418,19 +418,28 @@ td:nth-child(2) {
     position: relative;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
-    border: 2px solid transparent;
-    overflow: visible;
+    border: 2px solid transparent; /* Αόρατο περίγραμμα αρχικά */
+    
+    /* ΣΗΜΑΝΤΙΚΟ: Κόβει οτιδήποτε εξέχει από τις γωνίες */
+    overflow: hidden; 
 }
 
-/* Η χρυσή μπάρα στο πάνω μέρος της κάρτας */
+/* Η πράσινη μπάρα στο πάνω μέρος (ΜΕΙΩΜΕΝΗ & ΚΕΝΤΡΑΡΙΣΜΕΝΗ) */
 .player-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
+    left: 50%; 
+    transform: translateX(-50%); /* Το φέρνει ακριβώς στο κέντρο */
+    
+    /* Την μειώσαμε στο 50% του πλάτους αντί για 100% */
+    width: 80%; 
+    height: 4px; 
+    
     background: var(--primary-color);
+    
+    /* Στρογγυλεύουμε τις κάτω γωνίες της γραμμής για στυλ */
+    border-radius: 0 0 6px 6px; 
     z-index: 2;
 }
 
@@ -438,13 +447,13 @@ td:nth-child(2) {
 .player-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-    border-color: var(--accent-color);
+    border-color: var(--accent-color); /* Εμφάνιση κίτρινου περιγράμματος */
 }
 
 /* ΦΑΝΕΛΑ ΤΟΥ ΠΑΙΚΤΗ */
-/* --- FINAL ACADEMY STYLE (FLUO PLAYERS - GREEN COACH) --- */
+/* --- FINAL KIT: VERTICAL BADGE & HIGH COACH TEXT --- */
 
-/* ΒΑΣΙΚΟ ΚΟΥΤΙ ΦΩΤΟΓΡΑΦΙΑΣ */
+/* 1. ΒΑΣΙΚΟ ΚΟΥΤΙ */
 .player-photo {
     width: 150px;
     height: 130px;
@@ -453,18 +462,18 @@ td:nth-child(2) {
     display: flex;
     flex-direction: column; 
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 15px;
+    justify-content: flex-start; /* Στοίχιση ΟΛΩΝ προς τα πάνω */
+    padding-top: 8px;
     z-index: 1;
-    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.3));
     
-    /* ΣΗΜΑΝΤΙΚΟ: Διαφανές φόντο για να μην υπάρχει "μαύρο πλαίσιο" */
     background: transparent !important; 
     border: none !important;
     box-shadow: none !important;
+    
+    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.25));
 }
 
-/* --- 1. ΟΙ ΠΑΙΚΤΕΣ (FLUO ΦΑΝΕΛΑ) --- */
+/* 2. ΣΧΗΜΑ ΦΑΝΕΛΑΣ & ΥΦΗ */
 .player-photo::before {
     content: '';
     position: absolute;
@@ -473,93 +482,130 @@ td:nth-child(2) {
     width: 100%;
     height: 100%;
     
-    /* ΧΡΩΜΑ ΦΑΝΕΛΑΣ ΠΑΙΚΤΩΝ: FLUO */
     background-color: var(--fluo-color); 
     
-    /* ΥΦΗ: Λεπτές ρίγες */
-    background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-    
-    /* ΣΧΗΜΑ T-SHIRT */
+    /* Κάθετες ρίγες */
+    background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+
+    /* ΣΧΗΜΑ */
     clip-path: polygon(
-        20% 0%, 80% 0%,   
-        100% 20%, 100% 45%, 
-        85% 55%, 85% 100%,  
-        15% 100%, 15% 55%,  
-        0% 45%, 0% 20%      
+        22% 0%, 78% 0%,      /* Λαιμός */
+        100% 25%,            /* Δεξιός Ώμος έξω */
+        90% 50%,             /* Δεξί Μανίκι τέλος */
+        80% 42%,             /* Δεξιά Μασχάλη */
+        80% 100%,            /* Δεξιά Πλευρά Κάτω */
+        20% 100%,            /* Αριστερή Πλευρά Κάτω */
+        20% 42%,             /* Αριστερή Μασχάλη */
+        10% 50%,             /* Αριστερό Μανίκι τέλος */
+        0% 25%               /* Αριστερός Ώμος έξω */
     );
     z-index: -1;
 }
 
-/* ΓΙΑΚΑΣ ΠΑΙΚΤΩΝ (Μαύρος) */
+/* ΓΙΑΚΑΣ */
 .player-photo::after {
     content: '';
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 50px;
-    height: 15px;
+    width: 55px;
+    height: 12px;
     background-color: #000000;
-    border-radius: 0 0 25px 25px;
+    border-radius: 0 0 30px 30px;
     z-index: 0;
 }
 
-/* ΟΝΟΜΑ ΟΜΑΔΑΣ (ΠΑΙΚΤΕΣ - ΜΑΥΡΟ) */
+/* ΟΝΟΜΑ ΟΜΑΔΑΣ */
 .jersey-team-name {
-    font-size: 0.65rem;
+    font-size: 0.9rem; 
     font-weight: 800;
-    color: #000000; /* Μαύρα γράμματα στο Fluo */
+    color: #000000; 
     z-index: 5;
     font-family: 'Roboto Condensed', sans-serif;
-    letter-spacing: 1px;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+    margin-bottom: 4px; 
 }
 
-/* ΑΡΙΘΜΟΣ ΠΑΙΚΤΗ (ΜΑΥΡΟΣ) */
+/* ΑΡΙΘΜΟΣ */
 .player-number {
-    font-size: 3.9rem;
-    font-weight: 600;
-    font-family: 'Roboto Condensed', sans-serif;
-    z-index: 15;
+    font-family: 'Impact',sans-serif; 
+    font-weight: 400;
+    color: #000000; 
+    
+    font-size: 3.5rem; 
+    transform: scaleY(1.3); 
+    
     line-height: 1;
-    color: #000000; /* Μαύρος αριθμός */
+    margin-top: 2px;
+    letter-spacing: 3px; 
+    
+    z-index: 15;
     text-shadow: none;
 }
 
-/* --- 2. Ο ΠΡΟΠΟΝΗΤΗΣ (ΠΡΑΣΙΝΗ ΦΑΝΕΛΑ) --- */
+/* --- CAPTAIN BADGE (ΔΙΟΡΘΩΜΕΝΗ ΘΕΣΗ ΣΤΟ ΜΑΝΙΚΙ) --- */
+.captain-badge {
+    position: absolute;
+    
+    /* Θέση (όπως τη ρύθμισες και σου άρεσε) */
+    top: 60px;    
+    right: -5px;   
+    left: auto;   
+    /* Διαστάσεις */
+    width: 15px;
+    height: 32px; /* Λίγο πιο κοντό για να μην εξέχει */
+    
+    background-color: #ff0000;
+    color: #000000;
+   /* Κεντράρισμα του γράμματος στη μέση της λωρίδας */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+    
+    /* Μέγεθος γραμματοσειράς */
+    font-size: 0.7rem; 
+    font-weight: 900;
+    font-family: 'Roboto Condensed', sans-serif;
+    
+    /* Εφέ */
+    box-shadow: -1px 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.2); /* Μικρή σκιά στο γράμμα για να ξεχωρίζει */
+    
+    transform: rotate(30deg) !important; 
+    z-index: 20;
+}
 
-/* Καθαρίζουμε το φόντο για να φύγει το μαύρο πλαίσιο */
+/* --- ΠΡΟΠΟΝΗΤΗΣ (COACH - ΨΗΛΑ) --- */
 .coach-photo-bg {
     background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
 }
 
-/* Η Φανέλα του Προπονητή: ΠΡΑΣΙΝΗ (Primary Color) */
 .coach-photo-bg::before {
-    background-color: var(--primary-color) !important; /* Πράσινο Ολύμπου */
-    background-image: none !important; /* Χωρίς ρίγες */
-    
+    background-color: #117f0dd8 !important; 
+    background-image: none !important;
 }
 
-/* Κρύβουμε το όνομα ομάδας από τον προπονητή */
 
 .coach-photo-bg .jersey-team-name {
     display: none;
 }
 
-/* Κείμενο COACH: ΛΕΥΚΟ (για να φαίνεται στο Πράσινο) */
 .coach-photo-bg .player-number {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #f6f3f3; /* Ασπρα γράμματα στο Fluo */
-    z-index: 5;
-    font-family: 'Roboto Condensed', sans-serif;
-    letter-spacing: 2px;
-    margin-top: 20px;
-    margin-bottom: 5px;
+    font-family: 'Roboto Condensed', sans-serif !important; /* Όχι Impact */
+    font-size: 1.0rem !important; /* ΜΙΚΡΑ ΓΡΑΜΜΑΤΑ */
+    font-weight: 700 !important;
+    color: #000000 !important;
+    transform: none !important; /* Όχι τέντωμα */
+    letter-spacing: 1px !important;
+    
+    /* Τοποθέτηση ψηλά */
+    margin-top: 10px !important; 
+    margin-bottom: auto !important;
+    text-shadow: none !important;
 }
 
 /* Θέση Παίκτη */
@@ -1255,8 +1301,42 @@ td:nth-child(2) {
         font-size: 0.65rem;
         padding: 0.2rem 0.5rem;
     }
-}
+/* --- MOBILE FIXES ΓΙΑ ΤΗ ΦΑΝΕΛΑ & BADGE --- */
+    
+    /* 1. Προσαρμογή του σήματος Αρχηγού για μικρή φανέλα */
+    .captain-badge {
+        top: 20px !important;    /* Το ανεβάζουμε πιο ψηλά (ήταν 55px) */
+        right: 2px !important;  /* Το φέρνουμε πιο κοντά */
+        width: 8px !important;   /* Το κάνουμε πιο στενό */
+        height: 25px !important; /* Το κάνουμε πιο κοντό */
+    }
 
+    /* 2. Προσαρμογή Ονόματος Ομάδας */
+    .jersey-team-name {
+        font-size: 0.4rem !important; /* Πολύ μικρά γράμματα για να χωράνε */
+        margin-top: 5px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* 3. Προσαρμογή Αριθμού */
+    .player-number {
+        font-size: 2.2rem !important; /* Μικραίνουμε τον αριθμό */
+        margin-top: 0 !important;
+        transform: scaleY(1.2) !important; /* Λίγο λιγότερο τέντωμα */
+    }
+
+    /* 4. Μικροδιορθώσεις στη φανέλα του κινητού */
+    .player-photo {
+        width: 100px !important;  /* Λίγο πιο φαρδιά από 90px για να αναπνέει */
+        height: 90px !important;
+        padding-top: 5px !important;
+    }
+    
+    /* Διόρθωση γιακά στα κινητά */
+    .player-photo::after {
+        width: 35px !important;
+        height: 8px !important;
+    }
             /* Νέα - Ειδήσεις mobile styling */
             .news-item {
                 padding: 1rem;
@@ -1387,46 +1467,6 @@ td:nth-child(2) {
                 height: 40px;
                 font-size: 1rem;
             }
-        }
-/* --- CAPTAIN ARMBAND (ΔΕΞΙ ΜΑΝΙΚΙ - ΚΑΘΕΤΟ) --- */
-.captain-badge {
-    position: absolute;
-    /* Θέση στο Δεξί Μανίκι (όπως το κοιτάμε) */
-    top: 26px;    
-    right: 2px;  /* Το κολλάμε στην δεξιά άκρη */
-    left: auto;   /* Ακυρώνουμε το left */
-    
-    /* Σχήμα: Κάθετη λωρίδα (πιο ψηλή παρά φαρδιά) */
-    width: 11px;
-    height: 34px;
-    
-    /* Χρώμα */
-    background-color: #ff0000; 
-    color: rgb(0, 0, 0);
-    
-    /* Στυλ Κειμένου */
-    font-size: 0.75rem;
-    font-weight: 900;
-    font-family: 'Roboto Condensed', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* Εφέ */
-    border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: -1px 1px 3px rgba(0,0,0,0.3);
-    
-    /* Καμία περιστροφή (Κάθετο) */
-    transform: rotate(0deg); 
-    z-index: 10;
-}
-
-        /* --- Στυλ για τη φωτογραφία του ΠΡΟΠΟΝΗΤΗ --- */
-        .coach-photo-bg {
-            /* Σκούρο Γκρι/Μαύρο (Dark Slate) - Πιο επίσημο */
-            background: transparent!important;
-            border-color: #95a5a6 !important; /* Ασημί περίγραμμα */
-            color: white;
         }
         
         /* --- Mobile Fix για Φόρμα --- */
@@ -2617,7 +2657,7 @@ function displayFixtures() {
                 // ΕΔΩ ΕΙΝΑΙ Η ΑΛΛΑΓΗ: Προστέθηκε το div "jersey-team-name"
                 card.innerHTML = `
                     <div class="${photoClass}">
-                        <div class="jersey-team-name">ΟΛΥΜΠΟΣ FC</div>
+                        <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
                         <div class="player-number">${displayNumber}</div>
                         ${captainBadge}
                     </div>
