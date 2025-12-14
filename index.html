@@ -1871,8 +1871,15 @@ td:nth-child(2) {
     }
 
     /* --- ΓΕΝΙΚΑ --- */
-    #announcement-ticker { color: #000 !important; background: var(--accent-color) !important; }
-    #announcement-text { color: #000 !important; }
+        /* Ticker (Ανακοίνωση) - Σκούρο Πράσινο για Dark Mode */
+    #announcement-ticker { 
+        background-color: #1a472a !important; /* Το βασικό πράσινο της ομάδας */
+        color: #ffffff !important;             /* Λευκά γράμματα */
+        border-bottom: 1px solid #333;         /* Μια διακριτική γραμμή από κάτω */
+    }
+    #announcement-text { 
+        color: #ffffff !important;             /* Λευκά γράμματα στο κείμενο */
+    }
 
     .player-card { background-color: #252525 !important; border: 1px solid #444; }
     .player-number { color: #000 !important; }
