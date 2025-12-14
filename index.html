@@ -1813,6 +1813,94 @@ td:nth-child(2) {
         background: transparent !important;
     }
 }
+/* --- DARK MODE FIXES (FINAL) --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #121212;
+        --text-dark: #e0e0e0;
+    }
+
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    /* Κάρτες και γενικά κουτιά */
+    .card, .modal-content, .table-wrapper, .round-section, .next-match-card {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+    }
+    
+    /* Τίτλοι */
+    h1, h2, h3, .card h2, .news-title {
+        color: #ffffff !important;
+    }
+
+    /* --- ΔΙΟΡΘΩΣΗ 1: NEXT MATCH --- */
+    /* Η μπάρα πάνω (Next Match/Ημερομηνία) να γίνει σκούρα */
+    .nm-header {
+        background-color: #333 !important;
+        color: #fff !important;
+        border-bottom: 1px solid #444 !important;
+    }
+    /* Ο αντίπαλος (και όλες οι ομάδες) να γίνουν ΛΕΥΚΕΣ */
+    .nm-team {
+        color: #ffffff !important; 
+    }
+    /* Η δικιά μας ομάδα να παραμείνει Πράσινη (ή λίγο πιο φωτεινή) */
+    .nm-team.my-team {
+        color: #4caf50 !important; /* Φωτεινό πράσινο */
+    }
+    .nm-vs, .nm-stadium {
+        color: #aaa !important;
+    }
+
+    /* --- ΔΙΟΡΘΩΣΗ 2: ΣΚΟΡΕΡ --- */
+    /* Τα 1, 2, 3 (Μετάλλια) να φαίνονται σωστά */
+    .rank-1 { color: #ffd700 !important; } /* Χρυσό */
+    .rank-2 { color: #c0c0c0 !important; } /* Ασημί */
+    .rank-3 { color: #cd7f32 !important; } /* Χάλκινο */
+    
+    /* Η υπόλοιπη κατάταξη (#4, #5...) ΛΕΥΚΗ */
+    .col-rank { color: #fff !important; } 
+    
+    /* Όνομα παικτών ΛΕΥΚΟ */
+    .col-name { color: #eee !important; }
+    
+    /* ΔΙΟΡΘΩΣΗ ΓΚΟΛ: Σκούρο φόντο, Λευκά γράμματα */
+    .goals-badge {
+        background: #333 !important;   /* Σκούρο γκρι αντί για άσπρο */
+        color: #fff !important;        /* Λευκό νούμερο */
+        border: 2px solid #555 !important;
+        box-shadow: none !important;   /* Αφαίρεση σκιάς για καθαρό look */
+    }
+    
+    /* Header του πίνακα σκόρερ */
+    .scorer-header {
+        background-color: #2a2a2a !important;
+        color: #aaa !important;
+    }
+
+    /* --- ΓΕΝΙΚΕΣ ΔΙΟΡΘΩΣΕΙΣ --- */
+    /* Ticker (Ανακοίνωση) - Μαύρα γράμματα στο κίτρινο */
+    #announcement-ticker { color: #000 !important; background: var(--accent-color) !important; }
+    #announcement-text { color: #000 !important; }
+
+    /* Φανέλες & Ρόστερ */
+    .player-card { background-color: #252525 !important; border: 1px solid #444; }
+    .player-number { color: #000 !important; } /* Μαύρο νούμερο */
+    .player-position { color: #ffd700 !important; background: rgba(255, 215, 0, 0.1) !important; }
+    .player-name { color: #fff !important; }
+    .player-age { color: #aaa !important; }
+
+    /* Πίνακες & Inputs */
+    table, th, td { color: #e0e0e0 !important; border-color: #333 !important; }
+    th { background-color: #333 !important; color: #fff !important; }
+    input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
+    .match-vs-box { background-color: #444 !important; color: #fff !important; }
+    .match-row[style*="background"] { background-color: #2d382e !important; }
+}
     </style>
 </head>
 <body>
