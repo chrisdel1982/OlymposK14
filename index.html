@@ -242,37 +242,42 @@ table thead th:nth-child(1),
 table thead th:nth-child(2) {
     z-index: 10;
 }
-/* --- STICKY COLUMNS FIXED (ΔΙΟΡΘΩΜΕΝΟ) --- */
+/* --- STICKY COLUMNS (FINAL FIX) --- */
 
-/* 1η Στήλη: Θέση (#) - Την ΚΛΕΙΔΩΝΟΥΜΕ στα 40px */
+/* 1η Στήλη: Θέση (#) */
 table th:nth-child(1),
 table td:nth-child(1) {
     position: sticky;
     left: 0;
-    z-index: 20; /* Πολύ υψηλό για να είναι πάντα πάνω */
+    z-index: 20;
     
-    /* Απαραίτητα για να μην μικραίνει/μεγαλώνει και αφήνει κενά */
+    /* Σταθερό πλάτος */
     width: 40px !important;     
     min-width: 40px !important; 
     max-width: 40px !important;
     
     background-color: #ffffff; 
-    border-right: 1px solid #eee;
-    box-sizing: border-box; /* Για σωστό υπολογισμό πλάτους */
+    border-right: 1px solid #eee; /* Λεπτή διαχωριστική γραμμή */
+    box-sizing: border-box;
 }
 
-/* 2η Στήλη: Ομάδα - Ξεκινάει ΑΚΡΙΒΩΣ στα 40px */
+/* 2η Στήλη: Ομάδα */
 table th:nth-child(2),
 table td:nth-child(2) {
     position: sticky;
-    left: 40px; /* Πρέπει να είναι ΙΔΙΟ με το πλάτος της 1ης */
+    
+    /* ΔΙΟΡΘΩΣΗ ΚΕΝΟΥ: Ξεκινάμε στο 39px για να καλύψουμε τη "χαραμάδα" */
+    left: 39px; 
+    
     z-index: 20;
     background-color: #ffffff;
-    border-right: 2px solid #ddd; 
-    box-shadow: 4px 0 5px -2px rgba(0,0,0,0.1); /* Σκιά μόνο δεξιά */
+    
+    /* ΑΦΑΙΡΕΣΗ ΣΚΙΑΣ: Καθαρό δεξί σύνορο χωρίς εφέ */
+    border-right: 1px solid #ddd; 
+    box-shadow: none !important; /* Σβήσαμε τη σκιά */
 }
 
-/* Το Header πρέπει να είναι ακόμα πιο ψηλά */
+/* Header πάντα από πάνω */
 table thead th:nth-child(1),
 table thead th:nth-child(2) {
     z-index: 30;
@@ -1953,18 +1958,21 @@ table thead th:nth-child(2) {
     input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
     .match-vs-box { background-color: #444 !important; color: #fff !important; }
     .match-row[style*="background"] { background-color: #2d382e !important; }
-    /* --- STICKY COLUMNS DARK MODE FIX --- */
+        /* --- STICKY COLUMNS DARK MODE --- */
     table td:nth-child(1),
     table td:nth-child(2) {
         background-color: #1e1e1e !important;
-        border-right: 1px solid #333;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        
+        /* Καθαρό χώρισμα χωρίς σκιά */
+        border-right: 1px solid #333; 
+        box-shadow: none !important; 
     }
 
     table th:nth-child(1),
     table th:nth-child(2) {
         background-color: #333 !important;
         border-right: 1px solid #444;
+        box-shadow: none !important;
     }
 }
     </style>
