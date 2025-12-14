@@ -288,8 +288,8 @@
         {
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 0,
+          "awayScore": 7,
           "isPostponed": false
         },
         {
@@ -302,8 +302,8 @@
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 0,
+          "awayScore": 0,
           "isPostponed": false
         },
         {
