@@ -215,7 +215,60 @@ td:nth-child(2) {
 .my-team td:nth-child(2) {
     color: var(--text-dark); 
 }
+/* --- STICKY COLUMNS (Σταθερές Στήλες Βαθμολογίας) --- */
+/* 1η Στήλη: Θέση (#) */
+table th:nth-child(1),
+table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background-color: #ffffff; 
+    border-right: 1px solid #eee;
+}
 
+/* 2η Στήλη: Ομάδα */
+table th:nth-child(2),
+table td:nth-child(2) {
+    position: sticky;
+    left: 50px; 
+    z-index: 5;
+    background-color: #ffffff;
+    border-right: 2px solid #ddd; 
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+}
+
+/* Διόρθωση για το Header */
+table thead th:nth-child(1),
+table thead th:nth-child(2) {
+    z-index: 10;
+}
+/* --- STICKY COLUMNS (Σταθερές Στήλες Βαθμολογίας) --- */
+/* 1η Στήλη: Θέση (#) */
+table th:nth-child(1),
+table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background-color: #ffffff; 
+    border-right: 1px solid #eee;
+}
+
+/* 2η Στήλη: Ομάδα */
+table th:nth-child(2),
+table td:nth-child(2) {
+    position: sticky;
+    left: 50px; 
+    z-index: 5;
+    background-color: #ffffff;
+    border-right: 2px solid #ddd; 
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+}
+
+/* Διόρθωση για το Header */
+table thead th:nth-child(1),
+table thead th:nth-child(2) {
+    z-index: 10;
+}
 /* --- ΧΡΩΜΑΤΙΣΤΕΣ ΜΠΑΡΕΣ (INDICATORS - FLOATING STYLE) --- */
 
 /* Το κελί της θέσης χρειάζεται relative για να τοποθετηθεί η μπάρα μέσα του */
@@ -1892,6 +1945,19 @@ td:nth-child(2) {
     input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
     .match-vs-box { background-color: #444 !important; color: #fff !important; }
     .match-row[style*="background"] { background-color: #2d382e !important; }
+    /* --- STICKY COLUMNS DARK MODE FIX --- */
+    table td:nth-child(1),
+    table td:nth-child(2) {
+        background-color: #1e1e1e !important;
+        border-right: 1px solid #333;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    }
+
+    table th:nth-child(1),
+    table th:nth-child(2) {
+        background-color: #333 !important;
+        border-right: 1px solid #444;
+    }
 }
     </style>
 </head>
