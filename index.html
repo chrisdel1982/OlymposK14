@@ -242,32 +242,40 @@ table thead th:nth-child(1),
 table thead th:nth-child(2) {
     z-index: 10;
 }
-/* --- STICKY COLUMNS (Σταθερές Στήλες Βαθμολογίας) --- */
-/* 1η Στήλη: Θέση (#) */
+/* --- STICKY COLUMNS FIXED (ΔΙΟΡΘΩΜΕΝΟ) --- */
+
+/* 1η Στήλη: Θέση (#) - Την ΚΛΕΙΔΩΝΟΥΜΕ στα 40px */
 table th:nth-child(1),
 table td:nth-child(1) {
     position: sticky;
     left: 0;
-    z-index: 5;
+    z-index: 20; /* Πολύ υψηλό για να είναι πάντα πάνω */
+    
+    /* Απαραίτητα για να μην μικραίνει/μεγαλώνει και αφήνει κενά */
+    width: 40px !important;     
+    min-width: 40px !important; 
+    max-width: 40px !important;
+    
     background-color: #ffffff; 
     border-right: 1px solid #eee;
+    box-sizing: border-box; /* Για σωστό υπολογισμό πλάτους */
 }
 
-/* 2η Στήλη: Ομάδα */
+/* 2η Στήλη: Ομάδα - Ξεκινάει ΑΚΡΙΒΩΣ στα 40px */
 table th:nth-child(2),
 table td:nth-child(2) {
     position: sticky;
-    left: 50px; 
-    z-index: 5;
+    left: 40px; /* Πρέπει να είναι ΙΔΙΟ με το πλάτος της 1ης */
+    z-index: 20;
     background-color: #ffffff;
     border-right: 2px solid #ddd; 
-    box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
+    box-shadow: 4px 0 5px -2px rgba(0,0,0,0.1); /* Σκιά μόνο δεξιά */
 }
 
-/* Διόρθωση για το Header */
+/* Το Header πρέπει να είναι ακόμα πιο ψηλά */
 table thead th:nth-child(1),
 table thead th:nth-child(2) {
-    z-index: 10;
+    z-index: 30;
 }
 /* --- ΧΡΩΜΑΤΙΣΤΕΣ ΜΠΑΡΕΣ (INDICATORS - FLOATING STYLE) --- */
 
