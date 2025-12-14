@@ -1813,6 +1813,110 @@ td:nth-child(2) {
         background: transparent !important;
     }
 }
+/* --- DARK MODE SUPPORT (Αυτόματη Ενεργοποίηση) --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #121212;      /* Σκούρο φόντο σελίδας */
+        --text-dark: #e0e0e0;     /* Ανοιχτόχρωμο κείμενο */
+        --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    /* Κάρτες και βασικά κουτιά */
+    .card, 
+    .modal-content, 
+    .table-wrapper, 
+    .round-section,
+    .next-match-card,
+    .nm-header,
+    .nm-stadium {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+    }
+
+    /* Τίτλοι */
+    h1, h2, h3, .card h2, .news-title {
+        color: #fff !important;
+    }
+
+    /* Πίνακες (Βαθμολογία) */
+    table, th, td {
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+    }
+    
+    th {
+        background-color: #2c2c2c !important; /* Σκούρο γκρι για επικεφαλίδες */
+        color: #aaa !important;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #252525 !important; /* Ελαφρώς πιο ανοιχτό για ρίγες */
+    }
+
+    /* Λίστες και Inputs (Roster, Forms) */
+    .roster-item, 
+    .match-input-row,
+    .news-item,
+    .scorer-header,
+    .scorer-row,
+    input, select, textarea {
+        background-color: #2a2a2a !important;
+        color: #fff !important;
+        border-color: #444 !important;
+    }
+
+    /* Ειδικά για τα αποτελέσματα (VS box, Score box) */
+    .match-vs-box {
+        background-color: #444 !important;
+        color: #fff !important;
+    }
+    
+    .team-left, .team-right, .nm-team {
+        color: #fff !important;
+    }
+
+    /* Highlight της ομάδας μας στα αποτελέσματα */
+    .match-row[style*="background"] {
+        background-color: #2d382e !important; /* Σκούρο πράσινο αντί για κρεμ */
+    }
+
+    /* Roster Cards (FIFA style) */
+    .player-card {
+        background-color: #1e1e1e !important;
+        border: 1px solid #333;
+    }
+    
+    .player-number {
+        color: #fff !important; /* Άσπρος αριθμός */
+    }
+    
+    .player-photo::before {
+        opacity: 0.8; /* Λίγο πιο διακριτική η φανέλα */
+    }
+
+    /* Κουμπιά Admin */
+    .score-input {
+        background-color: #333 !important;
+        color: white !important;
+        border: 1px solid #555 !important;
+    }
+    
+    /* Αναδυόμενα (Modals) */
+    .modal {
+        background: rgba(0,0,0,0.85); /* Πιο σκούρο overlay */
+    }
+
+    /* Υπόμνημα */
+    .card div[style*="color: #666"] {
+        color: #aaa !important;
+    }
+}
     </style>
 </head>
 <body>
