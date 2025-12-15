@@ -1879,7 +1879,7 @@ table thead th:nth-child(2) {
         background: transparent !important;
     }
 }
-/* --- DARK MODE FIXES (FINAL V2) --- */
+/* --- DARK MODE FIXES (FINAL V3.1 - GOLD EDITION) --- */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-light: #121212;
@@ -1891,7 +1891,7 @@ table thead th:nth-child(2) {
         color: #e0e0e0;
     }
 
-    /* Κάρτες και βασικά κουτιά */
+    /* Κάρτες και γενικά κουτιά */
     .card, .modal-content, .table-wrapper, .round-section, .next-match-card {
         background-color: #1e1e1e !important;
         color: #e0e0e0 !important;
@@ -1903,6 +1903,15 @@ table thead th:nth-child(2) {
         color: #ffffff !important;
     }
 
+    /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΝΕΑ (NEWS) & ROSTER LIST --- */
+    .news-item, .roster-item {
+        background-color: #252525 !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+    .news-date { color: #aaa !important; }
+    .news-content { color: #ddd !important; }
+
     /* --- NEXT MATCH --- */
     .nm-header {
         background-color: #333 !important;
@@ -1910,25 +1919,18 @@ table thead th:nth-child(2) {
         border-bottom: 1px solid #444 !important;
     }
     .nm-team { color: #ffffff !important; }
-    .nm-team.my-team { color: #4caf50 !important; }
+    .nm-team.my-team { color: #4caf50 !important; } /* Φωτεινό πράσινο */
     .nm-vs, .nm-stadium { color: #aaa !important; }
 
-    /* --- ΣΚΟΡΕΡ (ΔΙΟΡΘΩΣΗ ΧΡΩΜΑΤΩΝ) --- */
-    /* 1. Πρώτα κάνουμε όλα τα νούμερα κατάταξης ΛΕΥΚΑ */
-    .col-rank { 
-        color: #fff !important; 
-    } 
+    /* --- ΣΚΟΡΕΡ --- */
+    .col-rank { color: #fff !important; } 
+    .col-rank.rank-1 { color: #ffeb3b !important; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    .col-rank.rank-2 { color: #e0e0e0 !important; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+    .col-rank.rank-3 { color: #ffab40 !important; text-shadow: 0 0 5px rgba(205, 127, 50, 0.5); }
     
-    /* 2. ΜΕΤΑ βάζουμε τα χρώματα για 1-2-3 (αυξήσαμε τη φωτεινότητα) */
-    .col-rank.rank-1 { color: #ffeb3b !important; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); } /* Χρυσό έντονο */
-    .col-rank.rank-2 { color: #e0e0e0 !important; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); } /* Ασημί έντονο */
-    .col-rank.rank-3 { color: #ffab40 !important; text-shadow: 0 0 5px rgba(205, 127, 50, 0.5); } /* Χάλκινο έντονο */
-    
-    /* Ονόματα & Header */
     .col-name { color: #eee !important; }
     .scorer-header { background-color: #2a2a2a !important; color: #aaa !important; }
 
-    /* Μπαλίτσες γκολ */
     .goals-badge {
         background: #333 !important;
         color: #fff !important;
@@ -1936,44 +1938,47 @@ table thead th:nth-child(2) {
         box-shadow: none !important;
     }
 
-    /* --- ΓΕΝΙΚΑ --- */
-        /* Ticker (Ανακοίνωση) - Σκούρο Πράσινο για Dark Mode */
-    #announcement-ticker { 
-        background-color: #b8860b !important; /* Το βασικό πράσινο της ομάδας */
-        color: #ffffff !important;             /* Λευκά γράμματα */
-        border-bottom: 1px solid #333;         /* Μια διακριτική γραμμή από κάτω */
-    }
-    #announcement-text { 
-        color: #ffffff !important;             /* Λευκά γράμματα στο κείμενο */
-    }
-
-    .player-card { background-color: #252525 !important; border: 1px solid #444; }
-    .player-number { color: #000 !important; }
-    .player-position { color: #ffd700 !important; background: rgba(255, 215, 0, 0.1) !important; }
-    .player-name { color: #fff !important; }
-    .player-age { color: #aaa !important; }
-
-    table, th, td { color: #e0e0e0 !important; border-color: #333 !important; }
-    th { background-color: #333 !important; color: #fff !important; }
-    input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
-    .match-vs-box { background-color: #444 !important; color: #fff !important; }
-    .match-row[style*="background"] { background-color: #2d382e !important; }
-        /* --- STICKY COLUMNS DARK MODE --- */
+    /* --- STICKY COLUMNS DARK MODE --- */
     table td:nth-child(1),
     table td:nth-child(2) {
         background-color: #1e1e1e !important;
-        
-        /* Καθαρό χώρισμα χωρίς σκιά */
         border-right: 1px solid #333; 
         box-shadow: none !important; 
     }
-
     table th:nth-child(1),
     table th:nth-child(2) {
         background-color: #333 !important;
         border-right: 1px solid #444;
         box-shadow: none !important;
     }
+
+    /* --- ΓΕΝΙΚΑ --- */
+    /* TICKER: ΣΚΟΥΡΟ ΧΡΥΣΟ (#b8860b) */
+    #announcement-ticker { 
+        background-color: #b8860b !important; 
+        color: #ffffff !important; 
+        border-bottom: 1px solid #333; 
+    }
+    #announcement-text { color: #ffffff !important; }
+
+    /* Φανέλες */
+    .player-card { background-color: #252525 !important; border: 1px solid #444; }
+    .player-number { color: #000 !important; }
+    .player-position { color: #ffd700 !important; background: rgba(255, 215, 0, 0.1) !important; }
+    .player-name { color: #fff !important; }
+    .player-age { color: #aaa !important; }
+
+    /* Πίνακες & Inputs */
+    table, th, td { color: #e0e0e0 !important; border-color: #333 !important; }
+    th { background-color: #333 !important; color: #fff !important; }
+    
+    input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
+    .match-vs-box { background-color: #444 !important; color: #fff !important; }
+    .match-row[style*="background"] { background-color: #2d382e !important; }
+    
+    /* Διόρθωση κουμπιών στο Admin */
+    .roster-item button { background-color: #444 !important; border-color: #666 !important; color: #fff !important; }
+    .roster-item input { background-color: #222 !important; color: #fff !important; }
 }
     </style>
 </head>
