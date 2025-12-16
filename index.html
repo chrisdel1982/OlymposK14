@@ -216,33 +216,7 @@ td:nth-child(2) {
 .my-team td:nth-child(2) {
     color: var(--text-dark); 
 }
-/* --- STICKY COLUMNS (Σταθερές Στήλες Βαθμολογίας) --- */
-/* 1η Στήλη: Θέση (#) */
-table th:nth-child(1),
-table td:nth-child(1) {
-    position: sticky;
-    left: 0;
-    z-index: 5;
-    background-color: #ffffff; 
-    border-right: 1px solid #eee;
-}
 
-/* 2η Στήλη: Ομάδα */
-table th:nth-child(2),
-table td:nth-child(2) {
-    position: sticky;
-    left: 50px; 
-    z-index: 5;
-    background-color: #ffffff;
-    border-right: 2px solid #ddd; 
-    box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
-}
-
-/* Διόρθωση για το Header */
-table thead th:nth-child(1),
-table thead th:nth-child(2) {
-    z-index: 10;
-}
 /* --- STICKY COLUMNS (FINAL FIX) --- */
 
 /* 1η Στήλη: Θέση (#) */
@@ -2373,7 +2347,7 @@ table thead th:nth-child(2) {
                     <strong>Υπόμνημα:</strong> Αγ=Αγώνες, Ν=Νίκες, Ι=Ισοπαλίες, Η=Ήττες, ΓΥ=Γκολ Υπέρ, ΓΚ=Γκολ Κατά, Β=Βαθμοί
                 </div>
                 <div class="card">
-    <div class="card-header">
+    </div> <div class="card-header">
         <h2>👟 Σκόρερ</h2>
     </div>
     <div id="scorersContainer">
@@ -2453,7 +2427,6 @@ table thead th:nth-child(2) {
                         Κάνε backup των δεδομένων σου τακτικά!
                     </p>
                 </div>
-<h3 style="margin-top: 1.5rem;">📢 Ανακοίνωση (Ticker)</h3>
 <h3 style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
 
 <div class="form-group">
