@@ -2193,6 +2193,53 @@ table thead th:nth-child(2) {
     font-weight: bold;
     background: #f0f0f0;
 }
+/* --- COMPACT MOBILE RESULTS V4 (CENTERED & CLEAN) --- */
+@media (max-width: 768px) {
+    /* 1. Μικραίνουμε το κενό ανάμεσα στα ματς */
+    .match-row {
+        margin-bottom: 0 !important;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* 2. Κεντράρισμα των πάντων */
+    .match-row > div:first-child {
+        padding: 0.6rem 0.2rem !important;
+        gap: 0.2rem !important;
+        grid-template-columns: 1fr auto 1fr !important;
+        align-items: center !important; /* Κάθετο κεντράρισμα */
+    }
+
+    /* 3. Ονόματα Ομάδων: ΚΕΝΤΡΑΡΙΣΜΕΝΑ για συμμετρία */
+    .team-left, .team-right {
+        font-size: 0.75rem !important; /* ~12px */
+        line-height: 1.2 !important;
+        word-wrap: break-word; 
+        text-align: center !important; /* ΣΗΜΑΝΤΙΚΗ ΑΛΛΑΓΗ */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    
+    /* Αφαιρούμε τα padding δεξιά/αριστερά για να εκμεταλλευτούμε όλο το χώρο */
+    .team-left { padding-right: 0 !important; }
+    .team-right { padding-left: 0 !important; }
+
+    /* 4. Σκορ */
+    .match-score-box {
+        font-size: 0.9rem !important;
+        padding: 0 6px !important;
+        height: 24px !important;
+        min-width: 35px !important;
+    }
+
+    /* 5. Σκόρερ από κάτω */
+    .match-scorers {
+        font-size: 0.7rem !important;
+        margin-top: 0 !important;
+        padding-bottom: 5px !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -3038,8 +3085,7 @@ function displayFixtures() {
         container.innerHTML = '<div class="empty-state"><p>🏁 Όλοι οι αγώνες έχουν ολοκληρωθεί!</p></div>';
     }
 }
-
- function displayRoster() {
+function displayRoster() {
     const container = document.getElementById('rosterContainer');
     container.className = ''; 
     container.innerHTML = '';
@@ -3051,11 +3097,12 @@ function displayFixtures() {
 
     const currentYear = new Date().getFullYear(); 
 
+    // Κατηγορίες με τα keywords
     const categories = [
-        { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['gk', 'τέρμα'], icon: '🧤' },
-        { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['cb', 'lb', 'rb', 'sw', 'wb', 'αμυντικός'], icon: '🛡️' },
-        { title: 'ΜΕΣΟΙ', keywords: ['cm', 'dm', 'am', 'lm', 'rm', 'μέσος'], icon: '⚙️' },
-        { title: 'ΕΠΙΘΕΤΙΚΟΙ', keywords: ['cf', 'ss', 'lw', 'rw', 'st', 'επιθετικός'], icon: '⚡' },
+        { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['(gk)'], icon: '🧤' },
+        { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
+        { title: 'ΜΕΣΟΙ', keywords: ['(cm)', '(dm)', '(am)', '(lm)', '(rm)'], icon: '⚙️' },
+        { title: 'ΕΠΙΘΕΤΙΚΟΙ', keywords: ['(cf)', '(ss)', '(lw)', '(rw)', '(st)'], icon: '⚡' },
         { title: 'TECHNICAL STAFF', keywords: ['προπονητής', 'coach'], icon: '👨‍🏫' }
     ];
 
@@ -3063,8 +3110,12 @@ function displayFixtures() {
 
     categories.forEach(category => {
         const groupPlayers = availablePlayers.filter(p => {
-            const pos = (p.position || '').toLowerCase();
-            return category.keywords.some(keyword => pos.includes(keyword));
+            const posFull = (p.position || '').toLowerCase();
+            // ΤΟ ΚΟΛΠΟ: Παίρνουμε μόνο το πρώτο κομμάτι πριν την κάθετο (/)
+            // Έτσι, αν είναι "DM / LB", θα ελέγξει μόνο το "DM".
+            const primaryPos = posFull.split('/')[0]; 
+            
+            return category.keywords.some(keyword => primaryPos.includes(keyword));
         });
 
         if (groupPlayers.length > 0) {
@@ -3086,12 +3137,6 @@ function displayFixtures() {
                 const displayNumber = player.number || (isCoach ? 'C' : '-');
                 const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
-                
-                // CLEAN SHEET BADGE (Μόνο αν έχει πάνω από 0)
-                let csHTML = '';
-                if (player.cleanSheets && player.cleanSheets > 0) {
-                    csHTML = `<div class="cs-badge" title="Clean Sheets">🧤 ${player.cleanSheets}</div>`;
-                }
 
                 let ageHTML = '';
                 if (player.birthYear && !isCoach) { 
@@ -3100,7 +3145,7 @@ function displayFixtures() {
                 }
 
                 card.innerHTML = `
-                    ${csHTML} <div class="${photoClass}">
+                    <div class="${photoClass}">
                         <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
                         <div class="player-number">${displayNumber}</div>
                         ${captainBadge}
@@ -3116,9 +3161,38 @@ function displayFixtures() {
         }
     });
 
-    // Ορφανοί παίκτες (αν υπάρχουν)
+    // Ορφανοί (αν υπάρχουν)
     if (availablePlayers.length > 0) {
-        // ... (Ο κώδικας για τους υπόλοιπους παραμένει ίδιος, μπορείς να τον κρατήσεις από την προηγούμενη version αν θες, ή να τον αγνοήσεις αν καλύπτονται όλοι)
+         const titleDiv = document.createElement('div');
+         titleDiv.className = 'roster-category-title';
+         titleDiv.innerText = 'ΑΛΛΟΙ';
+         container.appendChild(titleDiv);
+ 
+         const gridDiv = document.createElement('div');
+         gridDiv.className = 'roster-grid';
+         
+         availablePlayers.forEach(player => {
+              const card = document.createElement('div');
+              card.className = 'player-card';
+              const displayNumber = player.number || '—';
+              
+              let ageHTML = '';
+              if (player.birthYear) {
+                 const age = currentYear - player.birthYear;
+                 ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
+              }
+ 
+              card.innerHTML = `
+                 <div class="player-photo">
+                     <div class="player-number">${displayNumber}</div>
+                 </div>
+                 <div class="player-name">${player.name}</div>
+                 <div class="player-position">${player.position}</div>
+                 ${ageHTML}
+             `;
+             gridDiv.appendChild(card);
+         });
+         container.appendChild(gridDiv);
     }
 }
 function displayTopScorers() {
