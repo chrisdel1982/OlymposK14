@@ -1980,6 +1980,20 @@ table thead th:nth-child(2) {
     /* Διόρθωση κουμπιών στο Admin */
     .roster-item button { background-color: #444 !important; border-color: #666 !important; color: #fff !important; }
     .roster-item input { background-color: #222 !important; color: #fff !important; }
+    .match-scorers {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border-top: 1px solid #333 !important;
+        color: #ddd !important;
+    }
+
+    .match-scorer-entry {
+        color: #e0e0e0 !important;
+    }
+    
+    .match-cs-entry {
+        color: #81c784 !important;
+        font-weight: bold;
+    }
 }
 /* --- SHARE MODAL STYLES --- */
 .share-modal {
@@ -2891,7 +2905,7 @@ function displayStandings() {
         tbody.appendChild(row);
     });
 }
-   function displayResults() {
+  function displayResults() {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
     let hasResults = false;
@@ -2929,24 +2943,43 @@ function displayStandings() {
                         <div class="team-right">${match.away}</div>
                     </div>`;
 
-                // Εμφάνιση Σκόρερ
-                let scorersHTML = '';
+                // --- ΕΜΦΑΝΙΣΗ ΣΤΑΤΙΣΤΙΚΩΝ (Σκόρερ & Clean Sheets) ---
+                let statsHTML = '';
+                let hasStats = false;
+                let contentHTML = [];
+
+                // 1. Σκόρερ
                 if (match.scorers && match.scorers.length > 0 && !match.isPostponed) {
+                    hasStats = true;
                     const counts = {};
                     match.scorers.forEach(name => { counts[name] = (counts[name] || 0) + 1; });
 
-                    let namesHTML = [];
                     for (const [name, count] of Object.entries(counts)) {
                         let shortName = name;
                         const parts = name.split(' ');
                         if(parts.length > 1) shortName = parts.slice(1).join(' ') + ' ' + parts[0].charAt(0) + '.';
                         const goalsStr = count > 1 ? `(${count})` : '';
-                        namesHTML.push(`<span class="match-scorer-entry">⚽ ${shortName} ${goalsStr}</span>`);
+                        contentHTML.push(`<span class="match-scorer-entry">⚽ ${shortName} ${goalsStr}</span>`);
                     }
-                    scorersHTML = `<div class="match-scorers">${namesHTML.join('')}</div>`;
                 }
 
-                div.innerHTML = mainMatchHTML + scorersHTML;
+                // 2. Clean Sheets (ΝΕΟ)
+                if (match.cleanSheetHolders && match.cleanSheetHolders.length > 0 && !match.isPostponed) {
+                    hasStats = true;
+                    match.cleanSheetHolders.forEach(name => {
+                         let shortName = name;
+                        const parts = name.split(' ');
+                        if(parts.length > 1) shortName = parts.slice(1).join(' ') + ' ' + parts[0].charAt(0) + '.';
+                        // Προσθήκη με ειδική κλάση για να το κάνουμε πράσινο
+                        contentHTML.push(`<span class="match-scorer-entry match-cs-entry">🧤 ${shortName}</span>`);
+                    });
+                }
+
+                if (hasStats) {
+                    statsHTML = `<div class="match-scorers">${contentHTML.join('<span style="margin:0 4px; opacity:0.3">|</span>')}</div>`;
+                }
+
+                div.innerHTML = mainMatchHTML + statsHTML;
                 section.appendChild(div);
             });
             container.appendChild(section);
