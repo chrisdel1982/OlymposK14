@@ -412,16 +412,32 @@ table thead th:nth-child(2) {
     font-weight: bold;
 }
 
-/* Το κόκκινο ταμπελάκι για τα αναβληθέντα */
+/* --- FIX ΓΙΑ ΤΟ ΚΟΥΜΠΙ ΑΝΑΒΟΛΗΣ --- */
 .postponed-badge {
     background: #ffebee;
     color: #d32f2f;
     border: 1px solid #d32f2f;
-    padding: 0.3rem 0.6rem;
+    
+    /* ΝΕΕΣ ΔΙΑΣΤΑΣΕΙΣ (ΙΔΙΕΣ ΜΕ ΤΟ ΣΚΟΡ) */
+    height: 24px !important;       /* Ίδιο ύψος με το σκορ */
+    padding: 0 6px !important;     /* Μικρό περιθώριο */
+    font-size: 0.7rem !important;  /* Μικρά γράμματα για να χωράει */
     border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-flex;          /* Για κεντράρισμα */
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;           /* Να μην σπάει η λέξη */
+}
+
+/* DARK MODE FIX ΓΙΑ ΑΝΑΒΟΛΗ */
+@media (prefers-color-scheme: dark) {
+    .postponed-badge {
+        background: #3e2723 !important; /* Πολύ σκούρο κόκκινο φόντο */
+        color: #ff8a80 !important;      /* Ανοιχτό κόκκινο γράμμα */
+        border-color: #d32f2f !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1980,10 +1996,13 @@ table thead th:nth-child(2) {
     /* Διόρθωση κουμπιών στο Admin */
     .roster-item button { background-color: #444 !important; border-color: #666 !important; color: #fff !important; }
     .roster-item input { background-color: #222 !important; color: #fff !important; }
+   /* --- DARK MODE SCORERS (BLACK FIX) --- */
     .match-scorers {
-        background-color: rgba(255, 255, 255, 0.05) !important;
+        /* ΤΟ ΚΑΝΟΥΜΕ ΜΑΥΡΟ (ή TRANSPARENT) */
+        background-color: #000000 !important; 
         border-top: 1px solid #333 !important;
         color: #ddd !important;
+        margin-top: 0 !important; /* Κολλητά στο ματς */
     }
 
     .match-scorer-entry {
@@ -2990,8 +3009,9 @@ function displayStandings() {
 
                 if (match.home === MY_TEAM || match.away === MY_TEAM) { div.style.background = '#fffdf0'; }
 
+                // ΑΛΛΑΓΗ ΕΔΩ: Γράφουμε "ΑΝΑΒΟΛΗ" αντί για "ΑΝΑΒΛΗΘΗΚΕ"
                 let centerContent = match.isPostponed ? 
-                    `<span class="postponed-badge">ΑΝΑΒΛΗΘΗΚΕ</span>` : 
+                    `<span class="postponed-badge">ΑΝΑΒΟΛΗ</span>` : 
                     `<div class="match-score-box">${match.homeScore} - ${match.awayScore}</div>`;
 
                 let mainMatchHTML = `
@@ -3001,12 +3021,11 @@ function displayStandings() {
                         <div class="team-right">${match.away}</div>
                     </div>`;
 
-                // --- ΕΜΦΑΝΙΣΗ ΣΤΑΤΙΣΤΙΚΩΝ (Σκόρερ & Clean Sheets) ---
+                // --- ΕΜΦΑΝΙΣΗ ΣΤΑΤΙΣΤΙΚΩΝ ---
                 let statsHTML = '';
                 let hasStats = false;
                 let contentHTML = [];
 
-                // 1. Σκόρερ
                 if (match.scorers && match.scorers.length > 0 && !match.isPostponed) {
                     hasStats = true;
                     const counts = {};
@@ -3021,14 +3040,12 @@ function displayStandings() {
                     }
                 }
 
-                // 2. Clean Sheets (ΝΕΟ)
                 if (match.cleanSheetHolders && match.cleanSheetHolders.length > 0 && !match.isPostponed) {
                     hasStats = true;
                     match.cleanSheetHolders.forEach(name => {
                          let shortName = name;
                         const parts = name.split(' ');
                         if(parts.length > 1) shortName = parts.slice(1).join(' ') + ' ' + parts[0].charAt(0) + '.';
-                        // Προσθήκη με ειδική κλάση για να το κάνουμε πράσινο
                         contentHTML.push(`<span class="match-scorer-entry match-cs-entry">🧤 ${shortName}</span>`);
                     });
                 }
