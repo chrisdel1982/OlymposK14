@@ -7,6 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -1980,6 +1981,103 @@ table thead th:nth-child(2) {
     .roster-item button { background-color: #444 !important; border-color: #666 !important; color: #fff !important; }
     .roster-item input { background-color: #222 !important; color: #fff !important; }
 }
+/* --- SHARE MODAL STYLES --- */
+.share-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999; /* Πάνω από όλα */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.share-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.share-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.share-option:active { transform: scale(0.95); }
+
+.share-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+/* ΧΡΩΜΑΤΑ ΕΙΚΟΝΙΔΙΩΝ SOCIAL MEDIA */
+.share-icon i {
+    transition: transform 0.2s;
+}
+
+/* WhatsApp Πράσινο */
+.fa-whatsapp { color: #25D366; }
+
+/* Viber Μωβ */
+.fa-viber { color: #7360f2; }
+
+/* Facebook Μπλε */
+.fa-facebook-f { color: #1877F2; }
+
+/* Copy Γκρι (και λευκό στο dark mode) */
+.fa-copy { color: #555; }
+
+/* Εφέ όταν περνάει το ποντίκι */
+.share-option:hover .share-icon i {
+    transform: scale(1.2); /* Μεγαλώνει λίγο το εικονίδιο */
+}
+
+/* DARK MODE fix για το εικονίδιο αντιγραφής */
+@media (prefers-color-scheme: dark) {
+    .fa-copy { color: #e0e0e0; }
+}
+.share-text { font-weight: 600; font-size: 0.9rem; color: #333; }
+
+/* Κουμπί Share μέσα στην είδηση */
+.btn-share {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Dark Mode υποστήριξη για το Share */
+@media (prefers-color-scheme: dark) {
+    .share-modal-content { background: #252525; border: 1px solid #444; }
+    .share-option { background: #333; }
+    .share-text { color: #fff; }
+    .btn-share { border-color: #ffd700; color: #ffd700; }
+}
     </style>
 </head>
 <body>
@@ -2279,7 +2377,43 @@ table thead th:nth-child(2) {
             </div>
         </div>
     </div>
-
+<div id="shareModal" class="share-modal" onclick="closeShareModal()">
+    <div class="share-modal-content" onclick="event.stopPropagation()">
+        <h3 style="margin-bottom: 10px; color: var(--primary-color);">📤 Κοινοποίηση</h3>
+        <p id="shareTitlePreview" style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;"></p>
+        
+        <div class="share-options">
+            <div class="share-option" onclick="doShare('whatsapp')">
+                <div class="share-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="share-text">WhatsApp</div>
+            </div>
+            
+            <div class="share-option" onclick="doShare('viber')">
+                <div class="share-icon">
+                    <i class="fab fa-viber"></i>
+                </div>
+                <div class="share-text">Viber</div>
+            </div>
+            
+            <div class="share-option" onclick="doShare('copy')">
+                <div class="share-icon">
+                    <i class="fas fa-copy"></i>
+                </div>
+                <div class="share-text">Αντιγραφή</div>
+            </div>
+            
+             <div class="share-option" onclick="doShare('facebook')">
+                <div class="share-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="share-text">Facebook</div>
+            </div>
+        </div>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 1.5rem;" onclick="closeShareModal()">Ακύρωση</button>
+    </div>
+</div>
     <script>
         const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
         const ADMIN_PASSWORD = 'olympos';
@@ -3092,53 +3226,57 @@ function removeNewsPhoto() {
     document.getElementById('newsPhotoPreviewImg').src = '';
 }
         function displayNews() {
-            const container = document.getElementById('newsContainer');
-            container.innerHTML = '';
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = '';
 
-            if (!data.news) {
-                data.news = [];
-            }
+    if (!data.news) { data.news = []; }
 
-            if (data.news.length === 0) {
-                container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
-                return;
-            }
-
-            // Ταξινόμηση με τα νεότερα πρώτα
-            const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-          sortedNews.forEach(newsItem => {
-    const div = document.createElement('div');
-    div.className = 'news-item collapsed';
-    const formattedDate = new Date(newsItem.date).toLocaleDateString('el-GR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    let imageHTML = '';
-    if (newsItem.photo) {
-        imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="${newsItem.title}">`;
+    if (data.news.length === 0) {
+        container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
+        return;
     }
-    
-    div.innerHTML = `
-        <div class="news-header">
-            <h3 class="news-title">${newsItem.title} <span class="news-toggle">🔽</span></h3>
-            <span class="news-date">${formattedDate}</span>
-        </div>
-        <div class="news-content">${newsItem.content}</div>
-        ${imageHTML}
-    `;
-    
-    div.addEventListener('click', function() {
-        this.classList.toggle('collapsed');
-    });
-    
-    container.appendChild(div);
-});
+
+    // Ταξινόμηση
+    const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    sortedNews.forEach(newsItem => {
+        const div = document.createElement('div');
+        // ΠΡΟΣΟΧΗ: Δίνουμε μοναδικό ID στο div για να το βρίσκουμε μετά
+        div.id = `news-item-${newsItem.id}`; 
+        div.className = 'news-item collapsed';
+        
+        const formattedDate = new Date(newsItem.date).toLocaleDateString('el-GR', {
+            day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
+        });
+        
+        let imageHTML = '';
+        if (newsItem.photo) {
+            imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="News Photo">`;
         }
+        
+        // Προσθέσαμε το κουμπί Share κάτω από τον τίτλο
+        div.innerHTML = `
+            <div class="news-header">
+                <div>
+                    <h3 class="news-title">${newsItem.title} <span class="news-toggle">🔽</span></h3>
+                    <span class="news-date">${formattedDate}</span>
+                </div>
+                <button class="btn-share" onclick="event.stopPropagation(); openShareModal(${newsItem.id})">
+                    📤 Share
+                </button>
+            </div>
+            <div class="news-content">${newsItem.content}</div>
+            ${imageHTML}
+        `;
+        
+        // Λογική για άνοιγμα/κλείσιμο
+        div.addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+        });
+        
+        container.appendChild(div);
+    });
+}
 
         function addNews() {
             const title = document.getElementById('newsTitle').value.trim();
@@ -3521,6 +3659,7 @@ function saveResults() {
     displayFixtures();
     displayRoster();
     displayNews();
+    checkDeepLink();
 
 });
 
@@ -3549,6 +3688,98 @@ navLinks.forEach(n => n.addEventListener("click", () => {
         navMenu.classList.remove("active");
     }
 }));
+/* --- SHARE FUNCTIONALITY --- */
+let currentShareId = null;
+
+function openShareModal(id) {
+    const item = data.news.find(n => n.id === id);
+    if(!item) return;
+    
+    currentShareId = id;
+    document.getElementById('shareTitlePreview').textContent = item.title;
+    document.getElementById('shareModal').style.display = 'flex';
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').style.display = 'none';
+    currentShareId = null;
+}
+
+function doShare(platform) {
+    if(!currentShareId) return;
+    
+    // Δημιουργία του "Εξυπνου Link"
+    // Παίρνει το site url και κολλάει το #news-12345
+    const baseUrl = window.location.href.split('#')[0];
+    const deepLink = `${baseUrl}#news-${currentShareId}`;
+    
+    const item = data.news.find(n => n.id === currentShareId);
+    const text = `🔴 ${item.title}\n\nΔείτε το εδώ: ${deepLink}`;
+    
+    let url = '';
+    
+    if (platform === 'whatsapp') {
+        url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    } else if (platform === 'viber') {
+        url = `viber://forward?text=${encodeURIComponent(text)}`;
+    } else if (platform === 'facebook') {
+        // ΣΗΜΕΙΩΣΗ: Το Facebook βλέπει μόνο το Link, όχι το κείμενο
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(deepLink)}`;
+    } else if (platform === 'copy') {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('✅ Το Link αντιγράφηκε!');
+            closeShareModal();
+        }).catch(() => {
+            prompt("Αντιγράψτε το link:", deepLink);
+        });
+        return;
+    }
+    
+    if(url) {
+        window.open(url, '_blank');
+        closeShareModal();
+    }
+}
+
+/* --- DEEP LINK HANDLER (Αυτό ανοίγει την είδηση) --- */
+function checkDeepLink() {
+    // Ελέγχουμε αν το URL έχει hash τύπου #news-12345
+    const hash = window.location.hash;
+    
+    if (hash && hash.startsWith('#news-')) {
+        const id = hash.replace('#news-', '');
+        
+        // 1. Πάμε στη σελίδα Νέα
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        
+        // Βρίσκουμε το Link των νέων και το κάνουμε active
+        const newsLink = document.querySelector('a[href="#news"]');
+        if(newsLink) newsLink.classList.add('active');
+        document.getElementById('news').classList.add('active');
+        
+        // 2. Περιμένουμε λίγο να "χτιστεί" το HTML από το displayNews
+        setTimeout(() => {
+            const element = document.getElementById(`news-item-${id}`);
+            if (element) {
+                // 3. Ανοίγουμε την είδηση (αφαιρούμε το collapsed)
+                element.classList.remove('collapsed');
+                // 4. Σκρολάρουμε εκεί
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 5. Ένα μικρό εφέ (αναβοσβήνει)
+                element.style.border = "2px solid var(--accent-color)";
+                setTimeout(() => {
+                    element.style.border = "";
+                }, 2000);
+            }
+        }, 100); // Μικρή καθυστέρηση 0.1 δευτ.
+    }
+}
+
+// Τρέχουμε τον έλεγχο όταν φορτώσει η σελίδα ΚΑΙ τα δεδομένα
+// ΠΡΟΣΘΗΚΗ ΣΤΟΝ EXISTING Event Listener
+// Βρες στο τέλος του αρχείου σου το: data = await loadData();
+// Και πρόσθεσε το checkDeepLink(); αμέσως μετά το displayNews();
     </script>
 </body>
 </html>
