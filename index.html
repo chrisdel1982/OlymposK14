@@ -2270,6 +2270,46 @@ table thead th:nth-child(2) {
         padding-bottom: 5px !important;
     }
 }
+/* --- FIX: ΤΟ ΠΡΟΓΡΑΜΜΑ (FIXTURES) ΝΑ ΕΙΝΑΙ ΙΔΙΟ ΜΕ ΤΑ ΑΠΟΤΕΛΕΣΜΑΤΑ --- */
+@media (max-width: 768px) {
+    /* 1. Αναγκάζουμε το κουτί του αγώνα να γίνει 3στηλο πλέγμα */
+    #fixtures .match-row {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr !important; /* Αριστερά - Μέση - Δεξιά */
+        gap: 5px !important;
+        align-items: center !important;
+        padding: 10px 5px !important;
+        text-align: center;
+    }
+
+    /* 2. Στοίχιση Γηπεδούχου (Αριστερά) -> Να κοιτάει ΔΕΞΙΑ (προς το VS) */
+    #fixtures .team-left {
+        text-align: right !important;
+        justify-content: flex-end !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2;
+        padding-right: 5px;
+    }
+
+    /* 3. Στοίχιση Φιλοξενούμενου (Δεξιά) -> Να κοιτάει ΑΡΙΣΤΕΡΑ (προς το VS) */
+    #fixtures .team-right {
+        text-align: left !important;
+        justify-content: flex-start !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2;
+        padding-left: 5px;
+    }
+
+    /* 4. Το κουτάκι VS στη μέση */
+    #fixtures .match-vs-box {
+        font-size: 0.75rem !important;
+        padding: 2px 6px !important;
+        min-width: 25px;
+        height: auto;
+    }
+}
     </style>
 </head>
 <body>
