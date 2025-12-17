@@ -3175,7 +3175,7 @@ function displayRoster() {
                 card.className = 'player-card';
 
                 const isCoach = category.title === 'TECHNICAL STAFF';
-                const displayNumber = player.number || (isCoach ? 'C' : '-');
+                const displayNumber = player.number || (isCoach ? 'COACH' : '-');
                 const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
 
