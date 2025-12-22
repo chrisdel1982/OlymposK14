@@ -1901,6 +1901,78 @@ table thead th:nth-child(2) {
         background: transparent !important;
     }
 }
+/* --- NEXT MATCH HEADER LAYOUT FIX (FINAL CORRECTED) --- */
+.nm-header {
+    display: grid !important;
+    /* Τρεις στήλες: 1 μερίδιο - Αυτόματο πλάτος - 1 μερίδιο */
+    grid-template-columns: 1fr auto 1fr !important;
+    
+    /* ΚΑΘΕΤΗ ΣΤΟΙΧΙΣΗ: Όλα ακριβώς στη μέση */
+    align-items: center !important; 
+    align-content: center !important;
+    
+    justify-content: space-between !important;
+    gap: 8px; /* Μικρό κενό ανάμεσα στα στοιχεία */
+    min-height: 40px; /* Εξασφαλίζει ότι η μπάρα έχει "αέρα" */
+}
+
+/* 1. ΗΜΕΡΟΜΗΝΙΑ (HTML Child 1) -> ΤΕΡΜΑ ΑΡΙΣΤΕΡΑ */
+.nm-header span:nth-child(1) {
+    grid-column: 1; /* Πρώτη στήλη */
+    text-align: left;
+    justify-self: start;
+    
+    /* Εξασφάλιση ότι το εικονίδιο και το κείμενο είναι ευθυγραμμισμένα */
+    display: flex;
+    align-items: center;
+    gap: 4px; 
+}
+
+/* 2. ΤΙΤΛΟΣ (HTML Child 2) -> ΚΕΝΤΡΟ */
+.nm-header span:nth-child(2) {
+    grid-column: 2; /* Μεσαία στήλη */
+    text-align: center;
+    justify-self: center;
+    line-height: 1.1; /* Για να μην "ανοίγει" πολύ αν έχει 2 γραμμές */
+}
+
+/* 3. ΩΡΑ (HTML Child 3) -> ΤΕΡΜΑ ΔΕΞΙΑ */
+.nm-header span:nth-child(3) {
+    grid-column: 3; /* Τρίτη στήλη */
+    text-align: right;
+    justify-self: end;
+    
+    /* Ευθυγράμμιση εικονιδίου και ώρας */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Τα σπρώχνει δεξιά */
+    gap: 4px;
+}
+
+/* --- MOBILE ADJUSTMENTS (Διατηρούμε το Layout) --- */
+@media (max-width: 768px) {
+    .nm-header {
+        padding: 8px 5px !important;
+        gap: 5px !important;
+    }
+
+    .nm-header span:nth-child(1),
+    .nm-header span:nth-child(3) {
+        font-size: 0.75rem !important; /* Πιο μικρά για να χωράνε */
+    }
+
+    /* Ο τίτλος στη μέση */
+    .nm-header span:nth-child(2) {
+        font-size: 0.85rem !important;
+        max-width: 160px; /* Περιορισμός για να μην καβαλάει τα άκρα */
+        white-space: normal !important; /* Επιτρέπουμε αλλαγή γραμμής */
+    }
+}
+
+/* --- ΧΡΩΜΑΤΑ ΓΙΑ ΕΜΒΟΛΙΜΟ (LIGHT MODE) --- */
+.nm-header.special-match {
+    color: #000000 !important; /* Μαύρα γράμματα στο κίτρινο */
+}
 /* --- DARK MODE FIXES (FINAL V3.1 - GOLD EDITION) --- */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -2024,10 +2096,12 @@ table thead th:nth-child(2) {
         border-bottom: 1px solid #444 !important;
     }
     
-    /* Όταν είναι ΕΜΒΟΛΙΜΟΣ (χρυσό header) → Σκούρο χρυσό */
+    /* --- DARK MODE SPECIAL MATCH FIX --- */
+    /* Σκούρο Χρυσό φόντο με ΑΣΠΡΑ γράμματα για αντίθεση */
     .nm-header.special-match {
-        background-color: #6d4c00 !important;
-        color: #ffd700 !important;
+        background-color: #6d4c00 !important; /* Σκούρο Χρυσό/Καφέ */
+        color: #ffffff !important;             /* Άσπρα γράμματα */
+        border-bottom: 1px solid #8B4513 !important;
     }
     
     .nm-team { color: #ffffff !important; }
