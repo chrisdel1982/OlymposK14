@@ -2434,6 +2434,34 @@ table thead th:nth-child(2) {
     <input type="text" id="announcementInput" placeholder="π.χ. Καλή επιτυχία...">
 </div>
 
+<!-- ΝΕΟ: Checkbox για Εμβόλιμο Αγώνα -->
+<div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fff3cd; padding: 1rem; border-radius: 8px; border: 2px solid #ffc107;">
+    <input type="checkbox" id="useSpecialMatchCheckbox" style="width: 20px; height: 20px;" onchange="toggleSpecialMatchFields()">
+    <label for="useSpecialMatchCheckbox" style="margin: 0; cursor: pointer; font-weight: 700; color: #856404;">
+        🏆 Εμβόλιμος Αγώνας (Φιλικό, Κύπελλο κτλ) - Προτεραιότητα στο Banner
+    </label>
+</div>
+
+<!-- ΝΕΑ ΠΕΔΙΑ ΓΙΑ ΤΟΝ ΕΜΒΟΛΙΜΟ ΑΓΩΝΑ -->
+<div id="specialMatchFields" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+    <div class="form-group">
+        <label>Τύπος Αγώνα (π.χ. ΦΙΛΙΚΟΣ, ΚΥΠΕΛΛΟ):</label>
+        <input type="text" id="specialMatchTypeInput" placeholder="π.χ. ΦΙΛΙΚΟΣ ΑΓΩΝΑΣ">
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+            <label>Γηπεδούχος:</label>
+            <input type="text" id="specialHomeInput" placeholder="π.χ. ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ">
+        </div>
+        <div class="form-group">
+            <label>Φιλοξενούμενη:</label>
+            <input type="text" id="specialAwayInput" placeholder="π.χ. ΑΟ ΑΜΠΕΛΟΚΗΠΩΝ">
+        </div>
+    </div>
+</div>
+
+<!-- ΚΑΝΟΝΙΚΑ ΠΕΔΙΑ (για όλους τους αγώνες) -->
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
     <div class="form-group">
         <label>Ημερομηνία (Πάνω Αριστερά):</label>
@@ -3639,12 +3667,26 @@ function removeNewsPhoto() {
      function saveGeneralSettings() {
     if (!data) return;
     
-    // Αποθήκευση
+    // Αποθήκευση ΚΟΙΝΩΝ πεδίων
     data.announcement = document.getElementById('announcementInput').value.trim();
     data.matchDate = document.getElementById('matchDateInput').value.trim();
     data.matchTime = document.getElementById('matchTimeInput').value.trim();
     data.matchStadium = document.getElementById('matchStadiumInput').value.trim();
     data.matchMapLink = document.getElementById('matchMapLinkInput').value.trim();
+    
+    // ΝΕΟ: Αποθήκευση ΕΜΒΟΛΙΜΟΥ αγώνα
+    const useSpecial = document.getElementById('useSpecialMatchCheckbox').checked;
+    
+    if (useSpecial) {
+        data.specialMatch = {
+            type: document.getElementById('specialMatchTypeInput').value.trim() || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ',
+            home: document.getElementById('specialHomeInput').value.trim(),
+            away: document.getElementById('specialAwayInput').value.trim()
+        };
+    } else {
+        // Αν ξετσεκαριστεί, διαγράφουμε τον εμβόλιμο
+        delete data.specialMatch;
+    }
     
     saveData(data);
     
@@ -3665,32 +3707,46 @@ function displayNextMatch() {
     
     if (!data || !data.fixtures) return;
 
-    // 1. Βρες τον επόμενο αγώνα
     let nextMatch = null;
-    for (const round of data.fixtures) {
-        const myMatch = round.matches.find(m => 
-            (m.home === MY_TEAM || m.away === MY_TEAM) && 
-            (m.homeScore === null && m.awayScore === null) && !m.isPostponed
-        );
-        if (myMatch) { nextMatch = myMatch; break; }
+    let matchType = 'NEXT MATCH'; // Default
+    let headerColor = '#f4f4f4'; // Default γκρι
+
+    // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 1: Εμβόλιμος αγώνας
+    if (data.specialMatch && data.specialMatch.home && data.specialMatch.away) {
+        nextMatch = {
+            home: data.specialMatch.home,
+            away: data.specialMatch.away
+        };
+        matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
+        headerColor = '#ffc107'; // Χρυσό για εμβόλιμο
+    } 
+    // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 2: Επόμενος αγώνας πρωταθλήματος
+    else {
+        for (const round of data.fixtures) {
+            const myMatch = round.matches.find(m => 
+                (m.home === MY_TEAM || m.away === MY_TEAM) && 
+                (m.homeScore === null && m.awayScore === null) && !m.isPostponed
+            );
+            if (myMatch) { nextMatch = myMatch; break; }
+        }
     }
 
     if (!nextMatch) return; 
 
-    // 2. Πληροφορίες από Admin
+    // Πληροφορίες από Admin
     const mDate = data.matchDate || '-';
     const mTime = data.matchTime || '-';
     const mStadium = data.matchStadium || '';
     const mMap = data.matchMapLink || '#';
 
-    // 3. Εμφάνιση (Το Layout που ζήτησες)
+    // Εμφάνιση
     container.innerHTML = `
         <div class="next-match-card">
-            <div class="nm-header">
-    <span>📅 ${mDate}</span>
-    <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">⚽ NEXT MATCH</span>
-    <span>⏰ ${mTime}</span>
-</div>
+            <div class="nm-header" style="background: ${headerColor};">
+                <span>📅 ${mDate}</span>
+                <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">⚽ ${matchType}</span>
+                <span>⏰ ${mTime}</span>
+            </div>
             
             <div class="nm-body">
                 <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
@@ -3712,7 +3768,7 @@ function displayNextMatch() {
         </div>
     `;
 }
-     function checkPassword() {
+    function checkPassword() {
     const password = document.getElementById('adminPassword').value;
     if (password === ADMIN_PASSWORD) {
         document.getElementById('loginForm').style.display = 'none';
@@ -3728,6 +3784,18 @@ function displayNextMatch() {
             document.getElementById('matchTimeInput').value = data.matchTime || '';
             document.getElementById('matchStadiumInput').value = data.matchStadium || '';
             document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
+            
+            // ΝΕΟ: Φόρτωση εμβόλιμου αγώνα (αν υπάρχει)
+            if (data.specialMatch) {
+                document.getElementById('useSpecialMatchCheckbox').checked = true;
+                document.getElementById('specialMatchTypeInput').value = data.specialMatch.type || '';
+                document.getElementById('specialHomeInput').value = data.specialMatch.home || '';
+                document.getElementById('specialAwayInput').value = data.specialMatch.away || '';
+                toggleSpecialMatchFields(); // Εμφάνιση πεδίων
+            } else {
+                document.getElementById('useSpecialMatchCheckbox').checked = false;
+                toggleSpecialMatchFields(); // Απόκρυψη πεδίων
+            }
         }
     } else {
         alert('❌ Λάθος κωδικός!');
@@ -4196,6 +4264,12 @@ function saveAndRefresh() {
     displayTopScorers();
     displayResults();
     displayRoster();
+}
+// Εμφάνιση/Απόκρυψη πεδίων εμβόλιμου αγώνα
+function toggleSpecialMatchFields() {
+    const checkbox = document.getElementById('useSpecialMatchCheckbox');
+    const fields = document.getElementById('specialMatchFields');
+    fields.style.display = checkbox.checked ? 'block' : 'none';
 }
     </script>
 </body>
