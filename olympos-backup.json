@@ -736,9 +736,14 @@
       "photo": null
     }
   ],
-  "announcement": "📢 Ανακοίνωση προς κάθε ενδιαφερόμενο…Αύριο, στην ώρα της προπόνησης (20:30), η μπάλα αλλάζει χέρια — ή μάλλον… πόδια! 👨‍👦 Μπαμπάδες vs Παιδιά. Τα νιάτα απέναντι στην εμπειρία, η ταχύτητα απέναντι στην… «τακτική», τα σπριντ απέναντι στα διαλείμματα για ανάσα 😅",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": ""
+  "announcement": "",
+  "matchDate": "Δευτέρα",
+  "matchTime": "20:30",
+  "matchStadium": "Κωνσταντίνος Μιγκοτζίδης",
+  "matchMapLink": "https://maps.app.goo.gl/ZRKmNH2ixmzPHvQj9",
+  "specialMatch": {
+    "type": "👨‍👦 Μπαμπάδες vs Παιδιά",
+    "home": "ΟΛΥΜΠΟΣ Κ14",
+    "away": "Όλυμπος Fathers FC"
+  }
 }
