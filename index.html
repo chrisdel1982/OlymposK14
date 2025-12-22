@@ -1483,6 +1483,37 @@ table thead th:nth-child(2) {
                 background: var(--accent-color);
                 border-radius: 2px;
             }
+              /* Next Match mobile fixes */
+    .nm-header {
+        flex-direction: column !important;
+        gap: 0.3rem !important;
+        padding: 0.8rem 0.5rem !important;
+        text-align: center;
+    }
+    
+    .nm-header span {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Ο τίτλος του αγώνα να μπορεί να σπάει σε 2 γραμμές */
+    .nm-header span:nth-child(2) {
+        font-size: clamp(0.7rem, 3.5vw, 0.9rem) !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+    
+    .nm-body { 
+        flex-direction: column; 
+        gap: 0.5rem; 
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .nm-team { 
+        text-align: center !important; 
+        font-size: 1.2rem !important; 
+    }
         }
 
         /* Extra small devices (phones < 375px) */
@@ -1987,6 +2018,21 @@ table thead th:nth-child(2) {
         color: #81c784 !important;
         font-weight: bold;
     }
+    .nm-header {
+        background-color: #2a2a2a !important;
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #444 !important;
+    }
+    
+    /* Όταν είναι ΕΜΒΟΛΙΜΟΣ (χρυσό header) → Σκούρο χρυσό */
+    .nm-header.special-match {
+        background-color: #6d4c00 !important;
+        color: #ffd700 !important;
+    }
+    
+    .nm-team { color: #ffffff !important; }
+    .nm-team.my-team { color: #81c784 !important; }
+    .nm-vs, .nm-stadium { color: #aaa !important; }
 }
 /* --- SHARE MODAL STYLES --- */
 .share-modal {
@@ -3709,7 +3755,7 @@ function displayNextMatch() {
 
     let nextMatch = null;
     let matchType = 'NEXT MATCH'; // Default
-    let headerColor = '#f4f4f4'; // Default γκρι
+    let headerClass = ''; // Για dark mode class
 
     // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 1: Εμβόλιμος αγώνας
     if (data.specialMatch && data.specialMatch.home && data.specialMatch.away) {
@@ -3718,7 +3764,7 @@ function displayNextMatch() {
             away: data.specialMatch.away
         };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
-        headerColor = '#ffc107'; // Χρυσό για εμβόλιμο
+        headerClass = 'special-match'; // Class για χρυσό + dark mode
     } 
     // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 2: Επόμενος αγώνας πρωταθλήματος
     else {
@@ -3739,13 +3785,18 @@ function displayNextMatch() {
     const mStadium = data.matchStadium || '';
     const mMap = data.matchMapLink || '#';
 
+    // Inline style για light mode (dark mode το καλύπτει το CSS)
+    const headerStyle = headerClass === 'special-match' ? 'background: #ffc107;' : 'background: #f4f4f4;';
+
     // Εμφάνιση
     container.innerHTML = `
         <div class="next-match-card">
-            <div class="nm-header" style="background: ${headerColor};">
-                <span>📅 ${mDate}</span>
-                <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">⚽ ${matchType}</span>
-                <span>⏰ ${mTime}</span>
+            <div class="nm-header ${headerClass}" style="${headerStyle}">
+                <span style="font-size: 0.85rem;">📅 ${mDate}</span>
+                <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: clamp(0.75rem, 3vw, 1rem); line-height: 1.2;">
+                    ⚽ ${matchType}
+                </span>
+                <span style="font-size: 0.85rem;">⏰ ${mTime}</span>
             </div>
             
             <div class="nm-body">
