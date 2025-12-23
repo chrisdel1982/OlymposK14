@@ -2459,7 +2459,7 @@ table thead th:nth-child(2) {
         <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
         <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
         <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
-        <li><a href="#news" class="nav-link">Νέα - Ειδήσεις</a></li>
+        <li><a href="#news" class="nav-link" onclick="markNewsAsRead()">Νέα - Ειδήσεις <span id="newsBadge" class="notification-badge">NEW</span></a></li>
         <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
     </ul>
 </nav>
@@ -4147,6 +4147,7 @@ function saveResults() {
     displayRoster();
     displayNews();
     checkDeepLink();
+    checkNewNews();
 
 });
 
@@ -4263,7 +4264,44 @@ function checkDeepLink() {
     }
 }
 /* --- HELPER FUNCTIONS FOR STATS (SCORERS & CLEAN SHEETS) --- */
+// 1. ΕΛΕΓΧΟΣ ΓΙΑ ΝΕΕΣ ΕΙΔΗΣΕΙΣ (Καλείται όταν φορτώνει η σελίδα)
+function checkNewNews() {
+    if (!data.news || data.news.length === 0) return;
 
+    // Βρίσκουμε την πιο πρόσφατη είδηση (η πρώτη στη λίστα μετά το sort)
+    // Επειδή έχουμε ήδη σορτάρει τα news στο displayNews, παίρνουμε το πιο πρόσφατο από τα data
+    // Θα κάνουμε ένα γρήγορο sort εδώ για σιγουριά
+    const latestNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    
+    if (!latestNews) return;
+
+    const latestId = latestNews.id;
+    const lastReadId = localStorage.getItem('lastReadNewsId');
+
+    // Αν το ID της τελευταίας είδησης είναι διαφορετικό από αυτό που αποθηκεύσαμε
+    // σημαίνει ότι υπάρχει κάτι νέο!
+    if (latestId.toString() !== lastReadId) {
+        const badge = document.getElementById('newsBadge');
+        if (badge) badge.style.display = 'inline-block';
+    }
+}
+
+// 2. ΜΟΛΙΣ ΠΑΤΗΣΕΙ ΤΟ ΚΟΥΜΠΙ "ΝΕΑ"
+function markNewsAsRead() {
+    if (!data.news || data.news.length === 0) return;
+
+    // Βρίσκουμε πάλι το πιο πρόσφατο
+    const latestNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    
+    if (latestNews) {
+        // Αποθηκεύουμε στο κινητό του χρήστη ότι "Είδε" αυτή την είδηση
+        localStorage.setItem('lastReadNewsId', latestNews.id);
+        
+        // Κρύβουμε το σήμα
+        const badge = document.getElementById('newsBadge');
+        if (badge) badge.style.display = 'none';
+    }
+}
 function togglePanel(type, index) {
     const panelId = type === 'scorer' ? `scorer-panel-${index}` : `cs-panel-${index}`;
     const panel = document.getElementById(panelId);
@@ -4397,6 +4435,29 @@ function toggleSpecialMatchFields() {
 
 #backToTop:hover {
     background-color: #fff;
+}
+/* --- MODERN NEW BADGE --- */
+.notification-badge {
+    background: linear-gradient(135deg, #ff0046, #ff4d7e); /* Μοντέρνο κόκκινο degrade */
+    color: white;
+    font-size: 0.55rem;      /* Πολύ μικρά και διακριτικά γράμματα */
+    font-weight: 800;        /* Πολύ έντονα */
+    padding: 2px 5px;        /* Λίγο "αέρα" γύρω γύρω */
+    border-radius: 4px;      /* Ελαφρώς στρογγυλεμένες γωνίες (όχι κύκλος) */
+    margin-left: 6px;
+    vertical-align: middle;  /* Στοίχιση στη μέση της γραμμής */
+    display: none;           /* Κρυφό αρχικά */
+    box-shadow: 0 2px 8px rgba(255, 0, 70, 0.4); /* Λάμψη από κάτω */
+    animation: pulse-badge 2s infinite;
+    letter-spacing: 0.5px;   /* Αραιά γράμματα για στυλ */
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Το εφέ που αναβοσβήνει */
+@keyframes pulse-badge {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
 </style>
 
