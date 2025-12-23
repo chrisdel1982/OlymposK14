@@ -571,111 +571,411 @@
     {
       "round": 13,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "homeScore": null, "awayScore": null },
-        { "home": "ΑΕ ΦΙΛΥΡΟΥ", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null },
-        { "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΕ ΦΙΛΥΡΟΥ",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 14,
       "matches": [
-        { "home": "ΑΕ ΦΙΛΥΡΟΥ", "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "homeScore": null, "awayScore": null },
-        { "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΑΕ ΦΙΛΥΡΟΥ",
+          "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 15,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "away": "ΑΕ ΦΙΛΥΡΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "away": "ΑΕ ΦΙΛΥΡΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 16,
       "matches": [
-        { "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "homeScore": null, "awayScore": null },
-        { "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΕ ΦΙΛΥΡΟΥ", "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "homeScore": null, "awayScore": null },
-        { "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΕ ΦΙΛΥΡΟΥ",
+          "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 17,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "away": "ΑΕ ΦΙΛΥΡΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "away": "ΑΕ ΦΙΛΥΡΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 18,
       "matches": [
-        { "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "homeScore": null, "awayScore": null },
-        { "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "homeScore": null, "awayScore": null },
-        { "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΕ ΦΙΛΥΡΟΥ", "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΕ ΦΙΛΥΡΟΥ",
+          "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 19,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "homeScore": null, "awayScore": null },
-        { "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "away": "ΑΕ ΦΙΛΥΡΟΥ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "away": "ΑΕ ΦΙΛΥΡΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 20,
       "matches": [
-        { "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "homeScore": null, "awayScore": null },
-        { "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null },
-        { "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "homeScore": null, "awayScore": null },
-        { "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "away": "ΑΕ ΦΙΛΥΡΟΥ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "away": "ΑΕ ΦΙΛΥΡΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 21,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "homeScore": null, "awayScore": null },
-        { "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΕ ΦΙΛΥΡΟΥ", "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΕ ΦΙΛΥΡΟΥ",
+          "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     },
     {
       "round": 22,
       "matches": [
-        { "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)", "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ", "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ", "homeScore": null, "awayScore": null },
-        { "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ", "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)", "homeScore": null, "awayScore": null },
-        { "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ", "away": "ΑΕ ΦΙΛΥΡΟΥ", "homeScore": null, "awayScore": null },
-        { "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ", "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ", "homeScore": null, "awayScore": null },
-        { "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ", "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ", "homeScore": null, "awayScore": null }
+        {
+          "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
+          "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
+          "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
+          "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
+          "away": "ΑΕ ΦΙΛΥΡΟΥ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
+          "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
+          "homeScore": null,
+          "awayScore": null
+        },
+        {
+          "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
+          "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
+          "homeScore": null,
+          "awayScore": null
+        }
       ]
     }
   ],
@@ -846,14 +1146,9 @@
       "photo": null
     }
   ],
-  "announcement": "📢Η μπάλα θα αλλάξει χέρια… ή μάλλον πόδια! Η μάχη των γενεών ξεκινά: η ταχύτητα και η ενέργεια των παιδιών αντιμετωπίζουν την εμπειρία και τη… σοφία των μπαμπάδων! 😄",
-  "matchDate": "Δευτέρα",
-  "matchTime": "20:30",
-  "matchStadium": "Κωνσταντίνος Μιγκοτζίδης",
-  "matchMapLink": "https://maps.app.goo.gl/ZRKmNH2ixmzPHvQj9",
-  "specialMatch": {
-    "type": "Μπαμπάδες vs Παιδιά",
-    "home": "Όλυμπος Κ14",
-    "away": "Όλυμπος Fathers FC"
-  }
+  "announcement": "",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": ""
 }
