@@ -218,7 +218,6 @@ td:nth-child(2) {
 }
 
 /* --- STICKY COLUMNS (FINAL FIX) --- */
-
 /* 1η Στήλη: Θέση (#) */
 table th:nth-child(1),
 table td:nth-child(1) {
@@ -240,14 +239,9 @@ table td:nth-child(1) {
 table th:nth-child(2),
 table td:nth-child(2) {
     position: sticky;
-    
-    /* ΔΙΟΡΘΩΣΗ ΚΕΝΟΥ: Ξεκινάμε στο 39px για να καλύψουμε τη "χαραμάδα" */
     left: 39px; 
-    
     z-index: 20;
     background-color: #ffffff;
-    
-    /* ΑΦΑΙΡΕΣΗ ΣΚΙΑΣ: Καθαρό δεξί σύνορο χωρίς εφέ */
     border-right: 1px solid #ddd; 
     box-shadow: none !important; /* Σβήσαμε τη σκιά */
 }
@@ -258,7 +252,6 @@ table thead th:nth-child(2) {
     z-index: 30;
 }
 /* --- ΧΡΩΜΑΤΙΣΤΕΣ ΜΠΑΡΕΣ (INDICATORS - FLOATING STYLE) --- */
-
 /* Το κελί της θέσης χρειάζεται relative για να τοποθετηθεί η μπάρα μέσα του */
 .pos-cell {
     position: relative;
@@ -575,7 +568,7 @@ table thead th:nth-child(2) {
 
 /* ΟΝΟΜΑ ΟΜΑΔΑΣ */
 .jersey-team-name {
-    font-size: 0.9rem; 
+    font-size: 1rem; 
     font-weight: 800;
     color: #000000; 
     z-index: 5;
@@ -973,10 +966,12 @@ table thead th:nth-child(2) {
     margin: 0;
 }
 
+      /* --- ΒΕΛΤΙΩΜΕΝΑ ΚΟΥΜΠΙΑ ADMIN (IMPORT & PHOTO) --- */
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
             display: inline-block;
+            vertical-align: middle;
         }
 
         .file-input-wrapper input[type=file] {
@@ -987,19 +982,46 @@ table thead th:nth-child(2) {
         .file-input-label {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: var(--primary-color);
-            color: white;
+            
+            /* ΙΔΙΕΣ ΔΙΑΣΤΑΣΕΙΣ ΜΕ ΤΟ ΚΟΥΜΠΙ EXPORT (.btn) */
+            padding: 0.8rem 1.1rem!important;  
+            font-size: 0.95rem;      
             border-radius: 5px;
+            line-height: 1.1 !important;
+            width: fit-content !important;
+            
+            background: var(--primary-color);
+            color: #ffffff !important; /* Άσπρα γράμματα ΠΑΝΤΑ */
+            
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            margin: 0 !important;
         }
 
         .file-input-label:hover {
             background: var(--secondary-color);
             transform: translateY(-2px);
+            color: #ffffff !important;
+        }
+
+        /* --- ΡΥΘΜΙΣΕΙΣ ΓΙΑ ΚΙΝΗΤΑ (ΜΕΓΑΛΑ & ΚΕΝΤΡΑΡΙΣΜΕΝΑ) --- */
+        @media (max-width: 768px) {
+            .file-input-wrapper {
+                width: 100% !important;
+                margin-top: 5px;
+                display: block !important;
+            }
+
+            .file-input-label {
+                width: 100% !important;        /* Πιάνει όλο το πλάτος */
+                justify-content: center !important; /* Κεντράρισμα κειμένου */
+                text-align: center !important;
+                display: flex !important;
+            }
         }
 
         .empty-state {
@@ -2527,7 +2549,7 @@ table thead th:nth-child(2) {
             <div id="loginForm">
                 <div class="form-group">
                     <label>Κωδικός Admin:</label>
-                    <input type="password" id="adminPassword" placeholder="Εισάγετε κωδικό">
+                    <input type="password" id="adminPassword" placeholder="Εισάγετε κωδικό" onkeydown="if(event.key === 'Enter') checkPassword()">
                 </div>
                 <div class="modal-buttons">
                     <button class="btn" onclick="checkPassword()">Είσοδος</button>
