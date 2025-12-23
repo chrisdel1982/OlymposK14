@@ -2616,7 +2616,14 @@ table thead th:nth-child(2) {
         <input type="text" id="matchTimeInput" placeholder="π.χ. 10:45">
     </div>
 </div>
-
+<div class="form-group" style="background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #c8e6c9; margin-top: 10px;">
+    <label style="color: #1b5e20; font-weight: bold;">⏳ Ρύθμιση Αντίστροφης Μέτρησης (Ακριβής Ώρα):</label>
+    <input type="datetime-local" id="countdownTargetInput" style="background: white; border: 1px solid #a5d6a7;">
+    <small style="color: #555; display: block; margin-top: 5px;">
+        💡 <b>Προσοχή:</b> Αυτό ρυθμίζει <u>μόνο</u> το ρολόι που μετράει αντίστροφα.
+        Η ημερομηνία/ώρα που φαίνεται στην κάρτα είναι αυτή που γράφεις στα από πάνω κουτάκια.
+    </small>
+</div>
 <div class="form-group">
     <label>Γήπεδο (Κάτω από ομάδες):</label>
     <input type="text" id="matchStadiumInput" placeholder="π.χ. Γήπεδο Αμπελοκήπων">
@@ -3734,7 +3741,8 @@ function removeNewsPhoto() {
         // Αν ξετσεκαριστεί, διαγράφουμε τον εμβόλιμο
         delete data.specialMatch;
     }
-    
+    // Αποθήκευση Countdown
+data.countdownTarget = document.getElementById('countdownTargetInput').value;
     saveData(data);
     
     // Ενημέρωση Ticker
@@ -3747,6 +3755,8 @@ function removeNewsPhoto() {
     
     alert('✅ Οι ρυθμίσεις αποθηκεύτηκαν!');
 }
+let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
+
 function displayNextMatch() {
     const container = document.getElementById('nextMatchContainer');
     if (!container) return;
@@ -3755,20 +3765,17 @@ function displayNextMatch() {
     if (!data || !data.fixtures) return;
 
     let nextMatch = null;
-    let matchType = 'NEXT MATCH'; // Default
-    let headerClass = ''; // Για dark mode class
+    let matchType = 'NEXT MATCH';
+    let headerClass = '';
 
-    // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 1: Εμβόλιμος αγώνας
     if (data.specialMatch && data.specialMatch.home && data.specialMatch.away) {
         nextMatch = {
             home: data.specialMatch.home,
             away: data.specialMatch.away
         };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
-        headerClass = 'special-match'; // Class για χρυσό + dark mode
-    } 
-    // ΠΡΟΤΕΡΑΙΟΤΗΤΑ 2: Επόμενος αγώνας πρωταθλήματος
-    else {
+        headerClass = 'special-match';
+    } else {
         for (const round of data.fixtures) {
             const myMatch = round.matches.find(m => 
                 (m.home === MY_TEAM || m.away === MY_TEAM) && 
@@ -3780,16 +3787,13 @@ function displayNextMatch() {
 
     if (!nextMatch) return; 
 
-    // Πληροφορίες από Admin
     const mDate = data.matchDate || '-';
     const mTime = data.matchTime || '-';
     const mStadium = data.matchStadium || '';
     const mMap = data.matchMapLink || '#';
-
-    // Inline style για light mode (dark mode το καλύπτει το CSS)
     const headerStyle = headerClass === 'special-match' ? 'background: #ffc107;' : 'background: #f4f4f4;';
 
-    // Εμφάνιση
+    // HTML Κάρτας
     container.innerHTML = `
         <div class="next-match-card">
             <div class="nm-header ${headerClass}" style="${headerStyle}">
@@ -3800,13 +3804,14 @@ function displayNextMatch() {
                 <span style="font-size: 0.85rem;">⏰ ${mTime}</span>
             </div>
             
+            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; display: none; border-top: 1px solid rgba(255,255,255,0.1);">
+    </div>
+            
             <div class="nm-body">
                 <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
                     ${nextMatch.home}
                 </div>
-                
                 <div class="nm-vs">VS</div>
-                
                 <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">
                     ${nextMatch.away}
                 </div>
@@ -3819,6 +3824,44 @@ function displayNextMatch() {
             </a>
         </div>
     `;
+
+    // Έναρξη Αντίστροφης Μέτρησης (αν έχει οριστεί ώρα στο Admin)
+    if (data.countdownTarget) {
+        startCountdown(data.countdownTarget);
+    }
+}
+
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Υπολογισμός Χρόνου
+function startCountdown(targetDateString) {
+    const display = document.getElementById('countdown-display');
+    if (!display) return;
+
+    const targetDate = new Date(targetDateString).getTime();
+    
+    // Καθαρισμός προηγούμενου χρονομέτρου για να μην τρέχουν διπλά
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    // Εμφάνιση της μπάρας
+    display.style.display = 'block';
+
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            display.innerHTML = "🔴 LIVE / ΟΛΟΚΛΗΡΩΘΗΚΕ";
+            display.style.background = "#d32f2f"; // Κόκκινο όταν τελειώσει
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        display.innerHTML = `⏳ Σέντρα σε: ${days}μ ${hours}ω ${minutes}λ ${seconds}δ`;
+    }, 1000);
 }
     function checkPassword() {
     const password = document.getElementById('adminPassword').value;
@@ -3836,6 +3879,8 @@ function displayNextMatch() {
             document.getElementById('matchTimeInput').value = data.matchTime || '';
             document.getElementById('matchStadiumInput').value = data.matchStadium || '';
             document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
+            // Φόρτωση Countdown
+            document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
             
             // ΝΕΟ: Φόρτωση εμβόλιμου αγώνα (αν υπάρχει)
             if (data.specialMatch) {
@@ -4324,5 +4369,41 @@ function toggleSpecialMatchFields() {
     fields.style.display = checkbox.checked ? 'block' : 'none';
 }
     </script>
+    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
+
+<style>
+#backToTop {
+    display: none; /* Κρυφό αρχικά */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: var(--accent-color); /* Κίτρινο */
+    color: var(--primary-color); /* Πράσινο */
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#backToTop:hover {
+    background-color: #fff;
+}
+</style>
+
+<script>
+// Εμφάνιση κουμπιού όταν κατεβαίνουμε λίγο
+window.onscroll = function() {
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        document.getElementById("backToTop").style.display = "block";
+    } else {
+        document.getElementById("backToTop").style.display = "none";
+    }
+};
+</script>
 </body>
 </html>
