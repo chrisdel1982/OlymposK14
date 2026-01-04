@@ -2652,27 +2652,30 @@ table thead th:nth-child(2) {
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
-/* --- DARK MODE FIXES (WATERMARK & COLORS) --- */
+/* --- DARK MODE FIXES (FINAL V2) --- */
 @media (prefers-color-scheme: dark) {
     
-    /* 1. Διόρθωση Γραμμάτων: Όταν έχει πάνω από 1 γκολ -> ΛΕΥΚΟ */
-    .stats-list li b {
+    /* 1. Διόρθωση Γραμμάτων (Πιο δυνατή εντολή) */
+    .stats-list li b, 
+    .stats-list li b[style] { /* Στοχεύει και το inline style */
         color: #ffffff !important;
-        text-shadow: 0 0 2px rgba(0,0,0,0.5); /* Μικρή σκιά για να ξεχωρίζει */
+        text-shadow: none !important; /* Καθαρίζουμε τυχόν σκιές */
+        font-weight: 900 !important;
     }
 
-    /* 2. Διόρθωση Υδατογραφήματος (Να φύγει το άσπρο τετράγωνο) */
+    /* 2. Διόρθωση Υδατογραφήματος (DARKEN αντί για MULTIPLY) */
     .card-back {
-        /* Το multiply εξαφανίζει το λευκό φόντο της εικόνας! */
-        background-blend-mode: multiply !important; 
+        /* Το darken "εξαϋλώνει" το λευκό φόντο της εικόνας */
+        background-blend-mode: darken !important; 
         
-        /* Βάζουμε λίγο πιο ανοιχτό γκρι φόντο πίσω για να κάνει αντίθεση το σήμα */
-        background-color: #666 !important; 
+        /* Σκούρο γκρι φόντο */
+        background-color: #444444 !important; 
     }
 
-    /* Προσαρμόζουμε το "πέπλο" για να δέσει με το multiply */
+    /* 3. Το πέπλο από πάνω */
     .card-back::after {
-        background: rgba(30, 30, 30, 0.92) !important;
+        /* Λίγο πιο διάφανο για να φανεί το σήμα */
+        background: rgba(30, 30, 30, 0.85) !important;
     }
 }
     </style>
