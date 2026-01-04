@@ -1384,9 +1384,11 @@ table thead th:nth-child(2) {
         font-size: 0.95rem;
     }
 
-    .player-position {
-        font-size: 0.65rem;
-        padding: 0.2rem 0.5rem;
+   .player-position {
+        font-size: 0.55rem !important; /* ΗΤΑΝ 0.65rem -> ΤΟ ΚΑΝΑΜΕ 0.55rem */
+        padding: 0.1rem 0.4rem !important; /* Λιγότερο "φούσκωμα" γύρω γύρω */
+        line-height: 1.1 !important; /* Πιο κοντά οι γραμμές αν σπάει σε 2η σειρά */
+        margin-top: 2px;
     }
 /* --- MOBILE FIXES ΓΙΑ ΤΗ ΦΑΝΕΛΑ & BADGE --- */
     
