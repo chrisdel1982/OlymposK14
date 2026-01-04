@@ -2652,30 +2652,36 @@ table thead th:nth-child(2) {
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
-/* --- DARK MODE FIXES (FINAL V2) --- */
+/* --- DARK MODE FIXES (FINAL V3 - FIX WATERMARK) --- */
 @media (prefers-color-scheme: dark) {
     
-    /* 1. Διόρθωση Γραμμάτων (Πιο δυνατή εντολή) */
+    /* 1. Τα γράμματα των γκολ ΛΕΥΚΑ και έντονα */
     .stats-list li b, 
-    .stats-list li b[style] { /* Στοχεύει και το inline style */
+    .stats-list li b[style] {
         color: #ffffff !important;
-        text-shadow: none !important; /* Καθαρίζουμε τυχόν σκιές */
+        text-shadow: none !important;
         font-weight: 900 !important;
     }
 
-    /* 2. Διόρθωση Υδατογραφήματος (DARKEN αντί για MULTIPLY) */
+    /* 2. Διόρθωση Υδατογραφήματος */
     .card-back {
-        /* Το darken "εξαϋλώνει" το λευκό φόντο της εικόνας */
-        background-blend-mode: darken !important; 
+        /* Χρησιμοποιούμε multiply για να γίνει το άσπρο του σήματος διάφανο */
+        background-blend-mode: multiply !important; 
         
-        /* Σκούρο γκρι φόντο */
-        background-color: #444444 !important; 
+        /* ΚΟΛΠΟ: Βάζουμε ΑΝΟΙΧΤΟ γκρι από πίσω για να "γράψει" το σήμα */
+        background-color: #a0a0a0 !important; 
     }
 
-    /* 3. Το πέπλο από πάνω */
+    /* 3. Το πέπλο από πάνω (Αυτό κάνει την κάρτα σκούρα) */
     .card-back::after {
-        /* Λίγο πιο διάφανο για να φανεί το σήμα */
-        background: rgba(30, 30, 30, 0.85) !important;
+        /* Πολύ σκούρο πέπλο για να φαίνεται η κάρτα μαύρη/γκρι */
+        background: rgba(20, 20, 20, 0.94) !important;
+    }
+    
+    /* Σιγουρεύουμε ότι τα γράμματα είναι ανοιχτόχρωμα */
+    .stats-list li {
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #444 !important;
     }
 }
     </style>
