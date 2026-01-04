@@ -272,42 +272,42 @@
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         }
       ]
     },
@@ -1147,8 +1147,9 @@
     }
   ],
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": ""
+  "matchDate": "Κυριακή 11/1",
+  "matchTime": "14:15",
+  "matchStadium": "Γήπεδο Μακεδονικού (βοηθητικό)",
+  "matchMapLink": "https://maps.app.goo.gl/wr46zmEoFP6h2d1i7",
+  "countdownTarget": "2026-01-11T14:15"
 }
