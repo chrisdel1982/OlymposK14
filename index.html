@@ -3106,6 +3106,41 @@ table thead th:nth-child(2) {
         <button class="btn btn-secondary" style="width: 100%; margin-top: 1.5rem;" onclick="closeShareModal()">Ακύρωση</button>
     </div>
 </div>
+<div id="squadModal" class="modal" style="z-index: 3000;">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3 style="color: var(--primary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">
+            📋 Επιλογή Αποστολής
+        </h3>
+        
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">
+            Επίλεξε τους παίκτες για το μήνυμα.
+        </p>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fff3e0; padding: 10px; border-radius: 5px; border: 1px solid #ffcc80; margin-bottom: 1rem;">
+            <input type="checkbox" id="noSquadCheckbox" style="width: 20px; height: 20px; cursor: pointer;">
+            <label for="noSquadCheckbox" style="margin: 0; font-weight: bold; color: #e65100; cursor: pointer; font-size: 0.95rem;">
+                🚫 Μην στείλεις καθόλου ονόματα (Μόνο Γήπεδο/Ώρα)
+            </label>
+        </div>
+
+        <div id="squadList" style="max-height: 250px; overflow-y: auto; background: #f9f9f9; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 1rem;">
+            </div>
+
+        <div class="form-group">
+            <label style="font-size: 0.9rem;">➕ Προσθήκη από Κ13 (ή άλλοι):</label>
+            <input type="text" id="extraPlayersInput" placeholder="π.χ. Παπαδόπουλος (Κ13)" style="font-size: 0.9rem;">
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn" style="background: var(--primary-color); width: 100%;" onclick="shareFinalSquad()">
+                📤 Δημιουργία & Share στο Viber
+            </button>
+            <button class="btn btn-secondary" style="width: 100%;" onclick="document.getElementById('squadModal').style.display='none'">
+                Ακύρωση
+            </button>
+        </div>
+    </div>
+</div>
     <script>
         const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
         const ADMIN_PASSWORD = 'olympos';
@@ -4798,7 +4833,105 @@ function shareMatchInfo(home, away, date, time, stadium, mapLink) {
         window.open(viberUrl, '_blank');
     }
 }
-    </script>
+// Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
+let currentMatchShareData = {};
+
+function openSquadModal(home, away, date, time, stadium, mapLink) {
+    currentMatchShareData = { home, away, date, time, stadium, mapLink };
+
+    const list = document.getElementById('squadList');
+    list.innerHTML = ''; 
+
+    // RESET ΣΤΟ ΚΟΥΤΑΚΙ "ΧΩΡΙΣ ΑΠΟΣΤΟΛΗ"
+    document.getElementById('noSquadCheckbox').checked = false;
+
+    const players = [...data.roster].sort((a, b) => (a.number || 999) - (b.number || 999));
+
+    players.forEach(p => {
+        const div = document.createElement('div');
+        div.style.padding = "5px";
+        div.style.borderBottom = "1px solid #eee";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        
+        const isCoach = p.position.includes('Προπονητής');
+        
+        div.innerHTML = `
+            <label style="display: flex; align-items: center; width: 100%; cursor: pointer; margin: 0;">
+                <input type="checkbox" class="squad-checkbox" value="${p.name}" data-pos="${p.position}" ${!isCoach ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 10px;">
+                <span style="font-weight: 600; font-size: 0.9rem;">${p.number ? '#' + p.number : ''} ${p.name}</span>
+                <span style="font-size: 0.75rem; color: #888; margin-left: auto;">${p.position.split('/')[0]}</span>
+            </label>
+        `;
+        list.appendChild(div);
+    });
+
+    document.getElementById('extraPlayersInput').value = '';
+    document.getElementById('squadModal').style.display = 'flex';
+}
+function shareFinalSquad() {
+    const { home, away, date, time, stadium, mapLink } = currentMatchShareData;
+    const siteUrl = window.location.origin + window.location.pathname;
+    
+    // ΕΛΕΓΧΟΣ: Θέλουμε αποστολή ή όχι;
+    const hideSquad = document.getElementById('noSquadCheckbox').checked;
+
+    let squadText = "";
+
+    // Αν ΔΕΝ έχουμε τσεκάρει το "Χωρίς Αποστολή", τότε φτιάχνουμε τη λίστα
+    if (!hideSquad) {
+        const checkboxes = document.querySelectorAll('.squad-checkbox:checked');
+        
+        const gks = [];
+        const defs = [];
+        const mids = [];
+        const fwds = [];
+
+        checkboxes.forEach(box => {
+            const name = box.value;
+            const pos = (box.getAttribute('data-pos') || "").toLowerCase();
+
+            if (pos.includes('gk') || pos.includes('τερματοφύλακας')) gks.push(name);
+            else if (pos.includes('αμυντικός') || pos.includes('cb') || pos.includes('lb') || pos.includes('rb')) defs.push(name);
+            else if (pos.includes('μέσος') || pos.includes('cm') || pos.includes('am') || pos.includes('lm') || pos.includes('rm')) mids.push(name);
+            else if (pos.includes('επιθετικός') || pos.includes('cf') || pos.includes('lw') || pos.includes('rw')) fwds.push(name);
+            else mids.push(name);
+        });
+
+        const extras = document.getElementById('extraPlayersInput').value.trim();
+        
+        squadText = "\n📋 *Η ΑΠΟΣΤΟΛΗ ΤΗΣ ΟΜΑΔΑΣ:*";
+        if (gks.length) squadText += "\n🧤 " + gks.join(", ");
+        if (defs.length) squadText += "\n🛡️ " + defs.join(", ");
+        if (mids.length) squadText += "\n⚙️ " + mids.join(", ");
+        if (fwds.length) squadText += "\n⚡ " + fwds.join(", ");
+        
+        if (extras) {
+            squadText += "\n🆕 " + extras;
+        }
+        squadText += "\n"; // Προσθήκη κενού στο τέλος
+    }
+
+    // Δημιουργία Μηνύματος
+    const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
+                 `🆚 ${home} - ${away}\n` +
+                 `📅 ${date}  ⏰ ${time}\n` +
+                 `🏟️ ${stadium}\n\n` +
+                 `📍 *Χάρτης Γηπέδου:* ${mapLink}\n` +
+                 `${squadText}\n` + // Αν το hideSquad είναι true, αυτό θα είναι κενό
+                 `⏳ ${siteUrl}`;
+
+    // Αποστολή
+    if (navigator.share) {
+        navigator.share({ title: 'Επόμενος Αγώνας', text: text }).catch(console.error);
+    } else {
+        const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
+        window.open(viberUrl, '_blank');
+    }
+
+    document.getElementById('squadModal').style.display = 'none';
+}
+ </script>
     <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
 </body>
 </html>
