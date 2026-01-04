@@ -2434,6 +2434,108 @@ table thead th:nth-child(2) {
         height: auto;
     }
 }
+/* --- 3D FLIP CARD STYLES (FIXED) --- */
+
+/* 1. Καθαρίζουμε το Wrapper (για να φύγει η διπλή μπάρα) */
+.player-card {
+    background-color: transparent !important;
+    perspective: 1000px;
+    cursor: pointer;
+    min-height: 280px;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+/* ΚΡΥΒΟΥΜΕ ΤΗΝ ΠΑΛΙΑ ΜΠΑΡΑ ΑΠΟ ΤΟ WRAPPER */
+.player-card::before {
+    display: none !important;
+}
+
+/* 2. Το κουτί που γυρίζει */
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.player-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* 3. Στυλ για ΜΠΡΟΣ και ΠΙΣΩ (ΑΔΙΑΦΑΝΕΣ ΛΕΥΚΟ) */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Κρύβει την πίσω πλευρά */
+    backface-visibility: hidden;
+    border-radius: 12px;
+    background: white; /* ΣΗΜΑΝΤΙΚΟ: Λευκό για να μην φεγγίζει η φανέλα */
+    padding: 1rem 0.5rem; /* Λίγο μικρότερο padding */
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Η ΠΙΣΩ ΟΨΗ */
+.card-back {
+    transform: rotateY(180deg);
+    background: #ffffff; /* Καθαρό λευκό */
+    border: 2px solid var(--primary-color);
+    overflow-y: auto;
+    z-index: 2; /* Εξασφάλιση ότι είναι από πάνω όταν γυρίζει */
+}
+
+/* ΛΙΣΤΑ ΣΤΑΤΙΣΤΙΚΩΝ (ΜΙΚΡΟΤΕΡΑ ΓΡΑΜΜΑΤΑ) */
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+/* ΛΙΣΤΑ ΣΤΑΤΙΣΤΙΚΩΝ - ΜΙΚΡΑ ΓΡΑΜΜΑΤΑ & ΜΙΑ ΓΡΑΜΜΗ */
+.stats-list li {
+    padding: 5px 2px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    display: flex;
+    justify-content: space-between; /* Όνομα αριστερά - Σκορ δεξιά */
+    align-items: center;
+    gap: 8px; /* Κενό ανάμεσα σε όνομα και γκολ */
+
+    font-size: 0.65rem; /* ΠΟΛΥ ΜΙΚΡΑ (για να χωράει το ΟΛΥΜΠΟΣ...) */
+    font-weight: 600;   /* Έντονα για να διαβάζονται εύκολα παρόλο που είναι μικρά */
+    color: #333;
+    
+    white-space: nowrap; /* ΣΗΜΑΝΤΙΚΟ: Απαγορεύει την αλλαγή γραμμής */
+    overflow: hidden;    
+}
+
+/* Για να μην κολλάνε τα γράμματα */
+.stats-list li span {
+    overflow: hidden;
+    text-overflow: ellipsis; /* Αν είναι ΤΕΡΑΣΤΙΟ όνομα, βάζει ... στο τέλος */
+}
+
+.stat-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 0.85rem; /* Μικρότερος τίτλος */
+    font-weight: bold;
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -3216,6 +3318,39 @@ function displayFixtures() {
         container.innerHTML = '<div class="empty-state"><p>🏁 Όλοι οι αγώνες έχουν ολοκληρωθεί!</p></div>';
     }
 }
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Βρίσκει αναλυτικά τα στατιστικά ενός παίκτη
+function getPlayerDetailedStats(playerName) {
+    let goalsLog = [];
+    let cleanSheetsLog = [];
+
+    // Ψάχνουμε σε όλα τα fixtures
+    data.fixtures.forEach(round => {
+        round.matches.forEach(match => {
+            // Αν δεν έχει γίνει το ματς, το αγνοούμε
+            if (match.homeScore === null) return;
+
+            const opponent = (match.home === MY_TEAM) ? match.away : match.home;
+            const score = `${match.homeScore}-${match.awayScore}`;
+            const info = `vs ${opponent} (${score})`;
+
+            // 1. Έλεγχος για Γκολ
+            if (match.scorers) {
+                // Πόσες φορές υπάρχει το όνομα του παίκτη στη λίστα scorers;
+                const goalsInMatch = match.scorers.filter(s => s === playerName).length;
+                if (goalsInMatch > 0) {
+                    goalsLog.push({ match: info, count: goalsInMatch });
+                }
+            }
+
+            // 2. Έλεγχος για Clean Sheet
+            if (match.cleanSheetHolders && match.cleanSheetHolders.includes(playerName)) {
+                cleanSheetsLog.push({ match: info });
+            }
+        });
+    });
+
+    return { goalsLog, cleanSheetsLog };
+}
 function displayRoster() {
     const container = document.getElementById('rosterContainer');
     container.className = ''; 
@@ -3228,7 +3363,6 @@ function displayRoster() {
 
     const currentYear = new Date().getFullYear(); 
 
-    // Κατηγορίες με τα keywords
     const categories = [
         { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['(gk)'], icon: '🧤' },
         { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
@@ -3242,10 +3376,7 @@ function displayRoster() {
     categories.forEach(category => {
         const groupPlayers = availablePlayers.filter(p => {
             const posFull = (p.position || '').toLowerCase();
-            // ΤΟ ΚΟΛΠΟ: Παίρνουμε μόνο το πρώτο κομμάτι πριν την κάθετο (/)
-            // Έτσι, αν είναι "DM / LB", θα ελέγξει μόνο το "DM".
             const primaryPos = posFull.split('/')[0]; 
-            
             return category.keywords.some(keyword => primaryPos.includes(keyword));
         });
 
@@ -3261,8 +3392,12 @@ function displayRoster() {
             groupPlayers.sort((a, b) => (a.number || 999) - (b.number || 999));
 
             groupPlayers.forEach(player => {
+                const stats = getPlayerDetailedStats(player.name);
+                const isGoalKeeper = player.position.toLowerCase().includes('gk') || player.position.toLowerCase().includes('τερματοφύλακας');
+                
                 const card = document.createElement('div');
                 card.className = 'player-card';
+                card.setAttribute('onclick', "this.classList.toggle('flipped')");
 
                 const isCoach = category.title === 'TECHNICAL STAFF';
                 const displayNumber = player.number || (isCoach ? 'COACH' : '-');
@@ -3274,16 +3409,67 @@ function displayRoster() {
                     const age = currentYear - player.birthYear;
                     ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
                 }
+                
+               // --- ΠΙΣΩ ΟΨΗ CONTENT ---
+                let backContent = '';
+                
+                if (stats.goalsLog.length > 0) {
+                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><ul class="stats-list">`;
+                    stats.goalsLog.forEach(log => {
+                        const countStr = log.count > 1 ? `<b style="color:var(--primary-color); font-size:0.75rem;">(${log.count})</b>` : '';
+                        
+                        // Καθαρίζουμε το όνομα για να χωράει
+                        // Αφαιρούμε το "vs " και το "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ" αν υπάρχει μέσα
+                        let shortMatch = log.match
+                            .replace('vs ', '')
+                            .replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '') // Αφαιρεί το μεγάλο όνομα αν είναι μέσα
+                            .trim();
+                            
+                        backContent += `<li><span title="${shortMatch}">${shortMatch}</span> ${countStr}</li>`;
+                    });
+                    backContent += '</ul><br>';
+                } else if (!isGoalKeeper && !isCoach) {
+                    backContent += `<div class="stat-header" style="background:#ccc; color:#555;">⚽ ΚΑΝΕΝΑ ΓΚΟΛ</div><div style="font-size:0.75rem; color:#888; margin-top:10px;">Συνεχίζουμε δυνατά! 💪</div>`;
+                }
 
+                if (isGoalKeeper) {
+                    if (stats.cleanSheetsLog.length > 0) {
+                        backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CLEAN SHEETS</div><ul class="stats-list">`;
+                        stats.cleanSheetsLog.forEach(log => {
+                             const shortMatch = log.match.replace('vs ', '').trim();
+                            backContent += `<li><span>${shortMatch}</span> ✅</li>`;
+                        });
+                        backContent += '</ul>';
+                    } else {
+                        backContent += `<div class="stat-header" style="background:#ccc; color:#555;">🧤 ΚΑΝΕΝΑ CS</div>`;
+                    }
+                }
+                
+                if (isCoach) {
+                    backContent = `<div style="padding:1rem; font-style:italic; font-size:0.8rem;">"Ο προπονητής είναι η καρδιά της ομάδας!"</div>`;
+                }
+
+                // Σύνθεση HTML
                 card.innerHTML = `
-                    <div class="${photoClass}">
-                        <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
-                        <div class="player-number">${displayNumber}</div>
-                        ${captainBadge}
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:80%; height:4px; background:var(--primary-color); border-radius:0 0 6px 6px;"></div>
+                            
+                            <div class="${photoClass}">
+                                <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
+                                <div class="player-number">${displayNumber}</div>
+                                ${captainBadge}
+                            </div>
+                            <div class="player-name">${player.name}</div>
+                            <div class="player-position">${player.position}</div>
+                            ${ageHTML}
+                            </div>
+
+                        <div class="card-back">
+                            <h4 style="color:var(--primary-color); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:0.9rem;">Στατιστικά</h4>
+                            ${backContent}
+                        </div>
                     </div>
-                    <div class="player-name">${player.name}</div>
-                    <div class="player-position">${player.position}</div>
-                    ${ageHTML}
                 `;
                 gridDiv.appendChild(card);
             });
@@ -3291,40 +3477,6 @@ function displayRoster() {
             availablePlayers = availablePlayers.filter(p => !groupPlayers.includes(p));
         }
     });
-
-    // Ορφανοί (αν υπάρχουν)
-    if (availablePlayers.length > 0) {
-         const titleDiv = document.createElement('div');
-         titleDiv.className = 'roster-category-title';
-         titleDiv.innerText = 'ΑΛΛΟΙ';
-         container.appendChild(titleDiv);
- 
-         const gridDiv = document.createElement('div');
-         gridDiv.className = 'roster-grid';
-         
-         availablePlayers.forEach(player => {
-              const card = document.createElement('div');
-              card.className = 'player-card';
-              const displayNumber = player.number || '—';
-              
-              let ageHTML = '';
-              if (player.birthYear) {
-                 const age = currentYear - player.birthYear;
-                 ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
-              }
- 
-              card.innerHTML = `
-                 <div class="player-photo">
-                     <div class="player-number">${displayNumber}</div>
-                 </div>
-                 <div class="player-name">${player.name}</div>
-                 <div class="player-position">${player.position}</div>
-                 ${ageHTML}
-             `;
-             gridDiv.appendChild(card);
-         });
-         container.appendChild(gridDiv);
-    }
 }
 function displayTopScorers() {
     const container = document.getElementById('scorersContainer');
