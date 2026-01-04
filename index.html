@@ -4778,7 +4778,7 @@ window.onscroll = function() {
 };
 // --- Viber Share Logic (Χωρίς Σκορ) ---
 function shareMatchInfo(home, away, date, time, stadium, mapLink) {
-    // Καθαρό URL χωρίς παραμέτρους (αν υπάρχουν)
+    // Καθαρό URL χωρίς παραμέτρους
     const siteUrl = window.location.origin + window.location.pathname;
 
     const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
@@ -4786,13 +4786,12 @@ function shareMatchInfo(home, away, date, time, stadium, mapLink) {
                  `📅 ${date}  ⏰ ${time}\n` +
                  `🏟️ ${stadium}\n\n` +
                  `📍 *Χάρτης Γηπέδου:* ${mapLink}\n\n` +
-                 `⏳ ${siteUrl}`;
+                 `⏳ ${siteUrl}`; // Μόνο το εικονίδιο και το Link
 
     if (navigator.share) {
         navigator.share({
             title: 'Επόμενος Αγώνας Όλυμπος FC',
             text: text
-            // ΑΦΑΙΡΕΣΑΜΕ ΤΟ URL ΑΠΟ ΕΔΩ ΓΙΑ ΝΑ ΜΗΝ ΤΟ ΒΓΑΖΕΙ ΔΙΠΛΟ
         }).catch(console.error);
     } else {
         const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
