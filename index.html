@@ -2484,13 +2484,47 @@ table thead th:nth-child(2) {
     flex-direction: column;
 }
 
-/* Η ΠΙΣΩ ΟΨΗ */
+/* Η ΠΙΣΩ ΟΨΗ ΜΕ ΔΙΟΡΘΩΜΕΝΟ ΥΔΑΤΟΓΡΑΦΗΜΑ */
 .card-back {
     transform: rotateY(180deg);
-    background: #ffffff; /* Καθαρό λευκό */
+    background-color: #ffffff;
     border: 2px solid var(--primary-color);
     overflow-y: auto;
-    z-index: 2; /* Εξασφάλιση ότι είναι από πάνω όταν γυρίζει */
+    z-index: 2;
+    
+    /* ΤΟ ΣΗΜΑ */
+    background-image: url('android-chrome-192x192.png'); 
+    background-repeat: no-repeat;
+    
+    /* ΑΛΛΑΓΗ 1: ΘΕΣΗ */
+    /* Το 'center' το κεντράρει οριζόντια. */
+    /* Το '70%' το κατεβάζει πιο κάτω (ήταν center). Όσο μεγαλώνει το %, τόσο κατεβαίνει. */
+    background-position: center 70%; 
+    
+    background-size: 85%; 
+    background-blend-mode: luminosity; 
+}
+
+/* ΤΟ ΛΕΥΚΟ ΠΕΠΛΟ (ΓΙΑ ΝΑ ΓΙΝΕΙ ΑΧΝΟ) */
+.card-back::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* ΑΛΛΑΓΗ 2: ΔΙΑΦΑΝΕΙΑ */
+    /* Από 0.92 το πήγαμε 0.96. Όσο πιο κοντά στο 1, τόσο πιο άσπρο/αχνό γίνεται το σήμα */
+    background: rgba(255, 255, 255, 0.90); 
+    
+    z-index: -1; 
+}
+
+/* Σιγουρεύουμε ότι τα γράμματα είναι πάνω από το πέπλο */
+.stat-header, .stats-list, h4 {
+    z-index: 10;
+    position: relative;
 }
 
 /* ΛΙΣΤΑ ΣΤΑΤΙΣΤΙΚΩΝ (ΜΙΚΡΟΤΕΡΑ ΓΡΑΜΜΑΤΑ) */
@@ -2535,6 +2569,40 @@ table thead th:nth-child(2) {
     font-size: 0.85rem; /* Μικρότερος τίτλος */
     font-weight: bold;
     text-align: center;
+}
+/* --- DARK MODE FIX ΓΙΑ 3D ΚΑΡΤΕΣ (ΠΡΟΣΘΗΚΗ ΣΤΟ ΤΕΛΟΣ) --- */
+@media (prefers-color-scheme: dark) {
+    /* Βάζουμε σκούρο φόντο στις όψεις της κάρτας */
+    .card-front, .card-back {
+        background-color: #252525 !important; 
+        border-color: #444 !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Διορθώνουμε το "πέπλο" πίσω για να είναι σκούρο */
+    .card-back::after {
+        background: rgba(37, 37, 37, 0.96) !important; 
+    }
+
+    /* Χρώματα κειμένων */
+    .player-name { 
+        color: #ffffff !important; 
+    }
+    .player-age { 
+        color: #aaaaaa !important; 
+    }
+    
+    /* Λίστα στατιστικών (πίσω μέρος) - Σκούρα γράμματα και γραμμές */
+    .stats-list li {
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #444 !important;
+    }
+    
+    /* Διόρθωση για τα γκρι headers (π.χ. "ΚΑΝΕΝΑ ΓΚΟΛ") */
+    .stat-header[style*="background:#ccc"] {
+        background: #444 !important; 
+        color: #fff !important;
+    }
 }
     </style>
 </head>
