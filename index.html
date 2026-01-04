@@ -2769,36 +2769,6 @@ table thead th:nth-child(2) {
         color: #ffcc80 !important; /* Ανοιχτό πορτοκαλί */
     }
 }
-/* --- TOAST NOTIFICATIONS --- */
-.toast {
-    background: #333;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    font-size: 0.95rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-    min-width: 250px;
-    justify-content: center;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.success { background: #2e7d32; } /* Πράσινο */
-.toast.error { background: #d32f2f; }   /* Κόκκινο */
-.toast.info { background: #0288d1; }    /* Μπλε */
-
-/* Icon style */
-.toast i { font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -3206,9 +3176,7 @@ table thead th:nth-child(2) {
         </div>
     </div>
 </div>
-<div id="toast-container" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px;">
-</div> 
-   <script>
+    <script>
         const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
         const ADMIN_PASSWORD = 'olympos';
 
@@ -5047,36 +5015,6 @@ function shareFinalSquad() {
     }
 
     document.getElementById('squadModal').style.display = 'none';
-}
-// ΣΥΝΑΡΤΗΣΗ ΓΙΑ ΜΟΝΤΕΡΝΕΣ ΕΙΔΟΠΟΙΗΣΕΙΣ
-function showNotification(message, type = 'success') {
-    const container = document.getElementById('toast-container');
-    
-    // Δημιουργία του στοιχείου
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    // Εικονίδιο ανάλογα με τον τύπο
-    let icon = '✅';
-    if (type === 'error') icon = '❌';
-    if (type === 'info') icon = 'ℹ️';
-
-    toast.innerHTML = `<span>${icon}</span> ${message}`;
-    
-    container.appendChild(toast);
-
-    // Εμφάνιση (με μικρή καθυστέρηση για το animation)
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-
-    // Αυτόματη εξαφάνιση μετά από 3 δευτερόλεπτα
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300); // Περιμένουμε να τελειώσει το animation σβησίματος
-    }, 3000);
 }
  </script>
     <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
