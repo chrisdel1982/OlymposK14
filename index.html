@@ -2662,28 +2662,6 @@ table thead th:nth-child(2) {
         text-shadow: none !important;
         font-weight: 900 !important;
     }
-
-    /* 2. Διόρθωση Υδατογραφήματος */
-    .card-back {
-        /* Βάζουμε ΑΝΟΙΧΤΟ ΓΚΡΙ πίσω. 
-           Επειδή έχουμε multiply, αυτό θα γίνει το βασικό χρώμα της κάρτας 
-           πριν πέσει το πέπλο. */
-        background-color: #cccccc !important; 
-        
-        /* Το multiply εξαφανίζει το λευκό κουτί της εικόνας */
-        background-blend-mode: multiply !important; 
-    }
-
-    /* 3. Το πέπλο από πάνω */
-    .card-back::after {
-        /* Το κλειδί είναι εδώ: 
-           Ήταν 0.94 (πολύ σκούρο). Το πάμε στο 0.85.
-           Αυτό σκουραίνει το γκρι #cccccc και το κάνει ωραίο σκούρο (#1f1f1f),
-           αλλά αφήνει το σήμα να φαίνεται από κάτω!
-        */
-        background: rgba(20, 20, 20, 0.85) !important; 
-    }
-    
     /* Σιγουρεύουμε ότι τα υπόλοιπα γράμματα είναι ανοιχτόχρωμα */
     .stats-list li {
         color: #e0e0e0 !important;
