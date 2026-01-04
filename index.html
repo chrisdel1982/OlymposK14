@@ -4175,17 +4175,17 @@ function displayNextMatch() {
 
             <div class="nm-stadium">🏟️ ${mStadium}</div>
 
-            <div style="display: flex; width: 100%;">
+            <div style="display: flex; width: 100%; border-top: 1px solid rgba(0,0,0,0.1);">
                 
                 <a href="${mMap}" target="_blank" class="nm-footer" 
-                   style="flex-grow: 1; text-align: center; background: var(--primary-color); color: white !important; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                   style="flex-grow: 1; height: 48px; background: var(--primary-color); color: white !important; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; letter-spacing: 0.5px; border: none;">
                     📍 WHERE TO GO
                 </a>
                 
                 <button onclick="shareMatchInfo('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')" 
                         class="nm-footer" 
-                        style="width: 60px; background: var(--primary-color); color: white !important; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
-                    <i class="fas fa-share-nodes" style="font-size: 1.3rem;"></i>
+                        style="width: 60px; height: 48px; background: var(--primary-color); color: white !important; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-left: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-share-nodes" style="font-size: 1.4rem;"></i>
                 </button>
             </div>
         </div>
@@ -4784,7 +4784,7 @@ function shareMatchInfo(home, away, date, time, stadium, mapLink) {
                  `📅 ${date}  ⏰ ${time}\n` +
                  `🏟️ ${stadium}\n\n` +
                  `📍 *Χάρτης Γηπέδου:* ${mapLink}\n\n` +
-                 `⏳ *Δείτε αντίστροφη μέτρηση:* \n${window.location.href}`;
+                 `⏳ ${window.location.href}`;
 
     // Προσπάθεια για Native Share (Κινητά)
     if (navigator.share) {
