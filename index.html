@@ -2686,20 +2686,33 @@ table thead th:nth-child(2) {
         border-bottom: 1px solid #444 !important;
     }
 }
-/* ΕΙΔΙΚΗ ΡΥΘΜΙΣΗ ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
+/* FIX ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ (ΝΑ ΣΠΑΕΙ ΣΕ 2 ΓΡΑΜΜΕΣ) */
 .card-back h4 {
-    /* Το αναγκάζουμε να σπάσει σε 2 γραμμές */
-    word-spacing: 9999px !important; 
-    white-space: normal !important;
+    display: block !important;
+    width: 100% !important;
     
-    /* Στυλιστικά */
-    text-align: center;
-    line-height: 1.2;
-    margin-bottom: 8px !important;
-    font-size: 0.95rem !important; /* Λίγο πιο μεγάλο για να φαίνεται */
+    /* Το μαγικό για να σπάσει η γραμμή: */
+    white-space: normal !important; 
+    word-spacing: 9999px !important; /* Σπρώχνει τη 2η λέξη κάτω */
+    
+    text-align: center !important;
+    line-height: 1.1 !important;
+    font-size: 1rem !important;
     font-weight: 800 !important;
-    width: 100%;
-    display: block;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #eee !important;
+    padding-bottom: 5px !important;
+    
+    /* Χρώμα */
+    color: var(--primary-color) !important;
+}
+
+/* Αν είμαστε σε Dark Mode, να είναι λευκό */
+@media (prefers-color-scheme: dark) {
+    .card-back h4 {
+        color: #ffffff !important;
+        border-color: #444 !important;
+    }
 }
     </style>
 </head>
