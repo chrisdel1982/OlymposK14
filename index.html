@@ -2706,20 +2706,32 @@ table thead th:nth-child(2) {
     /* Χρώμα */
     color: var(--primary-color) !important;
 }
-
-/* Αν είμαστε σε Dark Mode, να είναι λευκό */
+/* --- ULTIMATE FIX: DARK MODE & WATERMARK --- */
 @media (prefers-color-scheme: dark) {
-    .card-back h4 {
-        color: #ffffff !important;
-        border-color: #444 !important;
+    
+    /* 1. ΟΝΟΜΑ: Χρησιμοποιούμε το "body" μπροστά για να κερδίσουμε σε δύναμη */
+    body .card-back h4, 
+    body .card-back h4[style] {
+        color: #ffffff !important;       /* ΚΑΤΑΛΕΥΚΟ */
+        border-bottom-color: #666 !important;
+        text-shadow: none !important;
     }
-}
-/* --- ΔΙΟΡΘΩΣΗ: ΟΝΟΜΑ ΠΑΙΚΤΗ ΣΕ DARK MODE (ΝΑ ΜΗΝ ΕΙΝΑΙ ΠΡΑΣΙΝΟ) --- */
-@media (prefers-color-scheme: dark) {
-    .card-back h4, 
-    .card-back h4[style] { /* Στοχεύει και το inline style για σιγουριά */
-        color: #ffffff !important;
-        border-bottom-color: #555 !important; /* Για να φαίνεται και η γραμμή από κάτω */
+
+    /* 2. ΣΗΜΑ (WATERMARK): Το αναγκάζουμε να κατέβει ξανά */
+    .card-back {
+        /* Ρυθμίσεις εμφάνισης (όπως πριν) */
+        background-color: #cccccc !important; 
+        background-blend-mode: multiply !important;
+        
+        /* ΤΟ ΚΛΕΙΔΙ: Ξαναδηλώνουμε τη θέση ΜΕΣΑ στο dark mode */
+        background-position: center 95% !important; /* Τέρμα κάτω */
+        background-size: 85% !important;
+        background-repeat: no-repeat !important;
+    }
+
+    /* 3. ΠΕΠΛΟ (Για να είναι σκούρα η κάρτα) */
+    .card-back::after {
+        background: rgba(20, 20, 20, 0.85) !important; 
     }
 }
     </style>
