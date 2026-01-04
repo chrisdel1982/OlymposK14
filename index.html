@@ -2652,6 +2652,29 @@ table thead th:nth-child(2) {
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
+/* --- DARK MODE FIXES (WATERMARK & COLORS) --- */
+@media (prefers-color-scheme: dark) {
+    
+    /* 1. Διόρθωση Γραμμάτων: Όταν έχει πάνω από 1 γκολ -> ΛΕΥΚΟ */
+    .stats-list li b {
+        color: #ffffff !important;
+        text-shadow: 0 0 2px rgba(0,0,0,0.5); /* Μικρή σκιά για να ξεχωρίζει */
+    }
+
+    /* 2. Διόρθωση Υδατογραφήματος (Να φύγει το άσπρο τετράγωνο) */
+    .card-back {
+        /* Το multiply εξαφανίζει το λευκό φόντο της εικόνας! */
+        background-blend-mode: multiply !important; 
+        
+        /* Βάζουμε λίγο πιο ανοιχτό γκρι φόντο πίσω για να κάνει αντίθεση το σήμα */
+        background-color: #666 !important; 
+    }
+
+    /* Προσαρμόζουμε το "πέπλο" για να δέσει με το multiply */
+    .card-back::after {
+        background: rgba(30, 30, 30, 0.92) !important;
+    }
+}
     </style>
 </head>
 <body>
