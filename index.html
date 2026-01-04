@@ -1382,6 +1382,18 @@ table thead th:nth-child(2) {
 
     .player-name {
         font-size: 0.95rem;
+        /* ΤΟ ΚΟΛΠΟ ΓΙΑ ΤΙΣ 2 ΓΡΑΜΜΕΣ: */
+    white-space: normal !important; /* Επιτρέπει αλλαγή γραμμής */
+    word-spacing: 999px;            /* Αναγκάζει κάθε λέξη να πάει σε νέα γραμμή! */
+    line-height: 1.2;               /* Σωστό κενό ανάμεσα στις γραμμές */
+    
+    /* ΚΛΕΙΔΩΜΑ ΥΨΟΥΣ (Για να είναι όλες οι κάρτες ίσες) */
+    min-height: 2.4em;              /* Πιάνει χώρο για 2 γραμμές ούτως ή άλλως */
+    display: flex;
+    align-items: center;            /* Κεντράρισμα κάθετα */
+    justify-content: center;        /* Κεντράρισμα οριζόντια */
+    text-align: center;
+    z-index: 10;
     }
 
    .player-position {
@@ -2470,16 +2482,22 @@ table thead th:nth-child(2) {
     transform: rotateY(180deg);
 }
 
-/* 3. Στυλ για ΜΠΡΟΣ και ΠΙΣΩ (ΑΔΙΑΦΑΝΕΣ ΛΕΥΚΟ) */
+/* 3. Στυλ για ΜΠΡΟΣ και ΠΙΣΩ (FIXED ΓΙΑ ΟΛΑ: MOZILLA, SAFARI, CHROME) */
 .card-front, .card-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* Κρύβει την πίσω πλευρά */
-    backface-visibility: hidden;
+    
+    /* ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ ΓΙΑ ΤΟ MOZILLA & ΤΟ IPHONE */
+    -webkit-backface-visibility: hidden !important; /* Safari / Chrome */
+    backface-visibility: hidden !important;         /* Mozilla Firefox */
+    
+    /* Έξτρα προστασία για να μην "φεγγίζει" */
+    transform-style: preserve-3d;
+    background-color: white !important; 
+    
     border-radius: 12px;
-    background: white; /* ΣΗΜΑΝΤΙΚΟ: Λευκό για να μην φεγγίζει η φανέλα */
-    padding: 1rem 0.5rem; /* Λίγο μικρότερο padding */
+    padding: 1rem 0.5rem;
     top: 0;
     left: 0;
     display: flex;
@@ -2501,7 +2519,7 @@ table thead th:nth-child(2) {
     /* ΑΛΛΑΓΗ 1: ΘΕΣΗ */
     /* Το 'center' το κεντράρει οριζόντια. */
     /* Το '70%' το κατεβάζει πιο κάτω (ήταν center). Όσο μεγαλώνει το %, τόσο κατεβαίνει. */
-    background-position: center 70%; 
+    background-position: center 95%; 
     
     background-size: 85%; 
     background-blend-mode: luminosity; 
@@ -2661,12 +2679,27 @@ table thead th:nth-child(2) {
         color: #ffffff !important;
         text-shadow: none !important;
         font-weight: 900 !important;
-    }
+    }    
     /* Σιγουρεύουμε ότι τα υπόλοιπα γράμματα είναι ανοιχτόχρωμα */
     .stats-list li {
         color: #e0e0e0 !important;
         border-bottom: 1px solid #444 !important;
     }
+}
+/* ΕΙΔΙΚΗ ΡΥΘΜΙΣΗ ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
+.card-back h4 {
+    /* Το αναγκάζουμε να σπάσει σε 2 γραμμές */
+    word-spacing: 9999px !important; 
+    white-space: normal !important;
+    
+    /* Στυλιστικά */
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 8px !important;
+    font-size: 0.95rem !important; /* Λίγο πιο μεγάλο για να φαίνεται */
+    font-weight: 800 !important;
+    width: 100%;
+    display: block;
 }
     </style>
 </head>
