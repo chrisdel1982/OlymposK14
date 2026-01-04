@@ -2734,6 +2734,41 @@ table thead th:nth-child(2) {
         background: rgba(20, 20, 20, 0.85) !important; 
     }
 }
+/* --- FIX: SQUAD MODAL DARK MODE --- */
+@media (prefers-color-scheme: dark) {
+    
+    /* 1. Το φόντο της λίστας να γίνει σκούρο γκρι */
+    #squadList {
+        background-color: #252525 !important;
+        border: 1px solid #444 !important;
+    }
+
+    /* 2. Οι διαχωριστικές γραμμές ανάμεσα στους παίκτες */
+    #squadList div {
+        border-bottom-color: #333 !important;
+    }
+
+    /* 3. ΤΟ ΣΗΜΑΝΤΙΚΟ: Τα ονόματα των παικτών ΚΑΤΑΛΕΥΚΑ */
+    #squadList label span {
+        color: #ffffff !important;
+    }
+
+    /* 4. Οι θέσεις (που ήταν γκρι #888) να γίνουν πιο φωτεινές για να διαβάζονται */
+    #squadList label span[style*="color: #888"] {
+        color: #bbbbbb !important;
+    }
+
+    /* 5. Το πορτοκαλί κουτάκι "Χωρίς Αποστολή" να προσαρμοστεί */
+    #squadModal .form-group[style*="background: #fff3e0"] {
+        background-color: #3e2723 !important; /* Σκούρο καφέ */
+        border-color: #d84315 !important;
+    }
+    
+    /* Το κείμενο στο πορτοκαλί κουτάκι */
+    #squadModal label[for="noSquadCheckbox"] {
+        color: #ffcc80 !important; /* Ανοιχτό πορτοκαλί */
+    }
+}
     </style>
 </head>
 <body>
