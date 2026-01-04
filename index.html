@@ -3605,7 +3605,9 @@ function displayRoster() {
                             </div>
 
                         <div class="card-back">
-                            <h4 style="color:var(--primary-color); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:0.9rem;">Στατιστικά</h4>
+                            <h4 style="color:var(--primary-color); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:0.9rem;">
+                                ${player.name}
+                            </h4>
                             ${backContent}
                         </div>
                     </div>
@@ -3965,10 +3967,17 @@ function removeNewsPhoto() {
             });
         }
 
+      // Κώδικας Πλοήγησης (Με αυτόματο κλείσιμο καρτών)
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
+                // 1. ΒΡΙΣΚΟΥΜΕ ΟΛΕΣ ΤΙΣ ΓΥΡΙΣΜΕΝΕΣ ΚΑΡΤΕΣ ΚΑΙ ΤΙΣ ΚΛΕΙΝΟΥΜΕ
+                document.querySelectorAll('.player-card.flipped').forEach(card => {
+                    card.classList.remove('flipped');
+                });
+
+                // 2. Η κανονική αλλαγή σελίδας
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 
