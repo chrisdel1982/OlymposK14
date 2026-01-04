@@ -2519,7 +2519,7 @@ table thead th:nth-child(2) {
     /* ΑΛΛΑΓΗ 1: ΘΕΣΗ */
     /* Το 'center' το κεντράρει οριζόντια. */
     /* Το '70%' το κατεβάζει πιο κάτω (ήταν center). Όσο μεγαλώνει το %, τόσο κατεβαίνει. */
-    background-position: center 95%; 
+    background-position: center 100%; 
     
     background-size: 85%; 
     background-blend-mode: luminosity; 
@@ -2712,6 +2712,14 @@ table thead th:nth-child(2) {
     .card-back h4 {
         color: #ffffff !important;
         border-color: #444 !important;
+    }
+}
+/* --- ΔΙΟΡΘΩΣΗ: ΟΝΟΜΑ ΠΑΙΚΤΗ ΣΕ DARK MODE (ΝΑ ΜΗΝ ΕΙΝΑΙ ΠΡΑΣΙΝΟ) --- */
+@media (prefers-color-scheme: dark) {
+    .card-back h4, 
+    .card-back h4[style] { /* Στοχεύει και το inline style για σιγουριά */
+        color: #ffffff !important;
+        border-bottom-color: #555 !important; /* Για να φαίνεται και η γραμμή από κάτω */
     }
 }
     </style>
