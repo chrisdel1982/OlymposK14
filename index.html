@@ -14,7 +14,6 @@
     <title>Όλυμπος FC</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-	<link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
@@ -2542,16 +2541,18 @@ table thead th:nth-child(2) {
     border-bottom: 1px solid #f0f0f0;
     
     display: flex;
-    justify-content: space-between; /* Όνομα αριστερά - Σκορ δεξιά */
+    justify-content: space-between; 
     align-items: center;
-    gap: 8px; /* Κενό ανάμεσα σε όνομα και γκολ */
+    gap: 8px; 
 
-    font-size: 0.65rem; /* ΠΟΛΥ ΜΙΚΡΑ (για να χωράει το ΟΛΥΜΠΟΣ...) */
-    font-weight: 600;   /* Έντονα για να διαβάζονται εύκολα παρόλο που είναι μικρά */
+    font-size: 0.7rem; 
+    font-weight: 600;   
     color: #333;
     
-    white-space: nowrap; /* ΣΗΜΑΝΤΙΚΟ: Απαγορεύει την αλλαγή γραμμής */
-    overflow: hidden;    
+    /* --- ΟΙ ΑΛΛΑΓΕΣ ΓΙΑ ΝΑ ΧΩΡΑΝΕ ΟΙ ΟΜΑΔΕΣ --- */
+    white-space: normal !important; /* Επιτρέπει να αλλάζει γραμμή */
+    height: auto !important;        /* Το ύψος μεγαλώνει αυτόματα */
+    line-height: 1.2;               /* Σωστό κενό στις γραμμές */
 }
 
 /* Για να μην κολλάνε τα γράμματα */
@@ -2603,6 +2604,50 @@ table thead th:nth-child(2) {
         background: #444 !important; 
         color: #fff !important;
     }
+}
+#backToTop {
+    display: none; /* Κρυφό αρχικά */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: var(--accent-color); /* Κίτρινο */
+    color: var(--primary-color); /* Πράσινο */
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#backToTop:hover {
+    background-color: #fff;
+}
+/* --- MODERN NEW BADGE --- */
+.notification-badge {
+    background: linear-gradient(135deg, #ff0046, #ff4d7e); /* Μοντέρνο κόκκινο degrade */
+    color: white;
+    font-size: 0.55rem;      /* Πολύ μικρά και διακριτικά γράμματα */
+    font-weight: 800;        /* Πολύ έντονα */
+    padding: 2px 5px;        /* Λίγο "αέρα" γύρω γύρω */
+    border-radius: 4px;      /* Ελαφρώς στρογγυλεμένες γωνίες (όχι κύκλος) */
+    margin-left: 6px;
+    vertical-align: middle;  /* Στοίχιση στη μέση της γραμμής */
+    display: none;           /* Κρυφό αρχικά */
+    box-shadow: 0 2px 8px rgba(255, 0, 70, 0.4); /* Λάμψη από κάτω */
+    animation: pulse-badge 2s infinite;
+    letter-spacing: 0.5px;   /* Αραιά γράμματα για στυλ */
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Το εφέ που αναβοσβήνει */
+@keyframes pulse-badge {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
     </style>
 </head>
@@ -4636,54 +4681,6 @@ function toggleSpecialMatchFields() {
 }
     </script>
     <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
-
-<style>
-#backToTop {
-    display: none; /* Κρυφό αρχικά */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 99;
-    border: none;
-    outline: none;
-    background-color: var(--accent-color); /* Κίτρινο */
-    color: var(--primary-color); /* Πράσινο */
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    font-weight: bold;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-#backToTop:hover {
-    background-color: #fff;
-}
-/* --- MODERN NEW BADGE --- */
-.notification-badge {
-    background: linear-gradient(135deg, #ff0046, #ff4d7e); /* Μοντέρνο κόκκινο degrade */
-    color: white;
-    font-size: 0.55rem;      /* Πολύ μικρά και διακριτικά γράμματα */
-    font-weight: 800;        /* Πολύ έντονα */
-    padding: 2px 5px;        /* Λίγο "αέρα" γύρω γύρω */
-    border-radius: 4px;      /* Ελαφρώς στρογγυλεμένες γωνίες (όχι κύκλος) */
-    margin-left: 6px;
-    vertical-align: middle;  /* Στοίχιση στη μέση της γραμμής */
-    display: none;           /* Κρυφό αρχικά */
-    box-shadow: 0 2px 8px rgba(255, 0, 70, 0.4); /* Λάμψη από κάτω */
-    animation: pulse-badge 2s infinite;
-    letter-spacing: 0.5px;   /* Αραιά γράμματα για στυλ */
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Το εφέ που αναβοσβήνει */
-@keyframes pulse-badge {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
-}
-</style>
-
 <script>
 // Εμφάνιση κουμπιού όταν κατεβαίνουμε λίγο
 window.onscroll = function() {
