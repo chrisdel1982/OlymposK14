@@ -4170,11 +4170,16 @@ function displayNextMatch() {
     let matchType = 'NEXT MATCH';
     let headerClass = '';
 
+    // Έλεγχος για Εμβόλιμο
     if (data.specialMatch && data.specialMatch.home && data.specialMatch.away) {
-        nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
+        nextMatch = {
+            home: data.specialMatch.home,
+            away: data.specialMatch.away
+        };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
         headerClass = 'special-match';
     } else {
+        // Έλεγχος για κανονικό αγώνα
         for (const round of data.fixtures) {
             const myMatch = round.matches.find(m => 
                 (m.home === MY_TEAM || m.away === MY_TEAM) && 
@@ -4200,24 +4205,27 @@ function displayNextMatch() {
                 <span style="font-size: 0.85rem;">⏰ ${mTime}</span>
             </div>
             
-            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; display: none; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; display: none; border-top: 1px solid rgba(255,255,255,0.1);">
+            </div>
             
             <div class="nm-body">
-                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${nextMatch.home}</div>
+                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
+                    ${nextMatch.home}
+                </div>
                 <div class="nm-vs">VS</div>
-                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
+                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">
+                    ${nextMatch.away}
+                </div>
             </div>
 
             <div class="nm-stadium">🏟️ ${mStadium}</div>
 
             <div style="display: flex; width: 100%; border-top: 1px solid rgba(0,0,0,0.1);">
-                
-                <a href="${mMap}" target="_blank" class="nm-footer" 
-                   style="flex-grow: 1; height: 48px; background: var(--primary-color); color: white !important; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; letter-spacing: 0.5px; border: none;">
+                <a href="${mMap}" target="_blank" class="nm-footer" style="flex-grow: 1; height: 48px; background: var(--primary-color); color: white !important; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; letter-spacing: 0.5px; border: none;">
                     📍 WHERE TO GO
                 </a>
                 
-                <button onclick="shareMatchInfo('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')" 
+                <button onclick="openSquadModal('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')" 
                         class="nm-footer" 
                         style="width: 60px; height: 48px; background: var(--primary-color); color: white !important; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-left: 1px solid rgba(255,255,255,0.2);">
                     <i class="fas fa-share-nodes" style="font-size: 1.4rem;"></i>
@@ -4226,7 +4234,10 @@ function displayNextMatch() {
         </div>
     `;
 
-    if (data.countdownTarget) { startCountdown(data.countdownTarget); }
+    // Έναρξη Αντίστροφης Μέτρησης
+    if (data.countdownTarget) {
+        startCountdown(data.countdownTarget);
+    }
 }
 // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Υπολογισμός Χρόνου
 function startCountdown(targetDateString) {
