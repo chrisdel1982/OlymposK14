@@ -164,11 +164,15 @@ h1, h2, h3, .card-header h2, nav {
             color: var(--primary-color);
             margin: 0;
         }
-        .player-age {
+    .player-age {
     font-size: 0.85rem;
     color: #666;
-    margin-top: 0.2rem;
-    font-weight: 500;
+    font-weight: 500;    
+    /* ΤΟ ΚΟΛΠΟ ΓΙΑ ΝΑ ΠΑΕΙ ΤΕΡΜΑ ΚΑΤΩ: */
+    margin-top: auto !important; /* Σπρώχνει το στοιχείο στο τέλος της κάρτας */
+        /* Λίγο "αέρα" από τον πάτο της κάρτας για να μην ακουμπάει */
+    padding-bottom: 5px; 
+    width: 100%;
 }
 
 /* --- PREMIER LEAGUE STYLE TABLE UPDATE --- */
@@ -670,13 +674,17 @@ table thead th:nth-child(2) {
 .player-position {
     color: var(--primary-color);
     font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
+    padding: 0.25rem 0.8rem; /* Λίγο πιο φαρδύ */
     background: rgba(255, 215, 0, 0.15);
     border-radius: 12px;
     display: inline-block;
     font-weight: 600;
     border: 1px solid rgba(255, 215, 0, 0.3);
     line-height: 1.2;
+    
+    /* Η ΑΛΛΑΓΗ ΓΙΑ ΤΟ ΚΕΝΟ: */
+    margin-top: 15px !important; /* Αέρας από το όνομα */
+    margin-bottom: 5px;
 }
     
 
