@@ -2777,6 +2777,57 @@ table thead th:nth-child(2) {
         color: #ffcc80 !important; /* Ανοιχτό πορτοκαλί */
     }
 }
+/* PIN Modal Styles */
+.pin-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.pin-dot.filled {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.pin-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pin-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+.pin-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .pin-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.3rem;
+    }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
     </style>
 </head>
 <div id="custom-splash">
@@ -3227,6 +3278,47 @@ window.addEventListener('load', function() {
                 Ακύρωση
             </button>
         </div>
+    </div>
+</div>
+<!-- PIN Modal -->
+<div id="pinModal" class="modal" style="z-index: 4000;">
+    <div class="modal-content" style="max-width: 350px; text-align: center;">
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+            🔐 Εισαγωγή PIN
+        </h3>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
+            Για να κάνεις share την αποστολή, εισήγαγε το PIN:
+        </p>
+        
+        <!-- PIN Display -->
+        <div id="pinDisplay" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem;">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+        
+        <!-- Numeric Keypad -->
+        <div id="pinKeypad" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 250px; margin: 0 auto 1rem;">
+            <button class="pin-btn" onclick="enterPin('1')">1</button>
+            <button class="pin-btn" onclick="enterPin('2')">2</button>
+            <button class="pin-btn" onclick="enterPin('3')">3</button>
+            <button class="pin-btn" onclick="enterPin('4')">4</button>
+            <button class="pin-btn" onclick="enterPin('5')">5</button>
+            <button class="pin-btn" onclick="enterPin('6')">6</button>
+            <button class="pin-btn" onclick="enterPin('7')">7</button>
+            <button class="pin-btn" onclick="enterPin('8')">8</button>
+            <button class="pin-btn" onclick="enterPin('9')">9</button>
+            <button class="pin-btn" onclick="clearPin()" style="background: #ff5252; color: white;">✖</button>
+            <button class="pin-btn" onclick="enterPin('0')">0</button>
+            <button class="pin-btn" onclick="deleteLastPin()" style="background: #ffa726; color: white;">⌫</button>
+        </div>
+        
+        <div id="pinError" style="color: #d32f2f; font-size: 0.85rem; margin-bottom: 1rem; min-height: 20px; font-weight: bold;"></div>
+        
+        <button class="btn btn-secondary" style="width: 100%;" onclick="closePinModal()">
+            Ακύρωση
+        </button>
     </div>
 </div>
     <script>
@@ -4934,14 +5026,12 @@ function shareMatchInfo(home, away, date, time, stadium, mapLink) {
 }
 // Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
 let currentMatchShareData = {};
-
 function openSquadModal(home, away, date, time, stadium, mapLink) {
     currentMatchShareData = { home, away, date, time, stadium, mapLink };
 
     const list = document.getElementById('squadList');
     list.innerHTML = ''; 
 
-    // RESET ΣΤΟ ΚΟΥΤΑΚΙ "ΧΩΡΙΣ ΑΠΟΣΤΟΛΗ"
     document.getElementById('noSquadCheckbox').checked = false;
 
     const players = [...data.roster].sort((a, b) => (a.number || 999) - (b.number || 999));
@@ -4969,10 +5059,83 @@ function openSquadModal(home, away, date, time, stadium, mapLink) {
     document.getElementById('squadModal').style.display = 'flex';
 }
 function shareFinalSquad() {
+    // Κλείσιμο του squad modal
+    document.getElementById('squadModal').style.display = 'none';
+    
+    // Άνοιγμα του PIN modal
+    document.getElementById('pinModal').style.display = 'flex';
+}
+// PIN Configuration
+const CORRECT_PIN = '1969'; // ⚠️ ΑΛΛΑΞΕ ΤΟ PIN ΕΔΩ
+let enteredPin = '';
+
+function enterPin(digit) {
+    if (enteredPin.length < 4) {
+        enteredPin += digit;
+        updatePinDisplay();
+        
+        if (enteredPin.length === 4) {
+            setTimeout(checkPin, 300);
+        }
+    }
+}
+
+function deleteLastPin() {
+    if (enteredPin.length > 0) {
+        enteredPin = enteredPin.slice(0, -1);
+        updatePinDisplay();
+        document.getElementById('pinError').textContent = '';
+    }
+}
+
+function clearPin() {
+    enteredPin = '';
+    updatePinDisplay();
+    document.getElementById('pinError').textContent = '';
+}
+
+function updatePinDisplay() {
+    const dots = document.querySelectorAll('.pin-dot');
+    dots.forEach((dot, index) => {
+        if (index < enteredPin.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function checkPin() {
+    if (enteredPin === CORRECT_PIN) {
+        // ✅ Σωστό PIN - Προχωράμε στο share
+        document.getElementById('pinError').textContent = '';
+        closePinModal();
+        executeShareSquad(); // Η πραγματική λειτουργία share
+    } else {
+        // ❌ Λάθος PIN
+        document.getElementById('pinError').textContent = '❌ Λάθος PIN! Προσπάθησε ξανά.';
+        
+        // Κούνημα animation
+        const modal = document.querySelector('#pinModal .modal-content');
+        modal.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            modal.style.animation = '';
+        }, 500);
+        
+        clearPin();
+    }
+}
+
+function closePinModal() {
+    document.getElementById('pinModal').style.display = 'none';
+    clearPin();
+}
+
+// Η πραγματική συνάρτηση share (παλιά shareFinalSquad)
+function executeShareSquad() {
     const { home, away, date, time, stadium, mapLink } = currentMatchShareData;
     const siteUrl = window.location.origin + window.location.pathname;
     
-    // ΕΛΕΓΧΟΣ: Θέλουμε αποστολή ή όχι;
     const hideSquad = document.getElementById('noSquadCheckbox').checked;
 
     let squadText = "";
@@ -4987,48 +5150,38 @@ function shareFinalSquad() {
 
         checkboxes.forEach(box => {
             const name = box.value;
-            // Παίρνουμε ΟΛΟ το string της θέσης (π.χ. "Επιθετικός Μέσος (AM) / Κεντρικός Επιθετικός (CF)")
             const rawPos = (box.getAttribute('data-pos') || "").toUpperCase();
-            
-            // 1. Κρατάμε μόνο την ΠΡΩΤΗ θέση (πριν το /)
             const firstPos = rawPos.split('/')[0];
-
-            // 2. Βρίσκουμε αυτό που είναι μέσα στην παρένθεση (π.χ. AM)
             const match = firstPos.match(/\(([A-Z]+)\)/);
             
-            let category = 'mid'; // Default στους μέσους αν δεν βγάλουμε άκρη
+            let category = 'mid';
 
             if (match && match[1].length >= 2) {
-                const code = match[1];      // π.χ. AM
-                const secondChar = code[1]; // Το δεύτερο γράμμα (M)
+                const code = match[1];
+                const secondChar = code[1];
 
                 if (secondChar === 'K') {
-                    category = 'gk'; // G(K) -> Τερματοφύλακας
+                    category = 'gk';
                 } else if (secondChar === 'B') {
-                    category = 'def'; // C(B), L(B), R(B) -> Αμυντικοί
+                    category = 'def';
                 } else if (secondChar === 'M') {
-                    category = 'mid'; // C(M), D(M), A(M) -> Μέσοι
+                    category = 'mid';
                 } else if (secondChar === 'F' || secondChar === 'S') {
-                    category = 'fwd'; // C(F), S(S) -> Επιθετικοί
+                    category = 'fwd';
                 } else if (secondChar === 'W') {
-                    // Ειδική περίπτωση για το W:
-                    // LW, RW (2 γράμματα) -> Winger (Επιθετικός)
-                    // SW, LWB, RWB (Ειδικοί/3 γράμματα) -> Συνήθως Αμυντικοί/Μπακ
                     if (code.length === 2 && code !== 'SW') {
-                        category = 'fwd'; // LW, RW
+                        category = 'fwd';
                     } else {
-                        category = 'def'; // LWB, RWB, SW
+                        category = 'def';
                     }
                 }
             } else {
-                // Fallback αν δεν βρει παρένθεση (ψάχνει ελληνικά)
                 if (firstPos.includes('ΤΕΡΜΑΤΟΦΥΛΑΚΑΣ')) category = 'gk';
                 else if (firstPos.includes('ΑΜΥΝΤΙΚΟΣ')) category = 'def';
                 else if (firstPos.includes('ΕΠΙΘΕΤΙΚΟΣ')) category = 'fwd';
                 else category = 'mid';
             }
 
-            // Τοποθέτηση στη σωστή λίστα
             if (category === 'gk') gks.push(name);
             else if (category === 'def') defs.push(name);
             else if (category === 'mid') mids.push(name);
@@ -5049,7 +5202,6 @@ function shareFinalSquad() {
         squadText += "\n"; 
     }
 
-    // Δημιουργία Μηνύματος (Με το Σλόγκαν στο τέλος)
     const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
                  `🆚 ${home} - ${away}\n` +
                  `📅 ${date}  ⏰ ${time}\n` +
@@ -5057,19 +5209,16 @@ function shareFinalSquad() {
                  `📍 *Χάρτης Γηπέδου:* ${mapLink}\n` +
                  `${squadText}\n` + 
                  `⏳ ${siteUrl}\n\n` + 
-                 `*👨‍👩‍👦 Μια οικογένεια, ⛰️ μια ομάδα, 🔥 ένα πάθος*`; 
+                 `*👨‍👩‍👦 Μια οικογένεια, ⛰️ μια ομάδα, 🔥 ένα πάθος*`;
 
-    // Αποστολή
     if (navigator.share) {
         navigator.share({ title: 'Επόμενος Αγώνας', text: text }).catch(console.error);
     } else {
         const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
         window.open(viberUrl, '_blank');
     }
-
-    document.getElementById('squadModal').style.display = 'none';
 }
- </script>
+</script>
     <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
 </body>
 </html>
