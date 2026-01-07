@@ -2828,6 +2828,53 @@ table thead th:nth-child(2) {
     10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
     20%, 40%, 60%, 80% { transform: translateX(10px); }
 }
+/* --- FULL SCREEN MODALS FIX --- */
+
+/* 1. SHARE MODAL - FULL SCREEN */
+#shareModal .share-modal-content {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important; /* Καταργεί το όριο πλάτους */
+    border-radius: 0 !important; /* Τετράγωνες γωνίες */
+    margin: 0 !important;
+    
+    /* Κεντράρισμα περιεχομένου στη μέση της μεγάλης οθόνης */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+}
+
+/* 2. PIN MODAL - FULL SCREEN (LOCK STYLE) */
+#pinModal .modal-content {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* Κεντράρισμα */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    /* Στυλ "Μαύρη Οθόνη" για να μοιάζει με κλείδωμα κινητού */
+    background-color: #1a1a1a !important; 
+    color: white !important;
+}
+
+/* Διορθώσεις χρωμάτων για το PIN σε Full Screen */
+#pinModal h3 { color: white !important; font-size: 1.5rem; margin-bottom: 2rem; }
+#pinModal p { color: #ccc !important; font-size: 1rem; }
+#pinModal .pin-btn {
+    width: 80px; height: 80px; font-size: 1.8rem; /* Μεγαλύτερα κουμπιά */
+    border: none; background: rgba(255,255,255,0.1); color: white; /* Διαφανή κουμπιά */
+}
+#pinModal .pin-btn:active { background: rgba(255,255,255,0.3); }
+#pinError { margin-top: 20px; font-size: 1rem; }
     </style>
 </head>
 <div id="custom-splash">
