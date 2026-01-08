@@ -4452,7 +4452,7 @@ function displayNextMatch() {
                     📍 WHERE TO GO
                 </a>
                 
-               <button onclick="checkPinBeforeSquad('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')"
+                <button onclick="openSquadModal('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')" 
                         class="nm-footer" 
                         style="width: 60px; height: 48px; background: var(--primary-color); color: white !important; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-left: 1px solid rgba(255,255,255,0.2);">
                     <i class="fas fa-share-nodes" style="font-size: 1.4rem;"></i>
@@ -5073,25 +5073,6 @@ function shareMatchInfo(home, away, date, time, stadium, mapLink) {
 }
 // Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
 let currentMatchShareData = {};
-
-function shareFinalSquad() {
-    // Κλείσιμο του squad modal
-    document.getElementById('squadModal').style.display = 'none';
-    
-    // Άνοιγμα του PIN modal
-    document.getElementById('pinModal').style.display = 'flex';
-}
-// PIN Configuration
-const CORRECT_PIN = '1969'; // ⚠️ ΑΛΛΑΞΕ ΤΟ PIN ΕΔΩ
-let enteredPin = '';
-// Νέα συνάρτηση που καλείται από το κουμπί Share
-function checkPinBeforeSquad(home, away, date, time, stadium, mapLink) {
-    currentMatchShareData = { home, away, date, time, stadium, mapLink };
-    // Ανοίγει το PIN modal ΠΡΩΤΑ
-    document.getElementById('pinModal').style.display = 'flex';
-}
-
-// Η πραγματική συνάρτηση που ανοίγει το squad modal
 function openSquadModal(home, away, date, time, stadium, mapLink) {
     currentMatchShareData = { home, away, date, time, stadium, mapLink };
 
@@ -5124,6 +5105,17 @@ function openSquadModal(home, away, date, time, stadium, mapLink) {
     document.getElementById('extraPlayersInput').value = '';
     document.getElementById('squadModal').style.display = 'flex';
 }
+function shareFinalSquad() {
+    // Κλείσιμο του squad modal
+    document.getElementById('squadModal').style.display = 'none';
+    
+    // Άνοιγμα του PIN modal
+    document.getElementById('pinModal').style.display = 'flex';
+}
+// PIN Configuration
+const CORRECT_PIN = '1969'; // ⚠️ ΑΛΛΑΞΕ ΤΟ PIN ΕΔΩ
+let enteredPin = '';
+
 function enterPin(digit) {
     if (enteredPin.length < 4) {
         enteredPin += digit;
@@ -5159,15 +5151,13 @@ function updatePinDisplay() {
         }
     });
 }
+
 function checkPin() {
     if (enteredPin === CORRECT_PIN) {
-        // ✅ Σωστό PIN - Ανοίγουμε το Squad Modal
+        // ✅ Σωστό PIN - Προχωράμε στο share
         document.getElementById('pinError').textContent = '';
         closePinModal();
-        
-        // Καλούμε την openSquadModal με τα αποθηκευμένα στοιχεία
-        const { home, away, date, time, stadium, mapLink } = currentMatchShareData;
-        openSquadModal(home, away, date, time, stadium, mapLink);
+        executeShareSquad(); // Η πραγματική λειτουργία share
     } else {
         // ❌ Λάθος PIN
         document.getElementById('pinError').textContent = '❌ Λάθος PIN! Προσπάθησε ξανά.';
@@ -5182,6 +5172,7 @@ function checkPin() {
         clearPin();
     }
 }
+
 function closePinModal() {
     document.getElementById('pinModal').style.display = 'none';
     clearPin();
