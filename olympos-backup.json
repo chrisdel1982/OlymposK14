@@ -277,15 +277,15 @@
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 0,
+          "awayScore": 4,
           "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 3,
+          "awayScore": 5,
           "isPostponed": false
         },
         {
@@ -305,8 +305,8 @@
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 5,
+          "awayScore": 1,
           "isPostponed": false
         }
       ]
