@@ -16,6 +16,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* LIVE SCORE STYLES */
+.live-badge-pulse { 
+    background: #ff0046; color: white; padding: 2px 8px; border-radius: 4px; 
+    font-weight: bold; font-size: 0.8rem; animation: live-pulse 1.5s infinite; margin-bottom: 5px; 
+}
+@keyframes live-pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+.live-score-display { 
+    font-size: 2.8rem; font-weight: 900; color: var(--primary-color); line-height: 1; margin: 10px 0; 
+}
+@media (prefers-color-scheme: dark) { .live-score-display { color: #fff !important; } }
         * {
             margin: 0;
             padding: 0;
@@ -33,10 +43,7 @@
             --shadow: rgba(0, 0, 0, 0.2);
             --accent-dark: #d4af37; /* Πιο σκούρο χρυσό για contrast */
         }
-/* Όπου έχεις κίτρινο text: */
-.some-yellow-text {
-    color: var(--accent-dark); /* Αντί για var(--accent-color) */
-}
+
         body {
     font-family: 'Inter', sans-serif; 
     line-height: 1.6;
@@ -175,7 +182,6 @@ h1, h2, h3, .card-header h2, nav {
     width: 100%;
 }
 
-/* --- PREMIER LEAGUE STYLE TABLE UPDATE --- */
 .table-wrapper {
     overflow-x: auto;
     margin-top: 1rem;
@@ -1771,20 +1777,6 @@ table thead th:nth-child(2) {
     display: flex;
     flex-direction: column;
 }
-
-/* ΠΑΝΩ ΜΕΡΟΣ: Γκρι μπάρα */
-.nm-header {
-    background: #f4f4f4;
-    border-bottom: 1px solid #ddd;
-    padding: 0.8rem 1.2rem;
-    display: flex;
-    justify-content: space-between; /* Αυτό στέλνει την Ημερομηνία Αριστερά και την Ώρα Δεξιά */
-    align-items: center;
-    color: #333;
-    font-weight: 700;
-    font-size: 1rem;
-}
-
 /* ΚΕΝΤΡΟ: Ομάδες */
 .nm-body {
     padding: 2rem 1rem 1rem;
@@ -1956,16 +1948,12 @@ table thead th:nth-child(2) {
 /* --- NEXT MATCH HEADER LAYOUT FIX (FINAL CORRECTED) --- */
 .nm-header {
     display: grid !important;
-    /* Τρεις στήλες: 1 μερίδιο - Αυτόματο πλάτος - 1 μερίδιο */
     grid-template-columns: 1fr auto 1fr !important;
-    
-    /* ΚΑΘΕΤΗ ΣΤΟΙΧΙΣΗ: Όλα ακριβώς στη μέση */
     align-items: center !important; 
     align-content: center !important;
-    
     justify-content: space-between !important;
-    gap: 8px; /* Μικρό κενό ανάμεσα στα στοιχεία */
-    min-height: 40px; /* Εξασφαλίζει ότι η μπάρα έχει "αέρα" */
+    gap: 8px; 
+    min-height: 40px; 
 }
 
 /* 1. ΗΜΕΡΟΜΗΝΙΑ (HTML Child 1) -> ΤΕΡΜΑ ΑΡΙΣΤΕΡΑ */
@@ -2875,13 +2863,6 @@ table thead th:nth-child(2) {
 }
 #pinModal .pin-btn:active { background: rgba(255,255,255,0.3); }
 #pinError { margin-top: 20px; font-size: 1rem; }
-    </style>
-</head>
-<div id="custom-splash">
-    <img src="logo_front.png" alt="Logo" class="splash-logo">
-</div>
-
-<style>
 /* Ρυθμίσεις εμφάνισης */
 #custom-splash {
     position: fixed;
@@ -2906,9 +2887,8 @@ table thead th:nth-child(2) {
     opacity: 0;
     pointer-events: none;
 }
-</style>
-
-<script>
+       </style>
+       <script>
 window.addEventListener('load', function() {
     // Εδώ ρυθμίζεις πόση ώρα θα μείνει (3000 = 3 δευτερόλεπτα)
     setTimeout(function() {
@@ -2922,7 +2902,11 @@ window.addEventListener('load', function() {
     }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
 });
 </script>
+</head>
 <body>
+    <div id="custom-splash">
+    <img src="logo_front.png" alt="Logo" class="splash-logo">
+</div>
     <header>
 <div id="announcement-ticker">
             <span id="announcement-text"></span>
@@ -3127,7 +3111,20 @@ window.addEventListener('load', function() {
     <label>Link Χάρτη (Google Maps):</label>
     <input type="text" id="matchMapLinkInput" placeholder="Επικόλληση link...">
 </div>
-
+<div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 10px; border: 1px solid #ffc1c1; margin-bottom: 20px;">
+    <label style="color: #d32f2f; font-weight: bold; display: block; margin-bottom: 10px;">🔴 ΖΩΝΤΑΝΟ ΣΚΟΡ (LIVE)</label>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <input type="checkbox" id="liveModeCheckbox" style="width: 20px; height: 20px;" onchange="document.getElementById('liveInputs').style.display = this.checked ? 'block' : 'none'">
+        <label for="liveModeCheckbox">Ενεργοποίηση Live Mode</label>
+    </div>
+    <div id="liveInputs" style="display: none;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+            <input type="number" id="liveHomeScore" placeholder="Σκορ 1" style="text-align: center;">
+            <input type="text" id="liveMinute" placeholder="Λεπτό (π.χ. 35')" style="text-align: center;">
+            <input type="number" id="liveAwayScore" placeholder="Σκορ 2" style="text-align: center;">
+        </div>
+    </div>
+</div>
 <div class="modal-buttons" style="margin-bottom: 1.5rem;">
     <button class="btn btn-success" onclick="saveGeneralSettings()">💾 Αποθήκευση</button>
 </div>
@@ -4320,149 +4317,87 @@ function removeNewsPhoto() {
         function closeAdminPanel() {
             document.getElementById('adminModal').classList.remove('active');
         }
-// (NEO) ΣΥΝΑΡΤΗΣΗ ΓΙΑ ΑΝΑΚΟΙΝΩΣΗ (ΔΙΟΡΘΩΜΕΝΗ)
-        function saveAnnouncement() {
-            const text = document.getElementById('announcementInput').value.trim();
-            
-            // Ελέγχουμε αν υπάρχει το 'data'
-            if (!data) {
-                alert('Σφάλμα: Τα δεδομένα δεν έχουν φορτωθεί. Δοκιμάστε να ανανεώσετε τη σελίδα.');
-                return;
-            }
-            
-            // Προσθέτουμε την ανακοίνωση στο *υπάρχον* αντικείμενο data
-            data.announcement = text;
-            saveData(data); // Αποθηκεύουμε ολόκληρο το αντικείμενο data
-            
-            // Ενημερώνουμε ζωντανά τη σελίδα
-            const tickerBar = document.getElementById('announcement-ticker');
-            const tickerText = document.getElementById('announcement-text');
-            tickerText.textContent = text;
-            
-            if (text) {
-                tickerBar.style.display = 'block';
-            } else {
-                tickerBar.style.display = 'none';
-            }
-            
-            alert('✅ Η ανακοίνωση αποθηκεύτηκε!');
-        }
-     function saveGeneralSettings() {
+function saveGeneralSettings() {
     if (!data) return;
     
-    // Αποθήκευση ΚΟΙΝΩΝ πεδίων
     data.announcement = document.getElementById('announcementInput').value.trim();
     data.matchDate = document.getElementById('matchDateInput').value.trim();
     data.matchTime = document.getElementById('matchTimeInput').value.trim();
     data.matchStadium = document.getElementById('matchStadiumInput').value.trim();
     data.matchMapLink = document.getElementById('matchMapLinkInput').value.trim();
+    data.countdownTarget = document.getElementById('countdownTargetInput').value;
     
-    // ΝΕΟ: Αποθήκευση ΕΜΒΟΛΙΜΟΥ αγώνα
-    const useSpecial = document.getElementById('useSpecialMatchCheckbox').checked;
-    
-    if (useSpecial) {
-        data.specialMatch = {
-            type: document.getElementById('specialMatchTypeInput').value.trim() || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ',
-            home: document.getElementById('specialHomeInput').value.trim(),
-            away: document.getElementById('specialAwayInput').value.trim()
-        };
-    } else {
-        // Αν ξετσεκαριστεί, διαγράφουμε τον εμβόλιμο
-        delete data.specialMatch;
-    }
-    // Αποθήκευση Countdown
-data.countdownTarget = document.getElementById('countdownTargetInput').value;
+    // Αποθήκευση Live Score από τα πεδία της εικόνας
+    data.liveScore = {
+        active: document.getElementById('liveModeCheckbox').checked,
+        home: document.getElementById('liveHomeScore').value || 0,
+        away: document.getElementById('liveAwayScore').value || 0,
+        minute: document.getElementById('liveMinute').value || ""
+    };
+
     saveData(data);
-    
-    // Ενημέρωση Ticker
-    const tickerBar = document.getElementById('announcement-ticker');
-    tickerBar.style.display = data.announcement ? 'block' : 'none';
-    document.getElementById('announcement-text').textContent = data.announcement;
-    
-    // Ενημέρωση Banner
     displayNextMatch();
-    
     alert('✅ Οι ρυθμίσεις αποθηκεύτηκαν!');
 }
 let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
-
 function displayNextMatch() {
     const container = document.getElementById('nextMatchContainer');
-    if (!container) return;
+    if (!container || !data) return;
     container.innerHTML = '';
-    
-    if (!data || !data.fixtures) return;
 
     let nextMatch = null;
-    let matchType = 'NEXT MATCH';
-    let headerClass = '';
+    let matchType = 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ';
 
-    // Έλεγχος για Εμβόλιμο
-    if (data.specialMatch && data.specialMatch.home && data.specialMatch.away) {
-        nextMatch = {
-            home: data.specialMatch.home,
-            away: data.specialMatch.away
-        };
+    if (data.specialMatch && data.specialMatch.home) {
+        nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
-        headerClass = 'special-match';
     } else {
-        // Έλεγχος για κανονικό αγώνα
         for (const round of data.fixtures) {
-            const myMatch = round.matches.find(m => 
-                (m.home === MY_TEAM || m.away === MY_TEAM) && 
-                (m.homeScore === null && m.awayScore === null) && !m.isPostponed
-            );
-            if (myMatch) { nextMatch = myMatch; break; }
+            const m = round.matches.find(m => (m.home === MY_TEAM || m.away === MY_TEAM) && m.homeScore === null);
+            if (m) { nextMatch = m; break; }
         }
     }
 
-    if (!nextMatch) return; 
+    if (!nextMatch) return;
 
-    const mDate = data.matchDate || '-';
-    const mTime = data.matchTime || '-';
-    const mStadium = data.matchStadium || 'Άγνωστο Γήπεδο';
-    const mMap = data.matchMapLink || '#';
-    const headerStyle = headerClass === 'special-match' ? 'background: #ffc107; color: #000;' : 'background: #f4f4f4;';
+    const isLive = data.liveScore && data.liveScore.active;
+    
+    // Αν είναι LIVE κρύβουμε την αντίστροφη μέτρηση (display: none)
+    const countdownStyle = isLive ? 'display: none;' : 'display: block;';
 
     container.innerHTML = `
-        <div class="next-match-card">
-            <div class="nm-header ${headerClass}" style="${headerStyle}">
-                <span style="font-size: 0.85rem;">📅 ${mDate}</span>
-                <span style="font-weight: 800; text-transform: uppercase; font-size: 0.9rem;">⚽ ${matchType}</span>
-                <span style="font-size: 0.85rem;">⏰ ${mTime}</span>
+        <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
+            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
+                <span>📅 ${data.matchDate || ''}</span>
+                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '🔴 LIVE NOW' : matchType}</span>
+                <span>⏰ ${data.matchTime || ''}</span>
             </div>
             
-            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; display: none; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; ${countdownStyle}">
             </div>
-            
+
             <div class="nm-body">
-                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">
-                    ${nextMatch.home}
-                </div>
-                <div class="nm-vs">VS</div>
-                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">
-                    ${nextMatch.away}
-                </div>
-            </div>
-
-            <div class="nm-stadium">🏟️ ${mStadium}</div>
-
-            <div style="display: flex; width: 100%; border-top: 1px solid rgba(0,0,0,0.1);">
-                <a href="${mMap}" target="_blank" class="nm-footer" style="flex-grow: 1; height: 48px; background: var(--primary-color); color: white !important; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 1rem; letter-spacing: 0.5px; border: none;">
-                    📍 WHERE TO GO
-                </a>
+                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${nextMatch.home}</div>
                 
-                <button onclick="openSquadModal('${nextMatch.home}', '${nextMatch.away}', '${mDate}', '${mTime}', '${mStadium}', '${mMap}')" 
-                        class="nm-footer" 
-                        style="width: 60px; height: 48px; background: var(--primary-color); color: white !important; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-left: 1px solid rgba(255,255,255,0.2);">
-                    <i class="fas fa-share-nodes" style="font-size: 1.4rem;"></i>
-                </button>
+                <div class="center-area">
+                    ${isLive ? `
+                        <div style="text-align:center;">
+                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${data.liveScore.minute}</div>
+                            <div class="live-badge-pulse">LIVE</div>
+                            <div class="live-score-display" style="font-size:2.5rem; font-weight:900;">${data.liveScore.home} - ${data.liveScore.away}</div>
+                        </div>
+                    ` : `<div class="nm-vs">VS</div>`}
+                </div>
+
+                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
             </div>
+            <div class="nm-stadium">🏟️ ${data.matchStadium || ''}</div>
+            <a href="${data.matchMapLink || '#'}" target="_blank" class="nm-footer" style="text-decoration:none;">📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ</a>
         </div>
     `;
 
-    // Έναρξη Αντίστροφης Μέτρησης
-    if (data.countdownTarget) {
+    // Ξεκινάμε το ρολόι μόνο αν ΔΕΝ είναι Live
+    if (!isLive && data.countdownTarget) {
         startCountdown(data.countdownTarget);
     }
 }
@@ -4498,7 +4433,7 @@ function startCountdown(targetDateString) {
         display.innerHTML = `⏳ Σέντρα σε: ${days}μ ${hours}ω ${minutes}λ ${seconds}δ`;
     }, 1000);
 }
-    function checkPassword() {
+ function checkPassword() {
     const password = document.getElementById('adminPassword').value;
     if (password === ADMIN_PASSWORD) {
         document.getElementById('loginForm').style.display = 'none';
@@ -4507,34 +4442,32 @@ function startCountdown(targetDateString) {
         updateRosterList();
         updateNewsList();
         
-        // Φόρτωση Πεδίων
         if (data) {
             document.getElementById('announcementInput').value = data.announcement || '';
             document.getElementById('matchDateInput').value = data.matchDate || '';
             document.getElementById('matchTimeInput').value = data.matchTime || '';
             document.getElementById('matchStadiumInput').value = data.matchStadium || '';
             document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
-            // Φόρτωση Countdown
             document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
+
+            // Φόρτωση του Live Score στα πεδία της εικόνας
+            if (data.liveScore) {
+                document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
+                document.getElementById('liveHomeScore').value = data.liveScore.home || 0;
+                document.getElementById('liveAwayScore').value = data.liveScore.away || 0;
+                document.getElementById('liveMinute').value = data.liveScore.minute || "";
+            }
             
-            // ΝΕΟ: Φόρτωση εμβόλιμου αγώνα (αν υπάρχει)
             if (data.specialMatch) {
                 document.getElementById('useSpecialMatchCheckbox').checked = true;
-                document.getElementById('specialMatchTypeInput').value = data.specialMatch.type || '';
-                document.getElementById('specialHomeInput').value = data.specialMatch.home || '';
-                document.getElementById('specialAwayInput').value = data.specialMatch.away || '';
-                toggleSpecialMatchFields(); // Εμφάνιση πεδίων
-            } else {
-                document.getElementById('useSpecialMatchCheckbox').checked = false;
-                toggleSpecialMatchFields(); // Απόκρυψη πεδίων
+                toggleSpecialMatchFields();
             }
         }
     } else {
         alert('❌ Λάθος κωδικός!');
     }
 }
-
-        function loadRoundSelector() {
+  function loadRoundSelector() {
             const select = document.getElementById('roundSelect');
             select.innerHTML = '<option value="">-- Επέλεξε Αγωνιστική --</option>';
             
@@ -5049,28 +4982,6 @@ window.onscroll = function() {
         document.getElementById("backToTop").style.display = "none";
     }
 };
-// --- Viber Share Logic (Χωρίς Σκορ) ---
-function shareMatchInfo(home, away, date, time, stadium, mapLink) {
-    // Καθαρό URL χωρίς παραμέτρους
-    const siteUrl = window.location.origin + window.location.pathname;
-
-    const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
-                 `🆚 ${home} - ${away}\n` +
-                 `📅 ${date}  ⏰ ${time}\n` +
-                 `🏟️ ${stadium}\n\n` +
-                 `📍 *Χάρτης Γηπέδου:* ${mapLink}\n\n` +
-                 `⏳ ${siteUrl}`; // Μόνο το εικονίδιο και το Link
-
-    if (navigator.share) {
-        navigator.share({
-            title: 'Επόμενος Αγώνας Όλυμπος FC',
-            text: text
-        }).catch(console.error);
-    } else {
-        const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
-        window.open(viberUrl, '_blank');
-    }
-}
 // Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
 let currentMatchShareData = {};
 function openSquadModal(home, away, date, time, stadium, mapLink) {
@@ -5266,6 +5177,6 @@ function executeShareSquad() {
     }
 }
 </script>
-    <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
+<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
 </body>
 </html>
