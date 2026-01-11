@@ -2505,36 +2505,100 @@ table thead th:nth-child(2) {
     transform: rotateY(180deg);
     background-color: #ffffff;
     border: 2px solid var(--primary-color);
-    overflow-y: auto;
+    border-radius: 12px;
     z-index: 2;
-    
-    /* ΤΟ ΣΗΜΑ */
-    background-image: url('android-chrome-192x192.png'); 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    overflow-y: auto; /* Επιτρέπει το scroll */
+    display: flex;
+    flex-direction: column;
+}
+.card-back::before {
+    content: '';
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-image: url('android-chrome-192x192.png');
     background-repeat: no-repeat;
-    
-    /* ΑΛΛΑΓΗ 1: ΘΕΣΗ */
-    /* Το 'center' το κεντράρει οριζόντια. */
-    /* Το '70%' το κατεβάζει πιο κάτω (ήταν center). Όσο μεγαλώνει το %, τόσο κατεβαίνει. */
-    background-position: center 100%; 
-    
-    background-size: 85%; 
-    background-blend-mode: luminosity; 
+    background-position: center;
+    background-size: contain;
+    opacity: 0.2; /* Αυξάνουμε λίγο την ορατότητα */
+    z-index: 1; /* Πάνω από το φόντο */
+    pointer-events: none;
+}
+/* ΤΕΛΙΚΗ ΣΦΙΧΤΗ ΣΤΟΙΧΙΣΗ */
+.stats-row {
+    display: grid;
+    /* Η ομάδα παίρνει όλο τον χώρο, τα νούμερα περιορίζονται σε 65px */
+    grid-template-columns: 1fr 60px; 
+    align-items: center;
+    padding: 6px 2px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.72rem;
+    gap: 0px; /* Μηδενικό κενό ανάμεσα στις στήλες */
+    position: relative;
+    z-index: 10;
 }
 
-/* ΤΟ ΛΕΥΚΟ ΠΕΠΛΟ (ΓΙΑ ΝΑ ΓΙΝΕΙ ΑΧΝΟ) */
+.stats-info-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    overflow: hidden;
+}
+
+.stats-team-name {
+    font-weight: 550;
+    color: var(--text-dark);
+    line-height: 1.1;
+    white-space: normal; /* Επιτρέπει αλλαγή γραμμής */
+    word-break: break-word;
+    padding-right: 5px;
+}
+
+/* Η ΔΕΞΙΑ ΣΤΗΛΗ ΠΟΥ ΗΡΘΕ ΠΙΟ ΑΡΙΣΤΕΡΑ */
+.stats-right-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 60px; /* Μειωμένο πλάτος */
+    flex-shrink: 0;
+}
+
+.stats-match-score {
+    font-size: 0.60rem;
+    color: #666;
+    font-weight: bold;
+    letter-spacing: 0px;
+}
+
+.stats-goals-count {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+/* ΤΟ ΠΕΠΛΟ (Φόντο) */
 .card-back::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    
-    /* ΑΛΛΑΓΗ 2: ΔΙΑΦΑΝΕΙΑ */
-    /* Από 0.92 το πήγαμε 0.96. Όσο πιο κοντά στο 1, τόσο πιο άσπρο/αχνό γίνεται το σήμα */
-    background: rgba(255, 255, 255, 0.90); 
-    
-    z-index: -1; 
+    min-height: 100%; 
+    background: #ffffff; /* Συμπαγές λευκό */
+    z-index: 0; /* Πίσω από το σήμα */
 }
 
 /* Σιγουρεύουμε ότι τα γράμματα είναι πάνω από το πέπλο */
@@ -2590,6 +2654,8 @@ table thead th:nth-child(2) {
 }
 /* --- DARK MODE FIX ΓΙΑ 3D ΚΑΡΤΕΣ (ΠΡΟΣΘΗΚΗ ΣΤΟ ΤΕΛΟΣ) --- */
 @media (prefers-color-scheme: dark) {
+    .stats-team-name { color: #fff !important; }
+    .stats-match-score { color: #aaa !important; }
     /* Βάζουμε σκούρο φόντο στις όψεις της κάρτας */
     .card-front, .card-back {
         background-color: #252525 !important; 
@@ -2599,7 +2665,7 @@ table thead th:nth-child(2) {
 
     /* Διορθώνουμε το "πέπλο" πίσω για να είναι σκούρο */
     .card-back::after {
-        background: rgba(37, 37, 37, 0.96) !important; 
+        background: #1e1e1e !important;
     }
 
     /* Χρώματα κειμένων */
@@ -2612,8 +2678,8 @@ table thead th:nth-child(2) {
     
     /* Λίστα στατιστικών (πίσω μέρος) - Σκούρα γράμματα και γραμμές */
     .stats-list li {
-        color: #e0e0e0 !important;
-        border-bottom: 1px solid #444 !important;
+        color: #ffffff !important;
+        border-bottom: 1px solid #333 !important;
     }
     
     /* Διόρθωση για τα γκρι headers (π.χ. "ΚΑΝΕΝΑ ΓΚΟΛ") */
@@ -3818,8 +3884,7 @@ function displayRoster() {
         return;
     }
 
-    const currentYear = new Date().getFullYear(); 
-
+    const currentYear = 2026; // Βάσει τρέχουσας ημερομηνίας
     const categories = [
         { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['(gk)'], icon: '🧤' },
         { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
@@ -3845,73 +3910,60 @@ function displayRoster() {
 
             const gridDiv = document.createElement('div');
             gridDiv.className = 'roster-grid';
-            
             groupPlayers.sort((a, b) => (a.number || 999) - (b.number || 999));
 
             groupPlayers.forEach(player => {
                 const stats = getPlayerDetailedStats(player.name);
-                const isGoalKeeper = player.position.toLowerCase().includes('gk') || player.position.toLowerCase().includes('τερματοφύλακας');
-                
+                const isGoalKeeper = player.position.toLowerCase().includes('gk');
                 const card = document.createElement('div');
                 card.className = 'player-card';
                 card.setAttribute('onclick', "this.classList.toggle('flipped')");
 
                 const isCoach = category.title === 'TECHNICAL STAFF';
-                const displayNumber = player.number || (isCoach ? 'COACH' : '-');
-                const captainBadge = player.isCaptain ? '<div class="captain-badge" title="Αρχηγός">C</div>' : '';
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
+                const displayNumber = player.number || (isCoach ? 'COACH' : '-');
+                const captainBadge = player.isCaptain ? '<div class="captain-badge">C</div>' : '';
 
-                let ageHTML = '';
-                if (player.birthYear && !isCoach) { 
-                    const age = currentYear - player.birthYear;
-                    ageHTML = `<div class="player-age">${player.birthYear} - ${age} ετών</div>`;
-                }
-                
-               // --- ΠΙΣΩ ΟΨΗ CONTENT ---
                 let backContent = '';
-                
                 if (stats.goalsLog.length > 0) {
-                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><ul class="stats-list">`;
+                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><div class="stats-list">`;
                     stats.goalsLog.forEach(log => {
-                        const countStr = log.count > 1 ? `<b style="color:var(--primary-color); font-size:0.75rem;">(${log.count})</b>` : '';
+                        let opponentInfo = log.match.replace('vs ', '').replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '').trim();
+                        const scoreMatch = opponentInfo.match(/\(\d+-\d+\)/);
+                        const scoreStr = scoreMatch ? scoreMatch[0].replace('(', '').replace(')', '') : '';
+                        let teamName = opponentInfo.replace(/\(\d+-\d+\)/, '').trim();
                         
-                        // Καθαρίζουμε το όνομα για να χωράει
-                        // Αφαιρούμε το "vs " και το "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ" αν υπάρχει μέσα
-                        let shortMatch = log.match
-                            .replace('vs ', '')
-                            .replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '') // Αφαιρεί το μεγάλο όνομα αν είναι μέσα
-                            .trim();
-                            
-                        backContent += `<li><span title="${shortMatch}">${shortMatch}</span> ${countStr}</li>`;
+                        backContent += `
+                            <div class="stats-row">
+                                <div class="stats-info-group">
+                                    <div class="stats-team-name">${teamName}</div>
+                                </div>
+                                <div class="stats-right-data">
+                                    <div class="stats-match-score">${scoreStr}</div>
+                                    <div class="stats-goals-count">⚽${log.count}</div>
+                                </div>
+                            </div>`;
                     });
-                    backContent += '</ul><br>';
+                    backContent += '</div><br>';
                 } else if (!isGoalKeeper && !isCoach) {
-                    backContent += `<div class="stat-header" style="background:#ccc; color:#555;">⚽ ΚΑΝΕΝΑ ΓΚΟΛ</div><div style="font-size:0.75rem; color:#888; margin-top:10px;">Συνεχίζουμε δυνατά! 💪</div>`;
+                    backContent += `<div class="stat-header" style="background:#ccc; color:#555;">⚽ ΚΑΝΕΝΑ ΓΚΟΛ</div>`;
                 }
 
-                if (isGoalKeeper) {
-                    if (stats.cleanSheetsLog.length > 0) {
-                        backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CLEAN SHEETS</div><ul class="stats-list">`;
-                        stats.cleanSheetsLog.forEach(log => {
-                             const shortMatch = log.match.replace('vs ', '').trim();
-                            backContent += `<li><span>${shortMatch}</span> ✅</li>`;
-                        });
-                        backContent += '</ul>';
-                    } else {
-                        backContent += `<div class="stat-header" style="background:#ccc; color:#555;">🧤 ΚΑΝΕΝΑ CS</div>`;
-                    }
-                }
-                
-                if (isCoach) {
-                    backContent = `<div style="padding:1rem; font-style:italic; font-size:0.8rem;">"Ο προπονητής είναι η καρδιά της ομάδας!"</div>`;
+                if (isGoalKeeper && stats.cleanSheetsLog.length > 0) {
+                    backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CS</div>`;
+                    stats.cleanSheetsLog.forEach(log => {
+                        backContent += `
+                            <div class="stats-row">
+                                <div class="stats-info-group"><div class="stats-team-name">${log.match.replace('vs ', '')}</div></div>
+                                <div class="stats-right-data"><div class="stats-goals-count">🧤✅</div></div>
+                            </div>`;
+                    });
                 }
 
-                // Σύνθεση HTML
                 card.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
                             <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:80%; height:4px; background:var(--primary-color); border-radius:0 0 6px 6px;"></div>
-                            
                             <div class="${photoClass}">
                                 <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
                                 <div class="player-number">${displayNumber}</div>
@@ -3919,17 +3971,12 @@ function displayRoster() {
                             </div>
                             <div class="player-name">${player.name}</div>
                             <div class="player-position">${player.position}</div>
-                            ${ageHTML}
-                            </div>
-
-                        <div class="card-back">
-                            <h4 style="color:var(--primary-color); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:0.9rem;">
-                                ${player.name}
-                            </h4>
-                            ${backContent}
                         </div>
-                    </div>
-                `;
+                        <div class="card-back">
+                            <h4 style="position:relative; z-index:10; color:var(--primary-color); text-align:center;">${player.name}</h4>
+                            <div style="position:relative; z-index:10; width:100%;">${backContent}</div>
+                        </div>
+                    </div>`;
                 gridDiv.appendChild(card);
             });
             container.appendChild(gridDiv);
