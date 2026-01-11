@@ -1155,7 +1155,7 @@
   "liveScore": {
     "active": true,
     "home": 2,
-    "away": 3,
-    "minute": "40'"
+    "away": 4,
+    "minute": "FT"
   }
 }
