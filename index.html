@@ -3748,7 +3748,7 @@ function displayRoster() {
         return;
     }
 
-    const currentYear = 2026; // Βάσει τρέχουσας ημερομηνίας
+    const currentYear = new Date().getFullYear(); 
     const categories = [
         { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['(gk)'], icon: '🧤' },
         { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
@@ -3786,11 +3786,16 @@ function displayRoster() {
                 const isCoach = category.title === 'TECHNICAL STAFF';
                 const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
                 const displayNumber = player.number || (isCoach ? 'COACH' : '-');
-                const captainBadge = player.isCaptain ? '<div class="captain-badge">C</div>' : '';
+                const captainBadge = player.isCaptain ? `<div class="captain-badge">C</div>` : '';
 
+                let ageHTML = '';
+                if (player.birthYear && !isCoach) { 
+                    ageHTML = `<div class="player-age">${player.birthYear} - ${currentYear - player.birthYear} ετών</div>`;
+                }
+                
                 let backContent = '';
                 if (stats.goalsLog.length > 0) {
-                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><div class="stats-list">`;
+                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><div class="stats-list" style="list-style:none; padding:0; margin:0;">`;
                     stats.goalsLog.forEach(log => {
                         let opponentInfo = log.match.replace('vs ', '').replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '').trim();
                         const scoreMatch = opponentInfo.match(/\(\d+-\d+\)/);
@@ -3798,13 +3803,13 @@ function displayRoster() {
                         let teamName = opponentInfo.replace(/\(\d+-\d+\)/, '').trim();
                         
                         backContent += `
-                            <div class="stats-row">
-                                <div class="stats-info-group">
-                                    <div class="stats-team-name">${teamName}</div>
+                            <div class="stats-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                                <div class="stats-info-group" style="flex: 1; text-align: left;">
+                                    <div class="stats-team-name" style="font-weight: 700; font-size: 0.72rem;">${teamName}</div>
                                 </div>
-                                <div class="stats-right-data">
-                                    <div class="stats-match-score">${scoreStr}</div>
-                                    <div class="stats-goals-count">⚽${log.count}</div>
+                                <div class="stats-right-data" style="width: 65px; display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0;">
+                                    <div class="stats-match-score" style="font-size: 0.65rem; color: #666; font-weight: bold;">${scoreStr}</div>
+                                    <div class="stats-goals-count" style="font-weight: 800; color: var(--primary-color); font-size: 0.82rem;">⚽${log.count}</div>
                                 </div>
                             </div>`;
                     });
@@ -3817,9 +3822,9 @@ function displayRoster() {
                     backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CS</div>`;
                     stats.cleanSheetsLog.forEach(log => {
                         backContent += `
-                            <div class="stats-row">
-                                <div class="stats-info-group"><div class="stats-team-name">${log.match.replace('vs ', '')}</div></div>
-                                <div class="stats-right-data"><div class="stats-goals-count">🧤✅</div></div>
+                            <div class="stats-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                                <div class="stats-info-group" style="flex: 1; text-align: left;"><div class="stats-team-name" style="font-weight:700; font-size:0.72rem;">${log.match.replace('vs ', '')}</div></div>
+                                <div class="stats-right-data" style="width:65px; display:flex; flex-direction:column; align-items:flex-end;"><div class="stats-goals-count">🧤✅</div></div>
                             </div>`;
                     });
                 }
@@ -3835,10 +3840,13 @@ function displayRoster() {
                             </div>
                             <div class="player-name">${player.name}</div>
                             <div class="player-position">${player.position}</div>
+                            ${ageHTML}
                         </div>
                         <div class="card-back">
-                            <h4 style="position:relative; z-index:10; color:var(--primary-color); text-align:center;">${player.name}</h4>
-                            <div style="position:relative; z-index:10; width:100%;">${backContent}</div>
+                            <div style="position:relative; z-index:10; width:100%; padding: 10px;">
+                                <h4 class="player-name-back">${player.name}</h4>
+                                ${backContent}
+                            </div>
                         </div>
                     </div>`;
                 gridDiv.appendChild(card);
