@@ -1151,5 +1151,11 @@
   "matchTime": "14:15",
   "matchStadium": "Γήπεδο Μακεδονικού (βοηθητικό)",
   "matchMapLink": "https://maps.app.goo.gl/wr46zmEoFP6h2d1i7",
-  "countdownTarget": "2026-01-11T14:15"
+  "countdownTarget": "2026-01-11T14:15",
+  "liveScore": {
+    "active": true,
+    "home": 0,
+    "away": 0,
+    "minute": ""
+  }
 }
