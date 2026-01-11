@@ -2536,12 +2536,13 @@ table thead th:nth-child(2) {
 /* ΤΕΛΙΚΗ ΣΦΙΧΤΗ ΣΤΟΙΧΙΣΗ */
 .stats-row {
     display: grid;
-    grid-template-columns: 1fr 40px 30px; 
+    /* Η ομάδα παίρνει όλο τον χώρο, τα νούμερα περιορίζονται σε 65px */
+    grid-template-columns: 1fr 60px; 
     align-items: center;
-    padding: 4px 0;
+    padding: 6px 2px;
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    font-size: 0.65rem; 
-    gap: 2px; 
+    font-size: 0.72rem;
+    gap: 0px; /* Μηδενικό κενό ανάμεσα στις στήλες */
     position: relative;
     z-index: 10;
 }
@@ -2557,10 +2558,9 @@ table thead th:nth-child(2) {
     font-weight: 550;
     color: var(--text-dark);
     line-height: 1.1;
-    font-size: 0.65rem;
     white-space: normal; /* Επιτρέπει αλλαγή γραμμής */
     word-break: break-word;
-    padding-right: 3px;
+    padding-right: 5px;
 }
 
 /* Η ΔΕΞΙΑ ΣΤΗΛΗ ΠΟΥ ΗΡΘΕ ΠΙΟ ΑΡΙΣΤΕΡΑ */
@@ -2569,7 +2569,7 @@ table thead th:nth-child(2) {
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
-    width: 55px; /* Μειωμένο πλάτος */
+    width: 60px; /* Μειωμένο πλάτος */
     flex-shrink: 0;
 }
 
