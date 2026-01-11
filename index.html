@@ -2024,9 +2024,7 @@ table thead th:nth-child(2) {
         background-color: #121212;
         color: #e0e0e0;
     }
- html {
-        background-color: #121212 !important;
-    }
+
     /* Κάρτες και γενικά κουτιά */
     .card, .modal-content, .table-wrapper, .round-section, .next-match-card {
         background-color: #1e1e1e !important;
@@ -2597,10 +2595,11 @@ table thead th:nth-child(2) {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    min-height: 100%; 
-    background: #ffffff; /* Συμπαγές λευκό */
-    z-index: 0; /* Πίσω από το σήμα */
+    right: 0;
+    bottom: 0;
+    background: var(--card-back-overlay, rgba(255, 255, 255, 0.85));
+    z-index: 1;
+    border-radius: 15px;
 }
 
 /* Σιγουρεύουμε ότι τα γράμματα είναι πάνω από το πέπλο */
@@ -2734,227 +2733,90 @@ table thead th:nth-child(2) {
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
 }
-/* --- DARK MODE FIXES (FINAL V4 - VISIBLE WATERMARK) --- */
-@media (prefers-color-scheme: dark) {
-    
-    /* 1. Γράμματα ΛΕΥΚΑ (Αυτό δούλεψε, το κρατάμε) */
-    .stats-list li b, 
-    .stats-list li b[style] {
-        color: #ffffff !important;
-        text-shadow: none !important;
-        font-weight: 900 !important;
-    }    
-    /* Σιγουρεύουμε ότι τα υπόλοιπα γράμματα είναι ανοιχτόχρωμα */
-    .stats-list li {
-        color: #e0e0e0 !important;
-        border-bottom: 1px solid #444 !important;
-    }
-}
-/* FIX ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ (ΝΑ ΣΠΑΕΙ ΣΕ 2 ΓΡΑΜΜΕΣ) */
-.card-back h4 {
-    display: block !important;
-    width: 100% !important;
-    
-    /* Το μαγικό για να σπάσει η γραμμή: */
-    white-space: normal !important; 
-    word-spacing: 9999px !important; /* Σπρώχνει τη 2η λέξη κάτω */
-    
-    text-align: center !important;
-    line-height: 1.1 !important;
-    font-size: 1rem !important;
-    font-weight: 800 !important;
-    margin-bottom: 10px !important;
-    border-bottom: 1px solid #eee !important;
-    padding-bottom: 5px !important;
-    
-    /* Χρώμα */
-    color: var(--primary-color) !important;
-}
-/* --- ULTIMATE FIX: DARK MODE & WATERMARK --- */
-@media (prefers-color-scheme: dark) {
-    
-    /* 1. ΟΝΟΜΑ: Χρησιμοποιούμε το "body" μπροστά για να κερδίσουμε σε δύναμη */
-    body .card-back h4, 
-    body .card-back h4[style] {
-        color: #ffffff !important;       /* ΚΑΤΑΛΕΥΚΟ */
-        border-bottom-color: #666 !important;
-        text-shadow: none !important;
-    }
+/* --- DARK MODE FIXES (FINAL V5 - PERFECT BACK CARD) --- */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --card-back-bg: #1a1a1a;
+            }
 
-    /* 2. ΣΗΜΑ (WATERMARK): Το αναγκάζουμε να κατέβει ξανά */
-    .card-back {
-        /* Ρυθμίσεις εμφάνισης (όπως πριν) */
-        background-color: #cccccc !important; 
-        background-blend-mode: multiply !important;
+            body { background-color: #121212; color: #e0e0e0; }
+
+            /* Η ΠΙΣΩ ΟΨΗ ΤΗΣ ΚΑΡΤΑΣ */
+            .card-back {
+                background-color: #1a1a1a !important;
+                background-blend-mode: multiply !important;
+                background-position: center 95% !important;
+                background-size: 85% !important;
+                background-repeat: no-repeat !important;
+            }
+
+            /* ΤΟ ΠΕΠΛΟ ΓΙΝΕΤΑΙ ΣΚΟΥΡΟ */
+            .card-back::after {
+                background: rgba(20, 20, 20, 0.9) !important;
+            }
+
+            /* ΛΕΥΚΑ ΓΡΑΜΜΑΤΑ ΣΤΑ ΣΤΑΤΙΣΤΙΚΑ */
+            .stats-team-name { color: #ffffff !important; }
+            .stats-match-score { color: #bbbbbb !important; }
+            .stats-list li {
+                color: #ffffff !important;
+                border-bottom: 1px solid #333 !important;
+            }
+            
+            /* ΟΝΟΜΑ ΠΑΙΚΤΗ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
+            body .card-back h4 {
+                color: #ffffff !important;
+                border-bottom-color: #444 !important;
+                text-shadow: none !important;
+            }
+
+            .stat-header[style*="background:#ccc"] {
+                background: #444 !important;
+                color: #fff !important;
+            }
+
+            /* SQUAD MODAL DARK MODE */
+            #squadList { background-color: #252525 !important; border: 1px solid #444 !important; }
+            #squadList label span { color: #ffffff !important; }
+            #squadModal .form-group[style*="background: #fff3e0"] { background-color: #3e2723 !important; }
+        }
+
+        /* FIX ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
+        .card-back h4 {
+            display: block !important;
+            width: 100% !important;
+            white-space: normal !important; 
+            word-spacing: 9999px !important; 
+            text-align: center !important;
+            line-height: 1.1 !important;
+            font-size: 1rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 10px !important;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        /* PIN MODAL STYLES */
+        .pin-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); background: white; transition: all 0.3s ease; }
+        .pin-dot.filled { background: var(--primary-color); transform: scale(1.1); }
+        .pin-btn { width: 70px; height: 70px; font-size: 1.5rem; font-weight: bold; border: 2px solid #ddd; background: white; border-radius: 50%; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .pin-btn:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
         
-        /* ΤΟ ΚΛΕΙΔΙ: Ξαναδηλώνουμε τη θέση ΜΕΣΑ στο dark mode */
-        background-position: center 95% !important; /* Τέρμα κάτω */
-        background-size: 85% !important;
-        background-repeat: no-repeat !important;
-    }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }
 
-    /* 3. ΠΕΠΛΟ (Για να είναι σκούρα η κάρτα) */
-    .card-back::after {
-        background: rgba(20, 20, 20, 0.85) !important; 
-    }
-}
-/* --- FIX: SQUAD MODAL DARK MODE --- */
-@media (prefers-color-scheme: dark) {
-    
-    /* 1. Το φόντο της λίστας να γίνει σκούρο γκρι */
-    #squadList {
-        background-color: #252525 !important;
-        border: 1px solid #444 !important;
-    }
+        /* FULL SCREEN MODALS */
+        #shareModal .share-modal-content, #pinModal .modal-content {
+            width: 100% !important; height: 100% !important; max-width: none !important; border-radius: 0 !important; margin: 0 !important;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        #pinModal .modal-content { background-color: #1a1a1a !important; color: white !important; }
+        #pinModal .pin-btn { border: none; background: rgba(255,255,255,0.1); color: white; }
 
-    /* 2. Οι διαχωριστικές γραμμές ανάμεσα στους παίκτες */
-    #squadList div {
-        border-bottom-color: #333 !important;
-    }
-
-    /* 3. ΤΟ ΣΗΜΑΝΤΙΚΟ: Τα ονόματα των παικτών ΚΑΤΑΛΕΥΚΑ */
-    #squadList label span {
-        color: #ffffff !important;
-    }
-
-    /* 4. Οι θέσεις (που ήταν γκρι #888) να γίνουν πιο φωτεινές για να διαβάζονται */
-    #squadList label span[style*="color: #888"] {
-        color: #bbbbbb !important;
-    }
-
-    /* 5. Το πορτοκαλί κουτάκι "Χωρίς Αποστολή" να προσαρμοστεί */
-    #squadModal .form-group[style*="background: #fff3e0"] {
-        background-color: #3e2723 !important; /* Σκούρο καφέ */
-        border-color: #d84315 !important;
-    }
-    
-    /* Το κείμενο στο πορτοκαλί κουτάκι */
-    #squadModal label[for="noSquadCheckbox"] {
-        color: #ffcc80 !important; /* Ανοιχτό πορτοκαλί */
-    }
-}
-/* PIN Modal Styles */
-.pin-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid var(--primary-color);
-    background: white;
-    transition: all 0.3s ease;
-}
-
-.pin-dot.filled {
-    background: var(--primary-color);
-    transform: scale(1.1);
-}
-
-.pin-btn {
-    width: 70px;
-    height: 70px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    border: 2px solid #ddd;
-    background: white;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.pin-btn:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: scale(1.05);
-    border-color: var(--primary-color);
-}
-
-.pin-btn:active {
-    transform: scale(0.95);
-}
-
-@media (max-width: 768px) {
-    .pin-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 1.3rem;
-    }
-}
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-    20%, 40%, 60%, 80% { transform: translateX(10px); }
-}
-/* --- FULL SCREEN MODALS FIX --- */
-
-/* 1. SHARE MODAL - FULL SCREEN */
-#shareModal .share-modal-content {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important; /* Καταργεί το όριο πλάτους */
-    border-radius: 0 !important; /* Τετράγωνες γωνίες */
-    margin: 0 !important;
-    
-    /* Κεντράρισμα περιεχομένου στη μέση της μεγάλης οθόνης */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-}
-
-/* 2. PIN MODAL - FULL SCREEN (LOCK STYLE) */
-#pinModal .modal-content {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    max-height: none !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    
-    /* Κεντράρισμα */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    /* Στυλ "Μαύρη Οθόνη" για να μοιάζει με κλείδωμα κινητού */
-    background-color: #1a1a1a !important; 
-    color: white !important;
-}
-
-/* Διορθώσεις χρωμάτων για το PIN σε Full Screen */
-#pinModal h3 { color: white !important; font-size: 1.5rem; margin-bottom: 2rem; }
-#pinModal p { color: #ccc !important; font-size: 1rem; }
-#pinModal .pin-btn {
-    width: 80px; height: 80px; font-size: 1.8rem; /* Μεγαλύτερα κουμπιά */
-    border: none; background: rgba(255,255,255,0.1); color: white; /* Διαφανή κουμπιά */
-}
-#pinModal .pin-btn:active { background: rgba(255,255,255,0.3); }
-#pinError { margin-top: 20px; font-size: 1rem; }
-/* Ρυθμίσεις εμφάνισης */
-#custom-splash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff; /* Άλλαξέ το αν θες άλλο χρώμα φόντου */
-    z-index: 999999; /* Πολύ μεγάλος αριθμός για να είναι σίγουρα πάνω από το Header */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.5s ease-out;
-}
-
-.splash-logo {
-    max-width: 60%;  /* Μέγεθος εικόνας στην οθόνη */
-    height: auto;
-}
-
-.splash-hidden {
-    opacity: 0;
-    pointer-events: none;
-}
+        /* SPLASH SCREEN */
+        #custom-splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 999999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .splash-logo { max-width: 60%; height: auto; }
+        .splash-hidden { opacity: 0; pointer-events: none; }
        </style>
        <script>
 window.addEventListener('load', function() {
