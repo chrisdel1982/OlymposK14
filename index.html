@@ -3047,11 +3047,28 @@ window.addEventListener('load', function() {
         <input type="checkbox" id="liveModeCheckbox" style="width: 20px; height: 20px;" onchange="document.getElementById('liveInputs').style.display = this.checked ? 'block' : 'none'">
         <label for="liveModeCheckbox">Ενεργοποίηση Live Mode</label>
     </div>
-    <div id="liveInputs" style="display: none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-            <input type="number" id="liveHomeScore" placeholder="Σκορ 1" style="text-align: center;">
-            <input type="text" id="liveMinute" placeholder="Λεπτό (π.χ. 35')" style="text-align: center;">
-            <input type="number" id="liveAwayScore" placeholder="Σκορ 2" style="text-align: center;">
+   <div id="liveInputs" style="display: none;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+        <input type="number" id="liveHomeScore" placeholder="Σκορ Εντός" style="text-align: center;">
+        <input type="number" id="liveAwayScore" placeholder="Σκορ Εκτός" style="text-align: center;">
+    </div>
+    
+    <div style="background: #fff; padding: 10px; border-radius: 5px; border: 1px solid #ddd; color: #333;">
+        <label style="font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">⏱️ Χρονόμετρο:</label>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">
+            <div>
+                <small style="display:block; font-size:0.7rem;">Ημίχρονο (1-4):</small>
+                <input type="number" id="liveHalf" value="1" min="1" max="4" style="text-align: center;">
+            </div>
+            <div>
+                <small style="display:block; font-size:0.7rem;">Διάρκεια (λεπτά):</small>
+                <input type="number" id="liveHalfDuration" value="20" style="text-align: center;">
+            </div>
+            <div>
+                <small style="display:block; font-size:0.7rem;">Ώρα Έναρξης:</small>
+                <input type="time" id="liveStartTime" style="text-align: center;">
+            </div>
         </div>
     </div>
 </div>
@@ -4236,22 +4253,55 @@ function removeNewsPhoto() {
         function closeAdminPanel() {
             document.getElementById('adminModal').classList.remove('active');
         }
+function calculateLiveMinute(startTime, half, duration) {
+    // Αν δεν έχει οριστεί ώρα έναρξης, εμφάνισε απλά "LIVE"
+    if (!startTime) return "LIVE";
+    
+    const now = new Date();
+    const [startHours, startMinutes] = startTime.split(':');
+    const start = new Date();
+    start.setHours(startHours, startMinutes, 0);
+
+    // Υπολογισμός διαφοράς σε λεπτά από την έναρξη
+    let diffInMinutes = Math.floor((now - start) / 60000);
+    
+    // Αν η ώρα έναρξης είναι στο μέλλον
+    if (diffInMinutes < 0) return "0'";
+
+    // Υπολογισμός λεπτού αγώνα (π.χ. στο 2ο ημίχρονο ξεκινάει μετά τη διάρκεια του 1ου)
+    let baseMinutes = (parseInt(half) - 1) * parseInt(duration);
+    let currentMatchMinute = baseMinutes + diffInMinutes + 1; // +1 για να ξεκινάει από το 1ο λεπτό
+
+    // Υπολογισμός ορίου ημιχρόνου για καθυστερήσεις
+    let halfLimit = parseInt(half) * parseInt(duration);
+    
+    if (currentMatchMinute > halfLimit) {
+        let extra = currentMatchMinute - halfLimit;
+        return halfLimit + "+" + extra + "'";
+    }
+    
+    return currentMatchMinute + "'";
+}
+// Αυτή η συνάρτηση θα τρέχει στο παρασκήνιο για να ανανεώνει το Live
+function startLiveUpdateLoop() {
+    setInterval(() => {
+        if (data.liveScore && data.liveScore.active) {
+            displayNextMatch();
+        }
+    }, 30000); // Ανανέωση κάθε 30 δευτερόλεπτα
+}
 function saveGeneralSettings() {
     if (!data) return;
     
-    data.announcement = document.getElementById('announcementInput').value.trim();
-    data.matchDate = document.getElementById('matchDateInput').value.trim();
-    data.matchTime = document.getElementById('matchTimeInput').value.trim();
-    data.matchStadium = document.getElementById('matchStadiumInput').value.trim();
-    data.matchMapLink = document.getElementById('matchMapLinkInput').value.trim();
-    data.countdownTarget = document.getElementById('countdownTargetInput').value;
-    
-    // Αποθήκευση Live Score από τα πεδία της εικόνας
+    // ... (οι υπόλοιπες ρυθμίσεις σου για announcement, matchDate κτλ) ...
+
     data.liveScore = {
         active: document.getElementById('liveModeCheckbox').checked,
         home: document.getElementById('liveHomeScore').value || 0,
         away: document.getElementById('liveAwayScore').value || 0,
-        minute: document.getElementById('liveMinute').value || ""
+        half: document.getElementById('liveHalf').value || 1,
+        duration: parseInt(document.getElementById('liveHalfDuration').value) || 20,
+        startTime: document.getElementById('liveStartTime').value
     };
 
     saveData(data);
@@ -4264,26 +4314,41 @@ function displayNextMatch() {
     if (!container || !data) return;
     container.innerHTML = '';
 
-    let nextMatch = null;
+    // 1. Εύρεση του αγώνα (Είτε Εμβόλιμος είτε από το Πρόγραμμα)
+    let matchInfo = null;
     let matchType = 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ';
 
     if (data.specialMatch && data.specialMatch.home) {
-        nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
+        matchInfo = { 
+            home: data.specialMatch.home, 
+            away: data.specialMatch.away 
+        };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
     } else {
         for (const round of data.fixtures) {
             const m = round.matches.find(m => (m.home === MY_TEAM || m.away === MY_TEAM) && m.homeScore === null);
-            if (m) { nextMatch = m; break; }
+            if (m) { 
+                matchInfo = m; 
+                break; 
+            }
         }
     }
 
-    if (!nextMatch) return;
+    if (!matchInfo) return;
 
     const isLive = data.liveScore && data.liveScore.active;
     
-    // Αν είναι LIVE κρύβουμε την αντίστροφη μέτρηση (display: none)
-    const countdownStyle = isLive ? 'display: none;' : 'display: block;';
+    // 2. Υπολογισμός Χρόνου αν είναι LIVE
+    let liveTimeDisplay = "";
+    if (isLive) {
+        liveTimeDisplay = calculateLiveMinute(
+            data.liveScore.startTime, 
+            data.liveScore.half, 
+            data.liveScore.duration
+        );
+    }
 
+    // 3. Κατασκευή του HTML
     container.innerHTML = `
         <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
             <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
@@ -4292,33 +4357,24 @@ function displayNextMatch() {
                 <span>⏰ ${data.matchTime || ''}</span>
             </div>
             
-            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; ${countdownStyle}">
-            </div>
-
             <div class="nm-body">
-                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${nextMatch.home}</div>
+                <div class="nm-team home ${matchInfo.home === MY_TEAM ? 'my-team' : ''}">${matchInfo.home}</div>
                 
-                <div class="center-area">
+                <div class="center-area" style="text-align:center; min-width:100px;">
                     ${isLive ? `
-                        <div style="text-align:center;">
-                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${data.liveScore.minute}</div>
-                            <div class="live-badge-pulse">LIVE</div>
-                            <div class="live-score-display" style="font-size:2.5rem; font-weight:900;">${data.liveScore.home} - ${data.liveScore.away}</div>
+                        <div style="color:#ff0046; font-weight:bold; font-size:1.1rem; margin-bottom:5px;">${liveTimeDisplay}</div>
+                        <div class="live-score-display" style="font-size:2.5rem; font-weight:900; margin:0;">
+                            ${data.liveScore.home} - ${data.liveScore.away}
                         </div>
-                    ` : `<div class="nm-vs">VS</div>`}
+                    ` : `<div class="nm-vs" style="font-size:1.5rem; color:#999;">VS</div>`}
                 </div>
 
-                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
+                <div class="nm-team away ${matchInfo.away === MY_TEAM ? 'my-team' : ''}">${matchInfo.away}</div>
             </div>
-            <div class="nm-stadium">🏟️ ${data.matchStadium || ''}</div>
-            <a href="${data.matchMapLink || '#'}" target="_blank" class="nm-footer" style="text-decoration:none;">📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ</a>
+            <div class="nm-stadium" style="text-align:center; padding-bottom:15px; color:#666;">🏟️ ${data.matchStadium || ''}</div>
+            <a href="${data.matchMapLink || '#'}" target="_blank" class="nm-footer">📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ</a>
         </div>
     `;
-
-    // Ξεκινάμε το ρολόι μόνο αν ΔΕΝ είναι Live
-    if (!isLive && data.countdownTarget) {
-        startCountdown(data.countdownTarget);
-    }
 }
 // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Υπολογισμός Χρόνου
 function startCountdown(targetDateString) {
@@ -4619,6 +4675,11 @@ function saveResults() {
             tickerText.textContent = data.announcement;
             tickerBar.style.display = 'block';
         }
+        setInterval(() => {
+    if (data && data.liveScore && data.liveScore.active) {
+        displayNextMatch();
+    }
+}, 60000);
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
@@ -4630,6 +4691,7 @@ function saveResults() {
     displayNews();
     checkDeepLink();
     checkNewNews();
+    startLiveUpdateLoop();
 
 });
 
