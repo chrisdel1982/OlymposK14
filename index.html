@@ -2682,6 +2682,10 @@ table thead th:nth-child(2) {
         background: #444 !important; 
         color: #fff !important;
     }
+    .goal-number-back {
+        color: #ffd700 !important; 
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); /* Ελαφριά λάμψη */
+    }
 }
 #backToTop {
     display: none; /* Κρυφό αρχικά */
@@ -3804,7 +3808,7 @@ function displayRoster() {
                                 </div>
                                 <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: right; width: 48px;">
                                     <div style="font-size: 0.55rem; color: #666; font-weight: bold;">${scoreStr}</div>
-                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.7rem;">⚽${log.count}</div>
+                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.7rem;">⚽&nbsp;<span class="goal-number-back">${log.count}</span></div>
                                 </div>
                             </div>`;
                     });
