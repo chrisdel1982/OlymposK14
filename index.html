@@ -2778,23 +2778,56 @@ table thead th:nth-child(2) {
             #squadList label span { color: #ffffff !important; }
             #squadModal .form-group[style*="background: #fff3e0"] { background-color: #3e2723 !important; }
         }
+/* --- ΟΡΙΣΤΙΚΗ ΔΙΟΡΘΩΣΗ ADMIN PANEL (DARK MODE) --- */
+@media (prefers-color-scheme: dark) {
+    /* 1. Γενικό φόντο Modal */
+    #adminModal .modal-content {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
 
-        /* FIX ΓΙΑ ΤΟ ΟΝΟΜΑ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
-        .card-back h4 {
-            display: block !important;
-            width: 100% !important;
-            white-space: normal !important; 
-            word-spacing: 9999px !important; 
-            text-align: center !important;
-            line-height: 1.1 !important;
-            font-size: 1rem !important;
-            font-weight: 800 !important;
-            margin-bottom: 10px !important;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            color: var(--primary-color);
-        }
+    /* 2. Διόρθωση των "ροζ" και "πράσινων" πλαισίων (Live Score, Countdown κτλ) */
+    #adminModal .form-group[style*="background"],
+    #adminModal div[style*="background"],
+    #liveInputs,
+    #specialMatchFields,
+    .admin-scorers-panel {
+        background-color: #252525 !important; /* Σκούρο γκρι αντί για ροζ/πράσινο */
+        border: 1px solid #444 !important;
+        color: #ffffff !important;
+    }
 
+    /* 3. Όλα τα κείμενα μέσα στο Admin */
+    #adminModal label, 
+    #adminModal h2, 
+    #adminModal h3, 
+    #adminModal p, 
+    #adminModal small,
+    #adminModal span {
+        color: #ffffff !important;
+    }
+
+    /* 4. Πεδία Εισαγωγής (Inputs) */
+    #adminModal input, 
+    #adminModal select, 
+    #adminModal textarea {
+        background-color: #333 !important;
+        color: #ffffff !important;
+        border: 1px solid #555 !important;
+    }
+
+    /* 5. Dropdown μενού (Select options) */
+    #adminModal select option {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+
+    /* 6. Διόρθωση για το checkbox "Ενεργοποίηση Live Mode" */
+    #adminModal .form-group input[type="checkbox"] + label {
+        color: #ffffff !important;
+    }
+}
+        
         /* PIN MODAL STYLES */
         .pin-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); background: white; transition: all 0.3s ease; }
         .pin-dot.filled { background: var(--primary-color); transform: scale(1.1); }
@@ -3045,11 +3078,34 @@ window.addEventListener('load', function() {
         <input type="checkbox" id="liveModeCheckbox" style="width: 20px; height: 20px;" onchange="document.getElementById('liveInputs').style.display = this.checked ? 'block' : 'none'">
         <label for="liveModeCheckbox">Ενεργοποίηση Live Mode</label>
     </div>
-    <div id="liveInputs" style="display: none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-            <input type="number" id="liveHomeScore" placeholder="Σκορ 1" style="text-align: center;">
-            <input type="text" id="liveMinute" placeholder="Λεπτό (π.χ. 35')" style="text-align: center;">
-            <input type="number" id="liveAwayScore" placeholder="Σκορ 2" style="text-align: center;">
+   <div id="liveInputs" style="display: none;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+        <input type="number" id="liveHomeScore" value="0" style="text-align: center;">
+        <input type="number" id="liveAwayScore" value="0" style="text-align: center;">
+    </div>
+    
+    <div style="background: #fff; padding: 10px; border-radius: 5px; border: 1px solid #ddd; color: #333; margin-bottom:10px;">
+        <label style="font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">⏱️ Ρυθμίσεις Χρονομέτρου:</label>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">
+            <div>
+                <small style="display:block; font-size:0.7rem;">Ημίχρονο:</small>
+                <select id="liveHalf" style="padding:5px;">
+                    <option value="1">1ο</option>
+                    <option value="2">2ο</option>
+                    <option value="3">3ο</option>
+                    <option value="4">4ο</option>
+                    <option value="FT">FT (Τέλος)</option>
+                </select>
+            </div>
+            <div>
+                <small style="display:block; font-size:0.7rem;">Διάρκεια (λ):</small>
+                <input type="number" id="liveHalfDuration" value="20" style="text-align: center; padding:5px;">
+            </div>
+            <div>
+                <small style="display:block; font-size:0.7rem;">Έναρξη:</small>
+                <input type="time" id="liveStartTime" style="text-align: center; padding:5px;">
+            </div>
         </div>
     </div>
 </div>
@@ -3355,6 +3411,34 @@ window.addEventListener('load', function() {
         roster: [],
         news: []
     };
+}
+function calculateLiveMinute(startTime, half, duration) {
+    if (half === "FT") return "FT";
+    if (!startTime) return "LIVE";
+
+    const now = new Date();
+    const [startHours, startMinutes] = startTime.split(':');
+    const start = new Date();
+    start.setHours(startHours, startMinutes, 0);
+
+    // Διαφορά σε λεπτά
+    let diffInMinutes = Math.floor((now - start) / 60000);
+    
+    if (diffInMinutes < 0) return "0'";
+
+    // Υπολογισμός βάσει ημιχρόνου
+    // Π.χ. αν είναι 2ο ημίχρονο και διάρκεια 20', ξεκινάμε από το 20' + diff
+    let baseMinutes = (parseInt(half) - 1) * parseInt(duration);
+    let currentMatchMinute = baseMinutes + diffInMinutes + 1; // +1 για να ξεκινάει από το 1'
+
+    // Έλεγχος για καθυστερήσεις ημιχρόνου
+    let halfLimit = parseInt(half) * parseInt(duration);
+    if (currentMatchMinute > halfLimit) {
+        let extra = currentMatchMinute - halfLimit;
+        return halfLimit + "+" + extra + "'";
+    }
+
+    return currentMatchMinute + "'";
 }
         function saveData(dataToSave) {
             localStorage.setItem('footballData', JSON.stringify(dataToSave));
@@ -4235,26 +4319,17 @@ function removeNewsPhoto() {
             document.getElementById('adminModal').classList.remove('active');
         }
 function saveGeneralSettings() {
-    if (!data) return;
-    
-    data.announcement = document.getElementById('announcementInput').value.trim();
-    data.matchDate = document.getElementById('matchDateInput').value.trim();
-    data.matchTime = document.getElementById('matchTimeInput').value.trim();
-    data.matchStadium = document.getElementById('matchStadiumInput').value.trim();
-    data.matchMapLink = document.getElementById('matchMapLinkInput').value.trim();
-    data.countdownTarget = document.getElementById('countdownTargetInput').value;
-    
-    // Αποθήκευση Live Score από τα πεδία της εικόνας
     data.liveScore = {
         active: document.getElementById('liveModeCheckbox').checked,
         home: document.getElementById('liveHomeScore').value || 0,
         away: document.getElementById('liveAwayScore').value || 0,
-        minute: document.getElementById('liveMinute').value || ""
+        half: document.getElementById('liveHalf').value,
+        duration: document.getElementById('liveHalfDuration').value || 20,
+        startTime: document.getElementById('liveStartTime').value
     };
-
     saveData(data);
     displayNextMatch();
-    alert('✅ Οι ρυθμίσεις αποθηκεύτηκαν!');
+    alert('✅ Ρυθμίσεις Live αποθηκεύτηκαν!');
 }
 let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
 function displayNextMatch() {
@@ -4278,6 +4353,15 @@ function displayNextMatch() {
     if (!nextMatch) return;
 
     const isLive = data.liveScore && data.liveScore.active;
+
+let liveMinuteDisplay = "";
+if (isLive) {
+    liveMinuteDisplay = calculateLiveMinute(
+        data.liveScore.startTime, 
+        data.liveScore.half, 
+        data.liveScore.duration
+    );
+}
     
     // Αν είναι LIVE κρύβουμε την αντίστροφη μέτρηση (display: none)
     const countdownStyle = isLive ? 'display: none;' : 'display: block;';
@@ -4299,10 +4383,11 @@ function displayNextMatch() {
                 <div class="center-area">
                     ${isLive ? `
                         <div style="text-align:center;">
-                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${data.liveScore.minute}</div>
+                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${liveMinuteDisplay}</div>
                             <div class="live-badge-pulse">LIVE</div>
-                            <div class="live-score-display" style="font-size:2.5rem; font-weight:900;">${data.liveScore.home} - ${data.liveScore.away}</div>
-                        </div>
+                            <div class="live-score-display" style="font-size:2.5rem; font-weight:900; margin:0; color:var(--text-dark);">
+    ${data.liveScore.home || 0} - ${data.liveScore.away || 0}
+</div>
                     ` : `<div class="nm-vs">VS</div>`}
                 </div>
 
@@ -4368,12 +4453,14 @@ function startCountdown(targetDateString) {
             document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
 
             // Φόρτωση του Live Score στα πεδία της εικόνας
-            if (data.liveScore) {
-                document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
-                document.getElementById('liveHomeScore').value = data.liveScore.home || 0;
-                document.getElementById('liveAwayScore').value = data.liveScore.away || 0;
-                document.getElementById('liveMinute').value = data.liveScore.minute || "";
-            }
+          if (data.liveScore) {
+    document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
+    document.getElementById('liveHomeScore').value = data.liveScore.home ?? 0;
+    document.getElementById('liveAwayScore').value = data.liveScore.away ?? 0;
+    document.getElementById('liveHalf').value = data.liveScore.half || "1";
+    document.getElementById('liveHalfDuration').value = data.liveScore.duration || 20;
+    document.getElementById('liveStartTime').value = data.liveScore.startTime || "";
+}
             
             if (data.specialMatch) {
                 document.getElementById('useSpecialMatchCheckbox').checked = true;
@@ -4617,6 +4704,11 @@ function saveResults() {
             tickerText.textContent = data.announcement;
             tickerBar.style.display = 'block';
         }
+        setInterval(() => {
+    if (data && data.liveScore && data.liveScore.active) {
+        displayNextMatch();
+    }
+}, 30000); // Ανανέωση κάθε 30 δευτερόλεπτα
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
