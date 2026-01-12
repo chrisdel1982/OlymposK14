@@ -2540,7 +2540,7 @@ table thead th:nth-child(2) {
     align-items: center;
     padding: 6px 8px;          /* Περισσότερος αέρας δεξιά-αριστερά */
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    font-size: 0.78rem;        /* Λίγο πιο μεγάλα γράμματα */
+    font-size: 0.7rem;        /* Λίγο πιο μεγάλα γράμματα */
     position: relative;
     z-index: 10;
     gap: 10px;
@@ -2553,7 +2553,8 @@ table thead th:nth-child(2) {
 }
 
 .stats-team-name {
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 0.7rem;
     color: var(--text-dark);
     line-height: 1.2;
     white-space: normal;       /* Επιτρέπει αλλαγή γραμμής αν η λέξη είναι τεράστια */
@@ -3795,14 +3796,15 @@ function displayRoster() {
                         const scoreStr = scoreMatch ? scoreMatch[0].replace('(', '').replace(')', '') : '';
                         let teamName = opponentInfo.replace(/\(\d+-\d+\)/, '').trim();
                         
+                        // padding-left: 2px για να κολλήσει αριστερά και font-size: 0.65rem για να μικρύνει
                         backContent += `
-                            <div style="position: relative; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); min-height: 38px; text-align: left;">
-                                <div style="font-weight: 700; font-size: 0.7rem; line-height: 1.2; padding-right: 55px; color: inherit;">
+                            <div style="position: relative; padding: 5px 0 5px 2px; border-bottom: 1px solid rgba(0,0,0,0.05); min-height: 35px; text-align: left;">
+                                <div style="font-weight: 650; font-size: 0.6rem; line-height: 1.2; padding-right: 52px; color: inherit;">
                                     ${teamName}
                                 </div>
-                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: right; width: 50px;">
-                                    <div style="font-size: 0.6rem; color: #666; font-weight: bold;">${scoreStr}</div>
-                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.75rem;">⚽${log.count}</div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: right; width: 48px;">
+                                    <div style="font-size: 0.55rem; color: #666; font-weight: bold;">${scoreStr}</div>
+                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.7rem;">⚽${log.count}</div>
                                 </div>
                             </div>`;
                     });
@@ -3814,9 +3816,9 @@ function displayRoster() {
                     backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CS</div>`;
                     stats.cleanSheetsLog.forEach(log => {
                         backContent += `
-                            <div style="position: relative; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: left;">
-                                <div style="font-weight: 700; font-size: 0.7rem; padding-right: 60px;">${log.match.replace('vs ', '')}</div>
-                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-weight: 800; color: #2e7d32; font-size: 0.7rem;">🧤✅</div>
+                            <div style="position: relative; padding: 5px 0 5px 2px; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: left;">
+                                <div style="font-weight: 700; font-size: 0.65rem; padding-right: 52px;">${log.match.replace('vs ', '')}</div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-weight: 800; color: #2e7d32; font-size: 0.65rem;">🧤✅</div>
                             </div>`;
                     });
                 }
@@ -3835,8 +3837,8 @@ function displayRoster() {
                             ${ageHTML}
                         </div>
                         <div class="card-back">
-                            <div style="position:relative; z-index:10; width:100%; padding: 10px;">
-                                <h4 style="font-size: 0.9rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; color: var(--primary-color); text-align: center;">${player.name}</h4>
+                            <div style="position:relative; z-index:10; width:100%; padding: 8px;">
+                                <h4 style="font-size: 0.85rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 8px; color: var(--primary-color); text-align: center;">${player.name}</h4>
                                 ${backContent}
                             </div>
                         </div>
