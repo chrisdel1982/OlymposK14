@@ -2535,58 +2535,51 @@ table thead th:nth-child(2) {
 }
 /* ΤΕΛΙΚΗ ΣΦΙΧΤΗ ΣΤΟΙΧΙΣΗ */
 .stats-row {
-    display: grid;
-    /* Η ομάδα παίρνει όλο τον χώρο, τα νούμερα περιορίζονται σε 65px */
-    grid-template-columns: 1fr 60px; 
+    display: flex;             /* Αλλαγή σε flex για μέγιστη ευελιξία */
+    justify-content: space-between; 
     align-items: center;
-    padding: 6px 2px;
+    padding: 6px 8px;          /* Περισσότερος αέρας δεξιά-αριστερά */
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    font-size: 0.72rem;
-    gap: 0px; /* Μηδενικό κενό ανάμεσα στις στήλες */
+    font-size: 0.78rem;        /* Λίγο πιο μεγάλα γράμματα */
     position: relative;
     z-index: 10;
+    gap: 10px;
 }
 
 .stats-info-group {
-    display: flex;
-    flex-direction: column;
+    flex: 1;                   
     text-align: left;
-    overflow: hidden;
+    min-width: 0;              
 }
 
 .stats-team-name {
-    font-weight: 550;
+    font-weight: 700;
     color: var(--text-dark);
-    line-height: 1.1;
-    white-space: normal; /* Επιτρέπει αλλαγή γραμμής */
+    line-height: 1.2;
+    white-space: normal;       /* Επιτρέπει αλλαγή γραμμής αν η λέξη είναι τεράστια */
     word-break: break-word;
-    padding-right: 5px;
 }
 
 /* Η ΔΕΞΙΑ ΣΤΗΛΗ ΠΟΥ ΗΡΘΕ ΠΙΟ ΑΡΙΣΤΕΡΑ */
 .stats-right-data {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    /* Σκορ πάνω, γκολ κάτω */
     align-items: flex-end;
     justify-content: center;
-    width: 60px; /* Μειωμένο πλάτος */
-    flex-shrink: 0;
+    flex-shrink: 0;            /* Απαγορεύει στη δεξιά στήλη να μικρύνει */
+    min-width: 55px;
 }
 
 .stats-match-score {
-    font-size: 0.60rem;
+    font-size: 0.62rem;
     color: #666;
-    font-weight: bold;
-    letter-spacing: 0px;
+    font-weight: 800;
 }
 
 .stats-goals-count {
-    font-weight: 700;
+    font-weight: 800;
     color: var(--primary-color);
-    font-size: 0.82rem;
-    display: flex;
-    align-items: center;
-    gap: 1px;
+    font-size: 0.85rem;
 }
 
 /* ΤΟ ΠΕΠΛΟ (Φόντο) */
@@ -2597,7 +2590,7 @@ table thead th:nth-child(2) {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--card-back-overlay, rgba(255, 255, 255, 0.85));
+    background: var(--card-back-overlay, rgba(255, 255, 255, 0.75));
     z-index: 1;
     border-radius: 15px;
 }
@@ -3795,7 +3788,7 @@ function displayRoster() {
                 
                 let backContent = '';
                 if (stats.goalsLog.length > 0) {
-                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div><div class="stats-list" style="list-style:none; padding:0; margin:0;">`;
+                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div>`;
                     stats.goalsLog.forEach(log => {
                         let opponentInfo = log.match.replace('vs ', '').replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '').trim();
                         const scoreMatch = opponentInfo.match(/\(\d+-\d+\)/);
@@ -3803,17 +3796,16 @@ function displayRoster() {
                         let teamName = opponentInfo.replace(/\(\d+-\d+\)/, '').trim();
                         
                         backContent += `
-                            <div class="stats-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                                <div class="stats-info-group" style="flex: 1; text-align: left;">
-                                    <div class="stats-team-name" style="font-weight: 700; font-size: 0.72rem;">${teamName}</div>
+                            <div style="position: relative; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); min-height: 38px; text-align: left;">
+                                <div style="font-weight: 700; font-size: 0.7rem; line-height: 1.2; padding-right: 55px; color: inherit;">
+                                    ${teamName}
                                 </div>
-                                <div class="stats-right-data" style="width: 65px; display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0;">
-                                    <div class="stats-match-score" style="font-size: 0.65rem; color: #666; font-weight: bold;">${scoreStr}</div>
-                                    <div class="stats-goals-count" style="font-weight: 800; color: var(--primary-color); font-size: 0.82rem;">⚽${log.count}</div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: right; width: 50px;">
+                                    <div style="font-size: 0.6rem; color: #666; font-weight: bold;">${scoreStr}</div>
+                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.75rem;">⚽${log.count}</div>
                                 </div>
                             </div>`;
                     });
-                    backContent += '</div><br>';
                 } else if (!isGoalKeeper && !isCoach) {
                     backContent += `<div class="stat-header" style="background:#ccc; color:#555;">⚽ ΚΑΝΕΝΑ ΓΚΟΛ</div>`;
                 }
@@ -3822,9 +3814,9 @@ function displayRoster() {
                     backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CS</div>`;
                     stats.cleanSheetsLog.forEach(log => {
                         backContent += `
-                            <div class="stats-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                                <div class="stats-info-group" style="flex: 1; text-align: left;"><div class="stats-team-name" style="font-weight:700; font-size:0.72rem;">${log.match.replace('vs ', '')}</div></div>
-                                <div class="stats-right-data" style="width:65px; display:flex; flex-direction:column; align-items:flex-end;"><div class="stats-goals-count">🧤✅</div></div>
+                            <div style="position: relative; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: left;">
+                                <div style="font-weight: 700; font-size: 0.7rem; padding-right: 60px;">${log.match.replace('vs ', '')}</div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-weight: 800; color: #2e7d32; font-size: 0.7rem;">🧤✅</div>
                             </div>`;
                     });
                 }
@@ -3844,7 +3836,7 @@ function displayRoster() {
                         </div>
                         <div class="card-back">
                             <div style="position:relative; z-index:10; width:100%; padding: 10px;">
-                                <h4 class="player-name-back">${player.name}</h4>
+                                <h4 style="font-size: 0.9rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; color: var(--primary-color); text-align: center;">${player.name}</h4>
                                 ${backContent}
                             </div>
                         </div>
