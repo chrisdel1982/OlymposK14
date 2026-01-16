@@ -2862,6 +2862,15 @@ window.addEventListener('load', function() {
         
     }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
 });
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "f3dc6a18-326d-4cb9-a216-0930598247df",
+    });
+  });
+</script>
 </script>
 </head>
 <body>
