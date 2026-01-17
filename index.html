@@ -2705,26 +2705,46 @@ table thead th:nth-child(2) {
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-#backToTop:hover {
-    background-color: #fff;
-}
-/* --- MODERN NEW BADGE --- */
-.notification-badge {
-    background: linear-gradient(135deg, #ff0046, #ff4d7e); /* Μοντέρνο κόκκινο degrade */
-    color: white;
-    font-size: 0.55rem;      /* Πολύ μικρά και διακριτικά γράμματα */
-    font-weight: 800;        /* Πολύ έντονα */
-    padding: 2px 5px;        /* Λίγο "αέρα" γύρω γύρω */
-    border-radius: 4px;      /* Ελαφρώς στρογγυλεμένες γωνίες (όχι κύκλος) */
-    margin-left: 6px;
-    vertical-align: middle;  /* Στοίχιση στη μέση της γραμμής */
-    display: none;           /* Κρυφό αρχικά */
-    box-shadow: 0 2px 8px rgba(255, 0, 70, 0.4); /* Λάμψη από κάτω */
-    animation: pulse-badge 2s infinite;
-    letter-spacing: 0.5px;   /* Αραιά γράμματα για στυλ */
-    border: 1px solid rgba(255,255,255,0.2);
+#backToTop {
+    display: none; /* Κρυφό αρχικά */
+    position: fixed;
+    bottom: 25px;       /* Λίγο πιο ψηλά για να μην κολλάει στο τέλος */
+    right: 25px;
+    z-index: 9999;      /* Πάνω από όλα */
+    
+    /* MINIMAL DESIGN - ΤΕΛΕΙΟΣ ΚΥΚΛΟΣ */
+    width: 45px;        /* Σταθερό πλάτος */
+    height: 45px;       /* Σταθερό ύψος */
+    border-radius: 50%; /* Απόλυτος κύκλος */
+    padding: 0;         /* Μηδενικό padding για να κεντράρει σωστά */
+    
+    background-color: var(--accent-color); /* Κίτρινο */
+    color: var(--primary-color);           /* Πράσινο γράμμα */
+    border: none;
+    outline: none;
+    
+    font-size: 1.1rem;  /* Μέγεθος βέλους */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Απαλή σκιά */
+    transition: all 0.3s ease;
+    
+    /* ΚΕΝΤΡΑΡΙΣΜΑ ΤΟΥ ΕΙΚΟΝΙΔΙΟΥ */
+    line-height: 45px;  /* Ίδιο με το ύψος για κάθετο κεντράρισμα */
+    text-align: center;
 }
 
+#backToTop:hover {
+    transform: translateY(-3px); /* Ελαφριά κίνηση προς τα πάνω όταν το ακουμπάς */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* Πιο minimal εμφάνιση στο Dark Mode */
+@media (prefers-color-scheme: dark) {
+    #backToTop {
+        background-color: #ffd700;
+        color: #000;
+    }
+}
 /* Το εφέ που αναβοσβήνει */
 @keyframes pulse-badge {
     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0.7); }
@@ -4350,10 +4370,12 @@ function displayNextMatch() {
     let nextMatch = null;
     let matchType = 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ';
 
+    // 1. Έλεγχος για Εμβόλιμο Αγώνα
     if (data.specialMatch && data.specialMatch.home) {
         nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
         matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
     } else {
+        // 2. Εύρεση επόμενου αγώνα
         for (const round of data.fixtures) {
             const m = round.matches.find(m => (m.home === MY_TEAM || m.away === MY_TEAM) && m.homeScore === null);
             if (m) { nextMatch = m; break; }
@@ -4362,20 +4384,20 @@ function displayNextMatch() {
 
     if (!nextMatch) return;
 
+    // Logic για Live Score
     const isLive = data.liveScore && data.liveScore.active;
-
-let liveMinuteDisplay = "";
-if (isLive) {
-    liveMinuteDisplay = calculateLiveMinute(
-        data.liveScore.startTime, 
-        data.liveScore.half, 
-        data.liveScore.duration
-    );
-}
+    let liveMinuteDisplay = "";
+    if (isLive) {
+        liveMinuteDisplay = calculateLiveMinute(
+            data.liveScore.startTime, 
+            data.liveScore.half, 
+            data.liveScore.duration
+        );
+    }
     
-    // Αν είναι LIVE κρύβουμε την αντίστροφη μέτρηση (display: none)
     const countdownStyle = isLive ? 'display: none;' : 'display: block;';
 
+    // HTML Κάρτας
     container.innerHTML = `
         <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
             <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
@@ -4396,19 +4418,36 @@ if (isLive) {
                             <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${liveMinuteDisplay}</div>
                             <div class="live-badge-pulse">LIVE</div>
                             <div class="live-score-display" style="font-size:2.5rem; font-weight:900; margin:0; color:var(--text-dark);">
-    ${data.liveScore.home || 0} - ${data.liveScore.away || 0}
-</div>
+                                ${data.liveScore.home || 0} - ${data.liveScore.away || 0}
+                            </div>
+                        </div>
                     ` : `<div class="nm-vs">VS</div>`}
                 </div>
 
                 <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
             </div>
             <div class="nm-stadium">🏟️ ${data.matchStadium || ''}</div>
-            <a href="${data.matchMapLink || '#'}" target="_blank" class="nm-footer" style="text-decoration:none;">📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ</a>
+            
+            <div class="nm-footer" style="display: flex; padding: 0; align-items: stretch; height: 50px;">
+                
+                <a href="${data.matchMapLink || '#'}" target="_blank" 
+                   style="flex: 1; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px;">
+                    📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ
+                </a>
+
+                <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 10px 0;"></div>
+
+                <div onclick="openSquadModal('${nextMatch.home}', '${nextMatch.away}', '${data.matchDate}', '${data.matchTime}', '${data.matchStadium}', '${data.matchMapLink}')" 
+                     style="width: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(0,0,0,0.1); transition: background 0.3s;"
+                     onmouseover="this.style.background='rgba(0,0,0,0.2)'" 
+                     onmouseout="this.style.background='rgba(0,0,0,0.1)'">
+                     <i class="fa-solid fa-share-nodes" style="color: white; font-size: 1.4rem;"></i>
+                </div>
+
+            </div>
         </div>
     `;
 
-    // Ξεκινάμε το ρολόι μόνο αν ΔΕΝ είναι Live
     if (!isLive && data.countdownTarget) {
         startCountdown(data.countdownTarget);
     }
@@ -5196,6 +5235,6 @@ function executeShareSquad() {
     }
 }
 </script>
-<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
+<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 </body>
 </html>
