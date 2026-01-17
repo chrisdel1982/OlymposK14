@@ -1,0 +1,5201 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a472a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Όλυμπος FC</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* LIVE SCORE STYLES */
+.live-badge-pulse { 
+    background: #ff0046; color: white; padding: 2px 8px; border-radius: 4px; 
+    font-weight: bold; font-size: 0.8rem; animation: live-pulse 1.5s infinite; margin-bottom: 5px; 
+}
+@keyframes live-pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+.live-score-display { 
+    font-size: 2.8rem; font-weight: 900; color: var(--primary-color); line-height: 1; margin: 10px 0; 
+}
+@media (prefers-color-scheme: dark) { .live-score-display { color: #fff !important; } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a472a;
+            --secondary-color: #2d5a3d;
+            --accent-color: #ffd700;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --fluo-color: #ccff00e9;
+            --bg-light: #f4f4f4;
+            --shadow: rgba(0, 0, 0, 0.2);
+            --accent-dark: #d4af37; /* Πιο σκούρο χρυσό για contrast */
+        }
+
+        body {
+    font-family: 'Inter', sans-serif; 
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: var(--bg-light);
+}
+h1, h2, h3, .card-header h2, nav {
+    font-family: 'Roboto Condensed', sans-serif; /* Condensed μόνο εδώ */
+}
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-light);
+            box-shadow: 0 4px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .club-info {
+            text-align: center;
+        }
+
+        .club-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .club-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+    .player-age {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;    
+    /* ΤΟ ΚΟΛΠΟ ΓΙΑ ΝΑ ΠΑΕΙ ΤΕΡΜΑ ΚΑΤΩ: */
+    margin-top: auto !important; /* Σπρώχνει το στοιχείο στο τέλος της κάρτας */
+        /* Λίγο "αέρα" από τον πάτο της κάρτας για να μην ακουμπάει */
+    padding-bottom: 5px; 
+    width: 100%;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 1rem;
+    background: white;
+    border-radius: 4px;
+    border-top: none; /* Αφαιρέσαμε το μωβ που βάλαμε πριν */
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px; /* Λίγο μεγαλύτερο για να χωράει η φόρμα */
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+th {
+    background: white;
+    color: #888;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    font-weight: 400;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Στοίχιση αριστερά για Ομάδα */
+th:nth-child(2), td:nth-child(2) {
+    text-align: left;
+    padding-left: 0.5rem;
+}
+
+td {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* Έντονα γράμματα για το όνομα της ομάδας */
+td:nth-child(2) {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Αν θέλεις να ξεχωρίζει ελάχιστα μόνο το κείμενο */
+.my-team td:nth-child(2) {
+    color: var(--text-dark); 
+}
+
+/* --- STICKY COLUMNS (FINAL FIX) --- */
+/* 1η Στήλη: Θέση (#) */
+table th:nth-child(1),
+table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    
+    /* Σταθερό πλάτος */
+    width: 40px !important;     
+    min-width: 40px !important; 
+    max-width: 40px !important;
+    
+    background-color: #ffffff; 
+    border-right: 1px solid #eee; /* Λεπτή διαχωριστική γραμμή */
+    box-sizing: border-box;
+}
+
+/* 2η Στήλη: Ομάδα */
+table th:nth-child(2),
+table td:nth-child(2) {
+    position: sticky;
+    left: 39px; 
+    z-index: 20;
+    background-color: #ffffff;
+    border-right: 1px solid #ddd; 
+    box-shadow: none !important; /* Σβήσαμε τη σκιά */
+}
+
+/* Header πάντα από πάνω */
+table thead th:nth-child(1),
+table thead th:nth-child(2) {
+    z-index: 30;
+}
+/* --- ΧΡΩΜΑΤΙΣΤΕΣ ΜΠΑΡΕΣ (INDICATORS - FLOATING STYLE) --- */
+/* Το κελί της θέσης χρειάζεται relative για να τοποθετηθεί η μπάρα μέσα του */
+.pos-cell {
+    position: relative;
+    padding-left: 1.2rem !important; /* Χώρος για να μην πέφτει ο αριθμός πάνω στην μπάρα */
+}
+
+/* Δημιουργία της μπάρας (Το σχήμα) */
+.pos-cell::before {
+    content: '';
+    position: absolute;
+    left: 4px; /* Απόσταση από την αριστερή άκρη */
+    top: 50%;
+    transform: translateY(-50%); /* Κεντράρισμα κάθετα */
+    width: 4px; /* Πάχος μπάρας */
+    height: 22px; /* Ύψος μπάρας (μικρότερο από το κελί για να μοιάζει με την Premier League) */
+    border-radius: 4px; /* Στρογγυλεμένες γωνίες */
+    background-color: transparent; /* Αόρατο αν δεν έχει κλάση χρώματος */
+}
+
+/* Ορισμός Χρωμάτων */
+.indicator-green::before { background-color: #006400; } /* 1ος - Σκούρο Πράσινο */
+.indicator-blue::before { background-color: #00daff; }  /* 2ος & 3ος - Μπλε */
+.indicator-red::before { background-color: #ff0046; }   /* Τελευταίοι - Κόκκινο */
+/* --- FORM BADGES (Κυκλάκια) --- */
+.form-container {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.form-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.form-win { background: #006400; color: white; }
+.form-draw { background: #e5e5e5; color: #333; } /* Γκρι - Ισοπαλία */
+.form-loss { background: #ff0046; color: white; } /* Κόκκινο - Ήττα */
+.form-none { background: transparent; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* Διόρθωση για το κουτί του σκορ στα κινητά */
+    .match-score-box {
+        padding: 0.2rem 0.5rem !important; /* Πολύ λιγότερο "φούσκωμα" */
+        min-width: 40px !important;       /* Μικρότερο ελάχιστο πλάτος */
+        font-size: 0.9rem !important;     /* Πιο διακριτικά γράμματα */
+        letter-spacing: 0 !important;     /* Πιο κοντά οι αριθμοί */
+    }
+
+    table { min-width: 100%; }
+}
+/* --- Match Display (New Grouped Style) --- */
+.round-section {
+    margin-bottom: 2rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.round-header {
+    background: #f8f8f8;
+    padding: 0.8rem 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.match-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.match-row:last-child {
+    border-bottom: none;
+}
+
+.team-left {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.team-right {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Τα κουτάκια του σκορ */
+.match-score-box {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    min-width: 70px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.match-vs-box {
+    background: #eee;
+    color: #666;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* --- FIX ΓΙΑ ΤΟ ΚΟΥΜΠΙ ΑΝΑΒΟΛΗΣ --- */
+.postponed-badge {
+    background: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+    
+    /* ΝΕΕΣ ΔΙΑΣΤΑΣΕΙΣ (ΙΔΙΕΣ ΜΕ ΤΟ ΣΚΟΡ) */
+    height: 24px !important;       /* Ίδιο ύψος με το σκορ */
+    padding: 0 6px !important;     /* Μικρό περιθώριο */
+    font-size: 0.7rem !important;  /* Μικρά γράμματα για να χωράει */
+    border-radius: 4px;
+    font-weight: 700;
+    display: inline-flex;          /* Για κεντράρισμα */
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;           /* Να μην σπάει η λέξη */
+}
+
+/* DARK MODE FIX ΓΙΑ ΑΝΑΒΟΛΗ */
+@media (prefers-color-scheme: dark) {
+    .postponed-badge {
+        background: #3e2723 !important; /* Πολύ σκούρο κόκκινο φόντο */
+        color: #ff8a80 !important;      /* Ανοιχτό κόκκινο γράμμα */
+        border-color: #d32f2f !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .match-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    .team-left, .team-right {
+        text-align: center;
+    }
+}
+
+      /* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE) --- */
+
+        .roster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
+.player-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    overflow: visible;
+}
+
+        /* Η χρυσή μπάρα στο πάνω μέρος της κάρτας */
+        .player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    z-index: 2;
+}
+/* --- ΝΕΟ ΣΤΥΛ ΚΑΡΤΑΣ ΠΑΙΚΤΗ (FIFA STYLE - CLEAN) --- */
+.roster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0.5rem;
+}
+
+.player-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent; /* Αόρατο περίγραμμα αρχικά */
+    
+    /* ΣΗΜΑΝΤΙΚΟ: Κόβει οτιδήποτε εξέχει από τις γωνίες */
+    overflow: hidden; 
+}
+
+/* Η πράσινη μπάρα στο πάνω μέρος (ΜΕΙΩΜΕΝΗ & ΚΕΝΤΡΑΡΙΣΜΕΝΗ) */
+.player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%; 
+    transform: translateX(-50%); /* Το φέρνει ακριβώς στο κέντρο */
+    
+    /* Την μειώσαμε στο 50% του πλάτους αντί για 100% */
+    width: 80%; 
+    height: 4px; 
+    
+    background: var(--primary-color);
+    
+    /* Στρογγυλεύουμε τις κάτω γωνίες της γραμμής για στυλ */
+    border-radius: 0 0 6px 6px; 
+    z-index: 2;
+}
+
+/* Εφέ όταν περνάει το ποντίκι από πάνω */
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    border-color: var(--accent-color); /* Εμφάνιση κίτρινου περιγράμματος */
+}
+
+/* ΦΑΝΕΛΑ ΤΟΥ ΠΑΙΚΤΗ */
+/* --- FINAL KIT: VERTICAL BADGE & HIGH COACH TEXT --- */
+
+/* 1. ΒΑΣΙΚΟ ΚΟΥΤΙ */
+.player-photo {
+    width: 150px;
+    height: 130px;
+    margin: 0 auto 0.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: flex-start; /* Στοίχιση ΟΛΩΝ προς τα πάνω */
+    padding-top: 8px;
+    z-index: 1;
+    
+    background: transparent !important; 
+    border: none !important;
+    box-shadow: none !important;
+    
+    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.25));
+    flex-shrink: 0; /* Απαγορεύει στη φανέλα να μικρύνει */
+}
+
+/* 2. ΣΧΗΜΑ ΦΑΝΕΛΑΣ & ΥΦΗ */
+.player-photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: var(--fluo-color); 
+    
+    /* Κάθετες ρίγες */
+    background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+
+    /* ΣΧΗΜΑ */
+    clip-path: polygon(
+        22% 0%, 78% 0%,      /* Λαιμός */
+        100% 25%,            /* Δεξιός Ώμος έξω */
+        90% 50%,             /* Δεξί Μανίκι τέλος */
+        80% 42%,             /* Δεξιά Μασχάλη */
+        80% 100%,            /* Δεξιά Πλευρά Κάτω */
+        20% 100%,            /* Αριστερή Πλευρά Κάτω */
+        20% 42%,             /* Αριστερή Μασχάλη */
+        10% 50%,             /* Αριστερό Μανίκι τέλος */
+        0% 25%               /* Αριστερός Ώμος έξω */
+    );
+    z-index: -1;
+}
+
+/* ΓΙΑΚΑΣ */
+.player-photo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 12px;
+    background-color: #000000;
+    border-radius: 0 0 30px 30px;
+    z-index: 0;
+}
+
+/* ΟΝΟΜΑ ΟΜΑΔΑΣ */
+.jersey-team-name {
+    font-size: 1rem; 
+    font-weight: 800;
+    color: #000000; 
+    z-index: 5;
+    font-family: 'Roboto Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+    margin-bottom: 4px; 
+}
+
+/* ΑΡΙΘΜΟΣ */
+.player-number {
+    font-family: 'Impact',sans-serif; 
+    font-weight: 400;
+    color: #000000; 
+    
+    font-size: 3.5rem; 
+    transform: scaleY(1.3); 
+    
+    line-height: 1;
+    margin-top: 2px;
+    letter-spacing: 3px; 
+    
+    z-index: 15;
+    text-shadow: none;
+}
+
+/* --- CAPTAIN BADGE (ΔΙΟΡΘΩΜΕΝΗ ΘΕΣΗ ΣΤΟ ΜΑΝΙΚΙ) --- */
+.captain-badge {
+    position: absolute;
+    
+    /* Θέση (όπως τη ρύθμισες και σου άρεσε) */
+    top: 60px;    
+    right: -5px;   
+    left: auto;   
+    /* Διαστάσεις */
+    width: 15px;
+    height: 32px; /* Λίγο πιο κοντό για να μην εξέχει */
+    
+    background-color: #ff0000;
+    color: #000000;
+   /* Κεντράρισμα του γράμματος στη μέση της λωρίδας */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+    
+    /* Μέγεθος γραμματοσειράς */
+    font-size: 0.7rem; 
+    font-weight: 900;
+    font-family: 'Roboto Condensed', sans-serif;
+    
+    /* Εφέ */
+    box-shadow: -1px 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.2); /* Μικρή σκιά στο γράμμα για να ξεχωρίζει */
+    
+    transform: rotate(30deg) !important; 
+    z-index: 20;
+}
+
+/* --- ΠΡΟΠΟΝΗΤΗΣ (COACH - ΨΗΛΑ) --- */
+.coach-photo-bg {
+    background: transparent !important;
+}
+
+.coach-photo-bg::before {
+    background-color: #117f0dd8 !important; 
+    background-image: none !important;
+}
+
+
+.coach-photo-bg .jersey-team-name {
+    display: none;
+}
+
+.coach-photo-bg .player-number {
+    font-family: 'Roboto Condensed', sans-serif !important; /* Όχι Impact */
+    font-size: 1.0rem !important; /* ΜΙΚΡΑ ΓΡΑΜΜΑΤΑ */
+    font-weight: 700 !important;
+    color: #000000 !important;
+    transform: none !important; /* Όχι τέντωμα */
+    letter-spacing: 1px !important;
+    
+    /* Τοποθέτηση ψηλά */
+    margin-top: 10px !important; 
+    margin-bottom: auto !important;
+    text-shadow: none !important;
+}
+
+/* Θέση Παίκτη */
+.player-position {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.8rem; /* Λίγο πιο φαρδύ */
+    background: rgba(255, 215, 0, 0.15);
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 600;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    line-height: 1.2;
+    
+    /* Η ΑΛΛΑΓΗ ΓΙΑ ΤΟ ΚΕΝΟ: */
+    margin-top: 15px !important; /* Αέρας από το όνομα */
+    margin-bottom: 5px;
+}
+    
+
+        .player-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            opacity: 0.8; 
+            transition: opacity 0.3s;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        /* News Items Styles */
+        #newsContainer {
+            margin-top: 1.5rem;
+        }
+
+       .news-item {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid var(--primary-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.news-item.collapsed .news-content,
+.news-item.collapsed .news-image {
+    display: none;
+}
+
+.news-toggle {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.news-item.collapsed .news-toggle {
+    transform: rotate(-90deg);
+}
+        
+
+        .news-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 1.5rem;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .news-content {
+            color: var(--text-dark);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+.news-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 1rem;
+    border: 2px solid #ddd;
+}
+        .no-news {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .btn-success {
+            background: #2e7d32;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .btn-warning {
+            background: #f57c00;
+        }
+
+        .btn-warning:hover {
+            background: #e65100;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Admin link styling */
+        .admin-link {
+            opacity: 0.6;
+            font-size: 1.1rem !important;
+            padding: 1rem 1.5rem !important;
+        }
+
+        .admin-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            margin: auto;
+        }
+
+        .modal-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content h3 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+.match-input-row {
+    display: grid;
+    grid-template-columns: 1fr 140px 1fr; /* Μεγαλώσαμε τη μέση για να χωρέσει το checkbox */
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+.score-inputs-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-inputs {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-input {
+    width: 50px !important;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 5px !important;
+}
+
+/* Στυλ για το checkbox Αναβλήθηκε */
+.postpone-label {
+    font-size: 0.8rem;
+    color: #d32f2f;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.postpone-label input {
+    width: auto !important; /* Επαναφορά μεγέθους για το checkbox */
+    margin: 0;
+}
+
+      /* --- ΒΕΛΤΙΩΜΕΝΑ ΚΟΥΜΠΙΑ ADMIN (IMPORT & PHOTO) --- */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            
+            /* ΙΔΙΕΣ ΔΙΑΣΤΑΣΕΙΣ ΜΕ ΤΟ ΚΟΥΜΠΙ EXPORT (.btn) */
+            padding: 0.8rem 1.1rem!important;  
+            font-size: 0.95rem;      
+            border-radius: 5px;
+            line-height: 1.1 !important;
+            width: fit-content !important;
+            
+            background: var(--primary-color);
+            color: #ffffff !important; /* Άσπρα γράμματα ΠΑΝΤΑ */
+            
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            margin: 0 !important;
+        }
+
+        .file-input-label:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            color: #ffffff !important;
+        }
+
+        /* --- ΡΥΘΜΙΣΕΙΣ ΓΙΑ ΚΙΝΗΤΑ (ΜΕΓΑΛΑ & ΚΕΝΤΡΑΡΙΣΜΕΝΑ) --- */
+        @media (max-width: 768px) {
+            .file-input-wrapper {
+                width: 100% !important;
+                margin-top: 5px;
+                display: block !important;
+            }
+
+            .file-input-label {
+                width: 100% !important;        /* Πιάνει όλο το πλάτος */
+                justify-content: center !important; /* Κεντράρισμα κειμένου */
+                text-align: center !important;
+                display: flex !important;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .roster-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.5rem;
+        }
+
+        .roster-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: #f9f9f9;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+        }
+
+        .roster-item:hover {
+            background: #f0f0f0;
+        }
+/* --- Announcement Ticker Styles (NEO) --- */
+        #announcement-ticker {
+            background: var(--accent-color);
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.6rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none; /* Κρυφό αρχικά - Εμφανίζεται με JS αν υπάρχει κείμενο */
+        }
+
+        #announcement-text {
+            display: inline-block;
+            padding-left: 100%; /* Το σπρώχνει έξω από την οθόνη δεξιά */
+            animation: marquee-scroll 25s linear infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        /* --- End Ticker Styles --- */
+        @media print {
+            body {
+                background: white;
+            }
+
+            header nav,
+            .action-buttons,
+            #results,
+            #fixtures,
+            #roster, 
+            #announcement-ticker{
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .card {
+                box-shadow: none;
+                padding: 1rem;
+                page-break-inside: avoid;
+            }
+
+            .card-header {
+                border-bottom: 2px solid #000;
+            }
+
+            table {
+                min-width: 100%;
+            }
+
+            th {
+                background: #1a472a !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .my-team {
+                background: #fff9c4 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            tr:nth-child(even) {
+                background: #f5f5f5 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+        #announcement-ticker {
+                font-size: 0.8rem;
+                padding: 0.5rem 0;
+            }
+            .header-top {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 10px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                border: 3px solid var(--accent-color);
+            }
+
+            .club-info h1 {
+                font-size: 1.4rem;
+                line-height: 1.2;
+                margin-bottom: 0.2rem;
+            }
+
+            .club-info p {
+                font-size: 0.8rem;
+            }
+
+            nav ul {
+                flex-direction: row;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+                gap: 0;
+            }
+
+            nav ul li {
+                flex-shrink: 0;
+            }
+
+            nav ul li a {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+
+            .admin-link {
+                font-size: 1rem !important;
+                padding: 0.8rem 1rem !important;
+                opacity: 0.7;
+            }
+
+            .container {
+                padding: 0 0.5rem;
+                margin: 1rem auto;
+            }
+
+            .card {
+                padding: 1rem 0.5rem;
+                margin: 1rem 0;
+                border-radius: 8px;
+            }
+
+            /* Για τα tables, δώσε ακόμα λιγότερο padding */
+            #standings .card,
+            #results .card,
+            #fixtures .card {
+                padding: 1rem 0;
+            }
+
+            #standings .card-header,
+            #results .card-header,
+            #fixtures .card-header {
+                padding: 0 0.5rem;
+                position: relative;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .card h2 {
+                font-size: 1.3rem;
+            }
+
+            .table-wrapper {
+                margin-top: 0.5rem;
+                border-radius: 8px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                /* Hint για touch scrolling */
+                cursor: grab;
+            }
+
+            .table-wrapper:active {
+                cursor: grabbing;
+            }
+
+            table {
+                font-size: 0.85rem;
+                min-width: 650px;
+            }
+
+            th, td {
+                padding: 0.6rem 0.4rem;
+            }
+
+            th {
+                font-size: 0.7rem;
+            }
+
+            td:first-child {
+                font-size: 0.9rem;
+            }
+
+            .team-position {
+                font-size: 0.8rem;
+            }
+
+            .points {
+                font-size: 1rem;
+            }
+
+            .match {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 0.5rem;
+                padding: 1rem;
+                margin: 0.8rem 0;
+            }
+
+            .team-left,
+            .team-right {
+                text-align: center;
+                font-size: 0.9rem;
+                padding: 0.3rem;
+            }
+
+            .score {
+                font-size: 1.2rem;
+                padding: 0.5rem;
+            }
+
+            .vs {
+                font-size: 0.8rem;
+            }
+
+            .modal {
+                padding: 0.5rem;
+            }
+
+            .modal-content {
+                padding: 1.2rem;
+                width: 95%;
+                max-width: 95vw;
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+
+            .modal-content h2 {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .modal-content h3 {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
+
+            .form-group label {
+                font-size: 0.85rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 0.9rem;
+                padding: 0.6rem;
+            }
+
+            .match-input-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding: 0.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .score-inputs {
+                justify-content: center;
+            }
+
+            .score-input {
+                width: 60px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .action-buttons .btn,
+            .modal-buttons .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .roster-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .player-card {
+        padding: 0.8rem;
+    }
+
+    .player-photo {
+        width: 90px;
+        height: 110px;
+        padding-top: 20px;
+    }
+    
+    .player-number {
+        font-size: 2rem;
+    }
+}
+
+    .player-name {
+        font-size: 0.95rem;
+        /* ΤΟ ΚΟΛΠΟ ΓΙΑ ΤΙΣ 2 ΓΡΑΜΜΕΣ: */
+    white-space: normal !important; /* Επιτρέπει αλλαγή γραμμής */
+    word-spacing: 999px;            /* Αναγκάζει κάθε λέξη να πάει σε νέα γραμμή! */
+    line-height: 1.2;               /* Σωστό κενό ανάμεσα στις γραμμές */
+    
+    /* ΚΛΕΙΔΩΜΑ ΥΨΟΥΣ (Για να είναι όλες οι κάρτες ίσες) */
+    min-height: 2.4em;              /* Πιάνει χώρο για 2 γραμμές ούτως ή άλλως */
+    display: flex;
+    align-items: center;            /* Κεντράρισμα κάθετα */
+    justify-content: center;        /* Κεντράρισμα οριζόντια */
+    text-align: center;
+    z-index: 10;
+    }
+
+   .player-position {
+        font-size: 0.55rem !important; /* ΗΤΑΝ 0.65rem -> ΤΟ ΚΑΝΑΜΕ 0.55rem */
+        padding: 0.1rem 0.4rem !important; /* Λιγότερο "φούσκωμα" γύρω γύρω */
+        line-height: 1.1 !important; /* Πιο κοντά οι γραμμές αν σπάει σε 2η σειρά */
+        margin-top: 2px;
+    }
+/* --- MOBILE FIXES ΓΙΑ ΤΗ ΦΑΝΕΛΑ & BADGE --- */
+    
+    /* 1. Προσαρμογή του σήματος Αρχηγού για μικρή φανέλα */
+    .captain-badge {
+        top: 20px !important;    /* Το ανεβάζουμε πιο ψηλά (ήταν 55px) */
+        right: 2px !important;  /* Το φέρνουμε πιο κοντά */
+        width: 8px !important;   /* Το κάνουμε πιο στενό */
+        height: 25px !important; /* Το κάνουμε πιο κοντό */
+    }
+
+    /* 2. Προσαρμογή Ονόματος Ομάδας */
+    .jersey-team-name {
+        font-size: 0.4rem !important; /* Πολύ μικρά γράμματα για να χωράνε */
+        margin-top: 5px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* 3. Προσαρμογή Αριθμού */
+    .player-number {
+        font-size: 2.2rem !important; /* Μικραίνουμε τον αριθμό */
+        margin-top: 0 !important;
+        transform: scaleY(1.2) !important; /* Λίγο λιγότερο τέντωμα */
+    }
+
+    /* 4. Μικροδιορθώσεις στη φανέλα του κινητού */
+    .player-photo {
+        width: 100px !important;  /* Λίγο πιο φαρδιά από 90px για να αναπνέει */
+        height: 90px !important;
+        padding-top: 5px !important;
+    }
+    
+    /* Διόρθωση γιακά στα κινητά */
+    .player-photo::after {
+        width: 35px !important;
+        height: 8px !important;
+    }
+            /* Νέα - Ειδήσεις mobile styling */
+            .news-item {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .news-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .news-title {
+                font-size: 1.2rem;
+                line-height: 1.3;
+            }
+
+            .news-date {
+                font-size: 0.75rem;
+            }
+
+            .news-content {
+                font-size: 0.9rem;
+                line-height: 1.65;
+            }
+
+            /* Roster List in Admin */
+            .roster-item {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .roster-item button {
+                align-self: flex-end;
+            }
+
+            /* Better button styling */
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1rem;
+            }
+
+            .btn-small {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.8rem;
+            }
+
+            /* File input wrapper */
+            .file-input-wrapper {
+                width: 100%;
+            }
+
+            .file-input-label {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+
+            /* Scrollbar για horizontal scroll */
+            .table-wrapper::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .table-wrapper::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+
+            .table-wrapper::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: 4px;
+            }
+
+            /* Navigation scrollbar */
+            nav ul::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            nav ul::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            nav ul::-webkit-scrollbar-thumb {
+                background: var(--accent-color);
+                border-radius: 2px;
+            }
+              /* Next Match mobile fixes */
+    .nm-header {
+        flex-direction: column !important;
+        gap: 0.3rem !important;
+        padding: 0.8rem 0.5rem !important;
+        text-align: center;
+    }
+    
+    .nm-header span {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Ο τίτλος του αγώνα να μπορεί να σπάει σε 2 γραμμές */
+    .nm-header span:nth-child(2) {
+        font-size: clamp(0.7rem, 3.5vw, 0.9rem) !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+    
+    .nm-body { 
+        flex-direction: column; 
+        gap: 0.5rem; 
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .nm-team { 
+        text-align: center !important; 
+        font-size: 1.2rem !important; 
+    }
+        }
+
+        /* Extra small devices (phones < 375px) */
+        @media (max-width: 375px) {
+	#announcement-ticker {
+                font-size: 0.75rem;
+            }            
+	.club-info h1 {
+                font-size: 1.1rem;
+            }
+
+            .club-info p {
+                font-size: 0.7rem;
+            }
+
+            nav ul li a {
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            table {
+                font-size: 0.7rem;
+            }
+
+            th, td {
+                padding: 0.4rem 0.25rem;
+            }
+
+            .card {
+                padding: 0.8rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .score-input {
+                width: 50px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* --- Mobile Fix για Φόρμα --- */
+@media (max-width: 768px) {
+    .form-container {
+        display: flex !important; /* Εμφάνιση της φόρμας */
+        gap: 2px; /* Μικρότερο κενό μεταξύ τους */
+    }
+
+    .form-badge {
+        width: 18px;  /* Πιο μικρά κυκλάκια */
+        height: 18px;
+        font-size: 0.6rem; /* Μικρότερα γράμματα */
+    }
+}
+/* Νέο στυλ για τους τίτλους των θέσεων στο Ρόστερ */
+.roster-category-title {
+    width: 100%;
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    clear: both; /* Για σιγουριά */
+}
+
+/* Διόρθωση: Το rosterContainer δεν πρέπει να είναι grid πια, 
+   αλλά να περιέχει grids */
+#rosterContainer {
+    display: block !important; /* Σημαντικό για να σπάσει το παλιό grid */
+}
+/* --- TOP SCORERS STYLES (FINAL - BALL BADGE) --- */
+.scorers-list {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-top: 1px solid #eee;
+}
+
+.scorer-row {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.scorer-header {
+    background: #f9f9f9;
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.6rem 0.5rem;
+}
+
+/* 1η Στήλη: Θέση (#) */
+.col-rank {
+    width: 40px;
+    text-align: center;
+    flex-shrink: 0;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #000;
+}
+
+/* 2η Στήλη: Όνομα (Συντομευμένο) */
+.col-name {
+    flex: 1;
+    padding-left: 10px;
+    text-align: left;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* 3η Στήλη: Γκολ (Κεντραρισμένη) */
+.col-goals {
+    width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Χρώματα μεταλλίων */
+.rank-1 { color: #ffd900c8; text-shadow: 1px 1px 0 rgba(0,0,0,0.1); font-size: 1.1rem; } 
+.rank-2 { color: #696a6b; font-size: 1.1rem; } 
+.rank-3 { color: #d84215c7; font-size: 1.1rem; }
+
+/* --- ΤΟ ΝΕΟ ΣΤΥΛ ΓΙΑ ΤΗΝ ΜΠΑΛΑ --- */
+.goals-badge {
+    /* Σχήμα & Μέγεθος */
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Απόλυτος κύκλος */
+    
+    /* Εμφάνιση Μπάλας */
+    background: radial-gradient(circle at 35% 35%, #ffffff, #e6e6e6); /* 3D εφέ λευκού */
+    border: 2px solid #222; /* Σκούρο περίγραμμα */
+    color: #000; /* Μαύρο χρώμα αριθμού */
+    
+    /* Κεντράρισμα Αριθμού */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    }
+    /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ ΚΟΥΤΑΚΙ ΤΩΝ ΓΚΟΛ (ADMIN) --- */
+.goal-control {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin-right: 10px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important; /* Σημαντικό: Να μην πιάνει 100% */
+}
+
+.goal-btn {
+    width: 35px !important;
+    height: 35px !important;
+    background: #e0e0e0 !important;
+    border: 1px solid #999 !important;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-radius: 4px 0 0 4px !important; /* Γωνίες αριστερά */
+}
+
+.goal-btn:last-child {
+    border-radius: 0 4px 4px 0 !important; /* Γωνίες δεξιά */
+}
+
+.goal-display {
+    width: 50px !important; /* ΣΤΑΘΕΡΟ ΠΛΑΤΟΣ */
+    height: 35px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    border-top: 1px solid #999 !important;
+    border-bottom: 1px solid #999 !important;
+    border-left: none !important;
+    border-right: none !important;
+    background: white !important;
+    font-size: 1.1rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+/* --- LA LIGA STYLE BANNER (FINAL FIX) --- */
+.next-match-card {
+    background: #ffffff;
+    border: 1px solid #ccc; /* Γκρι περίγραμμα */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    font-family: 'Roboto Condensed', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+/* ΚΕΝΤΡΟ: Ομάδες */
+.nm-body {
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nm-team {
+    flex: 1;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 1.2;
+}
+
+.nm-team.home { text-align: right; }
+.nm-team.away { text-align: left; }
+.nm-team.my-team { color: var(--primary-color); }
+
+.nm-vs {
+    font-size: 1.2rem;
+    color: #999;
+    font-weight: 300;
+}
+
+/* ΓΗΠΕΔΟ */
+.nm-stadium {
+    text-align: center;
+    color: #555;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* ΚΑΤΩ ΜΠΑΡΑ: WHERE TO GO */
+.nm-footer {
+    display: block;
+    width: 100%;
+    background: var(--primary-color); /* Πράσινο φόντο */
+    color: white !important;
+    text-align: center;
+    padding: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.nm-footer:hover { opacity: 0.9; }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .nm-body { flex-direction: column; gap: 0.5rem; }
+    .nm-team { text-align: center !important; font-size: 1.3rem; }
+}
+/* --- MOBILE MENU STYLES --- */
+
+/* Το κουμπί Hamburger (αρχικά κρυμμένο στα PC) */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 15px; /* Προσαρμογή ανάλογα με το ύψος της μπάρας */
+    z-index: 1100;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white; /* Άσπρες γραμμές */
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- MOBILE STYLES (LEFT ALIGN & SMALLER) --- */
+        @media (max-width: 768px) {
+            /* Το κουμπί (Χ) μένει πάνω δεξιά */
+            .hamburger { 
+                display: block;
+                position: fixed;
+                top: 25px;
+                right: 20px;
+                z-index: 1200;
+            }
+
+            /* Καθαρίζουμε την μπάρα */
+            nav {
+                background: transparent;
+                position: static;
+                min-height: 0;
+                padding: 0;
+            }
+
+            /* ΤΟ ΜΕΝΟΥ */
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                background-color: var(--primary-color);
+                width: 100%;
+                height: 100vh;
+                
+                /* ΑΛΛΑΓΗ: Στοίχιση Αριστερά */
+                justify-content: flex-start; /* Ξεκινάει από πάνω */
+                align-items: flex-start;     /* Κολλάει αριστερά */
+                padding-top: 100px;          /* Αφήνουμε κενό πάνω για να μην πέφτει στο Χ */
+                padding-left: 40px;          /* Κενό από τα αριστερά της οθόνης */
+                
+                transition: 0.4s ease;
+                z-index: 1050;
+            }
+
+            .nav-menu.active { left: 0; }
+
+            .nav-menu li { 
+                width: 100%; 
+                text-align: left;
+                margin: 0; 
+            }
+            
+            .nav-link {
+                padding: 10px 0; /* Μικρότερα κενά πάνω-κάτω */
+                font-size: 1.2rem; /* ΑΛΛΑΓΗ: Πιο μικρά γράμματα (ήταν 1.5rem) */
+                font-weight: 600;  /* Λίγο πιο έντονα για να διαβάζονται */
+                display: block;
+                color: rgba(255,255,255,0.9);
+                border-bottom: 1px solid rgba(255,255,255,0.1); /* Λεπτή γραμμή από κάτω */
+                width: 85%; /* Η γραμμή να μην πηγαίνει μέχρι τέρμα δεξιά */
+            }
+
+            /* Ειδικά για το γρανάζι του Admin */
+            .admin-link {
+                font-size: 1.4rem; /* Λίγο μεγαλύτερο το εικονίδιο */
+                border-bottom: none; /* Χωρίς γραμμή από κάτω */
+                margin-top: 10px;
+            }
+
+            /* Εφέ "Χ" στο κουμπί */
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        }
+        /* --- ΤΕΛΙΚΗ ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ ΜΕΝΟΥ (ΜΟΝΟ ΚΙΤΡΙΝΑ ΓΡΑΜΜΑΤΑ) --- */
+@media (max-width: 768px) {
+    .nav-link:hover, .nav-link.active {
+        background: transparent !important; /* Όχι φόντο */
+    }
+}
+/* --- CLEANEST MENU (Χωρίς καμία γραμμή) --- */
+@media (max-width: 768px) {
+    /* Αφαιρεί τη γραμμή από όλα τα λινκ */
+    .nav-link {
+        border-bottom: none !important;
+    }
+
+    /* Ρυθμίζει την εμφάνιση όταν πατάς (Μόνο κίτρινα γράμματα, τίποτα άλλο) */
+    .nav-link:hover, .nav-link.active {
+        border-bottom: none !important;
+        background: transparent !important;
+    }
+}
+/* --- NEXT MATCH HEADER LAYOUT FIX (FINAL CORRECTED) --- */
+.nm-header {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    align-items: center !important; 
+    align-content: center !important;
+    justify-content: space-between !important;
+    gap: 8px; 
+    min-height: 40px; 
+}
+
+/* 1. ΗΜΕΡΟΜΗΝΙΑ (HTML Child 1) -> ΤΕΡΜΑ ΑΡΙΣΤΕΡΑ */
+.nm-header span:nth-child(1) {
+    grid-column: 1; /* Πρώτη στήλη */
+    text-align: left;
+    justify-self: start;
+    
+    /* Εξασφάλιση ότι το εικονίδιο και το κείμενο είναι ευθυγραμμισμένα */
+    display: flex;
+    align-items: center;
+    gap: 4px; 
+}
+
+/* 2. ΤΙΤΛΟΣ (HTML Child 2) -> ΚΕΝΤΡΟ */
+.nm-header span:nth-child(2) {
+    grid-column: 2; /* Μεσαία στήλη */
+    text-align: center;
+    justify-self: center;
+    line-height: 1.1; /* Για να μην "ανοίγει" πολύ αν έχει 2 γραμμές */
+}
+
+/* 3. ΩΡΑ (HTML Child 3) -> ΤΕΡΜΑ ΔΕΞΙΑ */
+.nm-header span:nth-child(3) {
+    grid-column: 3; /* Τρίτη στήλη */
+    text-align: right;
+    justify-self: end;
+    
+    /* Ευθυγράμμιση εικονιδίου και ώρας */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Τα σπρώχνει δεξιά */
+    gap: 4px;
+}
+
+/* --- MOBILE ADJUSTMENTS (Διατηρούμε το Layout) --- */
+@media (max-width: 768px) {
+    .nm-header {
+        padding: 8px 5px !important;
+        gap: 5px !important;
+    }
+
+    .nm-header span:nth-child(1),
+    .nm-header span:nth-child(3) {
+        font-size: 0.75rem !important; /* Πιο μικρά για να χωράνε */
+    }
+
+    /* Ο τίτλος στη μέση */
+    .nm-header span:nth-child(2) {
+        font-size: 0.85rem !important;
+        max-width: 160px; /* Περιορισμός για να μην καβαλάει τα άκρα */
+        white-space: normal !important; /* Επιτρέπουμε αλλαγή γραμμής */
+    }
+}
+
+/* --- ΧΡΩΜΑΤΑ ΓΙΑ ΕΜΒΟΛΙΜΟ (LIGHT MODE) --- */
+.nm-header.special-match {
+    color: #000000 !important; /* Μαύρα γράμματα στο κίτρινο */
+}
+/* --- DARK MODE FIXES (FINAL V3.1 - GOLD EDITION) --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #121212;
+        --text-dark: #e0e0e0;
+    }
+
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    /* Κάρτες και γενικά κουτιά */
+    .card, .modal-content, .table-wrapper, .round-section, .next-match-card {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+    }
+    
+    /* Τίτλοι */
+    h1, h2, h3, .card h2, .news-title {
+        color: #ffffff !important;
+    }
+
+    /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΝΕΑ (NEWS) & ROSTER LIST --- */
+    .news-item, .roster-item {
+        background-color: #252525 !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+    .news-date { color: #aaa !important; }
+    .news-content { color: #ddd !important; }
+
+    /* --- NEXT MATCH --- */
+    .nm-header {
+        background-color: #333 !important;
+        color: #fff !important;
+        border-bottom: 1px solid #444 !important;
+    }
+    .nm-team { color: #ffffff !important; }
+    .nm-team.my-team { color: #4caf50 !important; } /* Φωτεινό πράσινο */
+    .nm-vs, .nm-stadium { color: #aaa !important; }
+
+    /* --- ΣΚΟΡΕΡ --- */
+    .col-rank { color: #fff !important; } 
+    .col-rank.rank-1 { color: #ffeb3b !important; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    .col-rank.rank-2 { color: #e0e0e0 !important; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+    .col-rank.rank-3 { color: #ffab40 !important; text-shadow: 0 0 5px rgba(205, 127, 50, 0.5); }
+    
+    .col-name { color: #eee !important; }
+    .scorer-header { background-color: #2a2a2a !important; color: #aaa !important; }
+
+    .goals-badge {
+        background: #333 !important;
+        color: #fff !important;
+        border: 2px solid #555 !important;
+        box-shadow: none !important;
+    }
+
+    /* --- STICKY COLUMNS DARK MODE --- */
+    table td:nth-child(1),
+    table td:nth-child(2) {
+        background-color: #1e1e1e !important;
+        border-right: 1px solid #333; 
+        box-shadow: none !important; 
+    }
+    table th:nth-child(1),
+    table th:nth-child(2) {
+        background-color: #333 !important;
+        border-right: 1px solid #444;
+        box-shadow: none !important;
+    }
+
+    /* --- ΓΕΝΙΚΑ --- */
+    /* TICKER: ΣΚΟΥΡΟ ΧΡΥΣΟ (#b8860b) */
+    #announcement-ticker { 
+        background-color: #b8860b !important; 
+        color: #ffffff !important; 
+        border-bottom: 1px solid #333; 
+    }
+    #announcement-text { color: #ffffff !important; }
+
+    /* Φανέλες */
+    .player-card { background-color: #252525 !important; border: 1px solid #444; }
+    .player-number { color: #000 !important; }
+    .player-position { color: #ffd700 !important; background: rgba(255, 215, 0, 0.1) !important; }
+    .player-name { color: #fff !important; }
+    .player-age { color: #aaa !important; }
+
+    /* Πίνακες & Inputs */
+    table, th, td { color: #e0e0e0 !important; border-color: #333 !important; }
+    th { background-color: #333 !important; color: #fff !important; }
+    
+    input, select, textarea { background-color: #333 !important; color: #fff !important; border-color: #555 !important; }
+    .match-vs-box { background-color: #444 !important; color: #fff !important; }
+    .match-row[style*="background"] { background-color: #2d382e !important; }
+    
+    /* Διόρθωση κουμπιών στο Admin */
+    .roster-item button { background-color: #444 !important; border-color: #666 !important; color: #fff !important; }
+    .roster-item input { background-color: #222 !important; color: #fff !important; }
+   /* --- DARK MODE SCORERS (BLACK FIX) --- */
+    .match-scorers {
+        /* ΤΟ ΚΑΝΟΥΜΕ ΜΑΥΡΟ (ή TRANSPARENT) */
+        background-color: #000000 !important; 
+        border-top: 1px solid #333 !important;
+        color: #ddd !important;
+        margin-top: 0 !important; /* Κολλητά στο ματς */
+    }
+
+    .match-scorer-entry {
+        color: #e0e0e0 !important;
+    }
+    
+    .match-cs-entry {
+        color: #81c784 !important;
+        font-weight: bold;
+    }
+    .nm-header {
+        background-color: #2a2a2a !important;
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #444 !important;
+    }
+    
+    /* --- DARK MODE SPECIAL MATCH FIX --- */
+    /* Σκούρο Χρυσό φόντο με ΑΣΠΡΑ γράμματα για αντίθεση */
+    .nm-header.special-match {
+        background-color: #6d4c00 !important; /* Σκούρο Χρυσό/Καφέ */
+        color: #ffffff !important;             /* Άσπρα γράμματα */
+        border-bottom: 1px solid #8B4513 !important;
+    }
+    
+    .nm-team { color: #ffffff !important; }
+    .nm-team.my-team { color: #81c784 !important; }
+    .nm-vs, .nm-stadium { color: #aaa !important; }
+}
+/* --- SHARE MODAL STYLES --- */
+.share-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999; /* Πάνω από όλα */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.share-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.share-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.share-option:active { transform: scale(0.95); }
+
+.share-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+/* ΧΡΩΜΑΤΑ ΕΙΚΟΝΙΔΙΩΝ SOCIAL MEDIA */
+.share-icon i {
+    transition: transform 0.2s;
+}
+
+/* WhatsApp Πράσινο */
+.fa-whatsapp { color: #25D366; }
+
+/* Viber Μωβ */
+.fa-viber { color: #7360f2; }
+
+/* Facebook Μπλε */
+.fa-facebook-f { color: #1877F2; }
+
+/* Copy Γκρι (και λευκό στο dark mode) */
+.fa-copy { color: #555; }
+
+/* Εφέ όταν περνάει το ποντίκι */
+.share-option:hover .share-icon i {
+    transform: scale(1.2); /* Μεγαλώνει λίγο το εικονίδιο */
+}
+
+/* DARK MODE fix για το εικονίδιο αντιγραφής */
+@media (prefers-color-scheme: dark) {
+    .fa-copy { color: #e0e0e0; }
+}
+.share-text { font-weight: 600; font-size: 0.9rem; color: #333; }
+
+/* Κουμπί Share μέσα στην είδηση */
+.btn-share {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Dark Mode υποστήριξη για το Share */
+@media (prefers-color-scheme: dark) {
+    .share-modal-content { background: #252525; border: 1px solid #444; }
+    .share-option { background: #333; }
+    .share-text { color: #fff; }
+    .btn-share { border-color: #ffd700; color: #ffd700; }
+}
+/* --- SCORERS STYLES (ΝΕΟ) --- */
+.match-scorers {
+    font-size: 0.8rem;
+    color: #444;
+    margin-top: 0.5rem;
+    text-align: center;
+    background: rgba(0,0,0,0.03);
+    padding: 0.4rem;
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    width: 100%;
+}
+.match-scorer-entry {
+    display: inline-block;
+    margin: 0 6px;
+    font-weight: 600;
+}
+/* ADMIN TOOLS */
+.admin-scorers-btn {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    background: #e0f2f1;
+    color: #00695c;
+    border: 1px solid #b2dfdb;
+    width: 100%;
+    padding: 5px;
+    cursor: pointer;
+}
+.admin-scorers-panel {
+    background: #f1f8e9;
+    padding: 10px;
+    border: 1px solid #c5e1a5;
+    margin-top: 5px;
+    border-radius: 4px;
+    display: none;
+}
+.scorer-tag {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+/* --- BIGGER ADMIN PANEL --- */
+.modal-content {
+    width: 95% !important;        /* Πιάνει σχεδόν όλο το πλάτος */
+    max-width: 1200px !important; /* Μέγιστο πλάτος για μεγάλες οθόνες */
+    height: 90vh !important;      /* Ύψος 90% της οθόνης */
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;        /* Αφαιρούμε το padding από το κυρίως κουτί */
+}
+
+/* Για να σκρολάρει μόνο το περιεχόμενο και όχι ο τίτλος */
+#adminContent {
+    overflow-y: auto;
+    flex: 1;
+    padding: 2rem;
+}
+
+#loginForm { padding: 2rem; }
+.modal-content h2 { padding: 1.5rem 2rem 0; margin: 0; }
+
+/* --- CLEAN SHEET BADGE (Στην Κάρτα Παίκτη) --- */
+.cs-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Αριστερά (δεξιά είναι ο αρχηγός) */
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* Μικρά κουμπάκια για το Admin του Clean Sheet */
+.btn-mini {
+    width: 25px !important; 
+    height: 25px !important; 
+    min-width: 0 !important;
+    padding: 0 !important;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-weight: bold;
+    background: #f0f0f0;
+}
+/* --- COMPACT MOBILE RESULTS V5 (MIRRORED ALIGNMENT - FINAL) --- */
+@media (max-width: 768px) {
+    .match-row {
+        margin-bottom: 0 !important;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Κεντρικό πλέγμα */
+    .match-row > div:first-child {
+        padding: 0.6rem 0.2rem !important;
+        gap: 0.5rem !important;
+        grid-template-columns: 1fr auto 1fr !important;
+        align-items: center !important;
+    }
+
+    /* Ομάδα Αριστερά (Γηπεδούχος) -> Στοίχιση ΔΕΞΙΑ */
+    .team-left {
+        text-align: right !important;
+        justify-content: flex-end !important; 
+        padding-right: 0 !important;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word;
+    }
+
+    /* Ομάδα Δεξιά (Φιλοξενούμενη) -> Στοίχιση ΑΡΙΣΤΕΡΑ */
+    .team-right {
+        text-align: left !important;
+        justify-content: flex-start !important;
+        padding-left: 0 !important;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word;
+    }
+
+    /* Σκορ (Κέντρο) */
+    .match-score-box {
+        font-size: 0.9rem !important;
+        padding: 0 6px !important;
+        height: 24px !important;
+        min-width: 38px !important;
+    }
+
+    /* Σκόρερ (Από κάτω) */
+    .match-scorers {
+        font-size: 0.7rem !important;
+        margin-top: 0 !important;
+        padding-bottom: 5px !important;
+    }
+}
+/* --- FIX: ΤΟ ΠΡΟΓΡΑΜΜΑ (FIXTURES) ΝΑ ΕΙΝΑΙ ΙΔΙΟ ΜΕ ΤΑ ΑΠΟΤΕΛΕΣΜΑΤΑ --- */
+@media (max-width: 768px) {
+    /* 1. Αναγκάζουμε το κουτί του αγώνα να γίνει 3στηλο πλέγμα */
+    #fixtures .match-row {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr !important; /* Αριστερά - Μέση - Δεξιά */
+        gap: 5px !important;
+        align-items: center !important;
+        padding: 10px 5px !important;
+        text-align: center;
+    }
+
+    /* 2. Στοίχιση Γηπεδούχου (Αριστερά) -> Να κοιτάει ΔΕΞΙΑ (προς το VS) */
+    #fixtures .team-left {
+        text-align: right !important;
+        justify-content: flex-end !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2;
+        padding-right: 5px;
+    }
+
+    /* 3. Στοίχιση Φιλοξενούμενου (Δεξιά) -> Να κοιτάει ΑΡΙΣΤΕΡΑ (προς το VS) */
+    #fixtures .team-right {
+        text-align: left !important;
+        justify-content: flex-start !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2;
+        padding-left: 5px;
+    }
+
+    /* 4. Το κουτάκι VS στη μέση */
+    #fixtures .match-vs-box {
+        font-size: 0.75rem !important;
+        padding: 2px 6px !important;
+        min-width: 25px;
+        height: auto;
+    }
+}
+/* --- 3D FLIP CARD STYLES (FIXED) --- */
+
+/* 1. Καθαρίζουμε το Wrapper (για να φύγει η διπλή μπάρα) */
+.player-card {
+    background-color: transparent !important;
+    perspective: 1000px;
+    cursor: pointer;
+    min-height: 280px;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+/* ΚΡΥΒΟΥΜΕ ΤΗΝ ΠΑΛΙΑ ΜΠΑΡΑ ΑΠΟ ΤΟ WRAPPER */
+.player-card::before {
+    display: none !important;
+}
+
+/* 2. Το κουτί που γυρίζει */
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.player-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* 3. Στυλ για ΜΠΡΟΣ και ΠΙΣΩ (FIXED ΓΙΑ ΟΛΑ: MOZILLA, SAFARI, CHROME) */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    /* ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ ΓΙΑ ΤΟ MOZILLA & ΤΟ IPHONE */
+    -webkit-backface-visibility: hidden !important; /* Safari / Chrome */
+    backface-visibility: hidden !important;         /* Mozilla Firefox */
+    
+    /* Έξτρα προστασία για να μην "φεγγίζει" */
+    transform-style: preserve-3d;
+    background-color: white !important; 
+    
+    border-radius: 12px;
+    padding: 1rem 0.5rem;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Η ΠΙΣΩ ΟΨΗ ΜΕ ΔΙΟΡΘΩΜΕΝΟ ΥΔΑΤΟΓΡΑΦΗΜΑ */
+.card-back {
+    transform: rotateY(180deg);
+    background-color: #ffffff;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    overflow-y: auto; /* Επιτρέπει το scroll */
+    display: flex;
+    flex-direction: column;
+}
+.card-back::before {
+    content: '';
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-image: url('android-chrome-192x192.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.2; /* Αυξάνουμε λίγο την ορατότητα */
+    z-index: 1; /* Πάνω από το φόντο */
+    pointer-events: none;
+}
+/* ΤΕΛΙΚΗ ΣΦΙΧΤΗ ΣΤΟΙΧΙΣΗ */
+.stats-row {
+    display: flex;             /* Αλλαγή σε flex για μέγιστη ευελιξία */
+    justify-content: space-between; 
+    align-items: center;
+    padding: 6px 8px;          /* Περισσότερος αέρας δεξιά-αριστερά */
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.7rem;        /* Λίγο πιο μεγάλα γράμματα */
+    position: relative;
+    z-index: 10;
+    gap: 10px;
+}
+
+.stats-info-group {
+    flex: 1;                   
+    text-align: left;
+    min-width: 0;              
+}
+
+.stats-team-name {
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: var(--text-dark);
+    line-height: 1.2;
+    white-space: normal;       /* Επιτρέπει αλλαγή γραμμής αν η λέξη είναι τεράστια */
+    word-break: break-word;
+}
+
+/* Η ΔΕΞΙΑ ΣΤΗΛΗ ΠΟΥ ΗΡΘΕ ΠΙΟ ΑΡΙΣΤΕΡΑ */
+.stats-right-data {
+    display: flex;
+    flex-direction: column;    /* Σκορ πάνω, γκολ κάτω */
+    align-items: flex-end;
+    justify-content: center;
+    flex-shrink: 0;            /* Απαγορεύει στη δεξιά στήλη να μικρύνει */
+    min-width: 55px;
+}
+
+.stats-match-score {
+    font-size: 0.62rem;
+    color: #666;
+    font-weight: 800;
+}
+
+.stats-goals-count {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+}
+
+/* ΤΟ ΠΕΠΛΟ (Φόντο) */
+.card-back::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--card-back-overlay, rgba(255, 255, 255, 0.75));
+    z-index: 1;
+    border-radius: 15px;
+}
+
+/* Σιγουρεύουμε ότι τα γράμματα είναι πάνω από το πέπλο */
+.stat-header, .stats-list, h4 {
+    z-index: 10;
+    position: relative;
+}
+
+/* ΛΙΣΤΑ ΣΤΑΤΙΣΤΙΚΩΝ (ΜΙΚΡΟΤΕΡΑ ΓΡΑΜΜΑΤΑ) */
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+/* ΛΙΣΤΑ ΣΤΑΤΙΣΤΙΚΩΝ - ΜΙΚΡΑ ΓΡΑΜΜΑΤΑ & ΜΙΑ ΓΡΑΜΜΗ */
+.stats-list li {
+    padding: 5px 2px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    gap: 8px; 
+
+    font-size: 0.7rem; 
+    font-weight: 600;   
+    color: #333;
+    
+    /* --- ΟΙ ΑΛΛΑΓΕΣ ΓΙΑ ΝΑ ΧΩΡΑΝΕ ΟΙ ΟΜΑΔΕΣ --- */
+    white-space: normal !important; /* Επιτρέπει να αλλάζει γραμμή */
+    height: auto !important;        /* Το ύψος μεγαλώνει αυτόματα */
+    line-height: 1.2;               /* Σωστό κενό στις γραμμές */
+}
+
+/* Για να μην κολλάνε τα γράμματα */
+.stats-list li span {
+    overflow: hidden;
+    text-overflow: ellipsis; /* Αν είναι ΤΕΡΑΣΤΙΟ όνομα, βάζει ... στο τέλος */
+}
+
+.stat-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 0.85rem; /* Μικρότερος τίτλος */
+    font-weight: bold;
+    text-align: center;
+}
+/* --- DARK MODE FIX ΓΙΑ 3D ΚΑΡΤΕΣ (ΠΡΟΣΘΗΚΗ ΣΤΟ ΤΕΛΟΣ) --- */
+@media (prefers-color-scheme: dark) {
+    .stats-team-name { color: #fff !important; }
+    .stats-match-score { color: #aaa !important; }
+    /* Βάζουμε σκούρο φόντο στις όψεις της κάρτας */
+    .card-front, .card-back {
+        background-color: #252525 !important; 
+        border-color: #444 !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Διορθώνουμε το "πέπλο" πίσω για να είναι σκούρο */
+    .card-back::after {
+        background: #1e1e1e !important;
+    }
+
+    /* Χρώματα κειμένων */
+    .player-name { 
+        color: #ffffff !important; 
+    }
+    .player-age { 
+        color: #aaaaaa !important; 
+    }
+    
+    /* Λίστα στατιστικών (πίσω μέρος) - Σκούρα γράμματα και γραμμές */
+    .stats-list li {
+        color: #ffffff !important;
+        border-bottom: 1px solid #333 !important;
+    }
+    
+    /* Διόρθωση για τα γκρι headers (π.χ. "ΚΑΝΕΝΑ ΓΚΟΛ") */
+    .stat-header[style*="background:#ccc"] {
+        background: #444 !important; 
+        color: #fff !important;
+    }
+    .goal-number-back {
+        color: #ffd700 !important; 
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); /* Ελαφριά λάμψη */
+    }
+}
+#backToTop {
+    display: none; /* Κρυφό αρχικά */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: var(--accent-color); /* Κίτρινο */
+    color: var(--primary-color); /* Πράσινο */
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#backToTop:hover {
+    background-color: #fff;
+}
+/* --- MODERN NEW BADGE --- */
+.notification-badge {
+    background: linear-gradient(135deg, #ff0046, #ff4d7e); /* Μοντέρνο κόκκινο degrade */
+    color: white;
+    font-size: 0.55rem;      /* Πολύ μικρά και διακριτικά γράμματα */
+    font-weight: 800;        /* Πολύ έντονα */
+    padding: 2px 5px;        /* Λίγο "αέρα" γύρω γύρω */
+    border-radius: 4px;      /* Ελαφρώς στρογγυλεμένες γωνίες (όχι κύκλος) */
+    margin-left: 6px;
+    vertical-align: middle;  /* Στοίχιση στη μέση της γραμμής */
+    display: none;           /* Κρυφό αρχικά */
+    box-shadow: 0 2px 8px rgba(255, 0, 70, 0.4); /* Λάμψη από κάτω */
+    animation: pulse-badge 2s infinite;
+    letter-spacing: 0.5px;   /* Αραιά γράμματα για στυλ */
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Το εφέ που αναβοσβήνει */
+@keyframes pulse-badge {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 0, 70, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 70, 0); }
+}
+/* --- DARK MODE FIXES (FINAL V5 - PERFECT BACK CARD) --- */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --card-back-bg: #1a1a1a;
+            }
+
+            body { background-color: #121212; color: #e0e0e0; }
+
+            /* Η ΠΙΣΩ ΟΨΗ ΤΗΣ ΚΑΡΤΑΣ */
+            .card-back {
+                background-color: #1a1a1a !important;
+                background-blend-mode: multiply !important;
+                background-position: center 95% !important;
+                background-size: 85% !important;
+                background-repeat: no-repeat !important;
+            }
+
+            /* ΤΟ ΠΕΠΛΟ ΓΙΝΕΤΑΙ ΣΚΟΥΡΟ */
+            .card-back::after {
+                background: rgba(20, 20, 20, 0.75) !important;
+            }
+
+            /* ΛΕΥΚΑ ΓΡΑΜΜΑΤΑ ΣΤΑ ΣΤΑΤΙΣΤΙΚΑ */
+            .stats-team-name { color: #ffffff !important; }
+            .stats-match-score { color: #bbbbbb !important; }
+            .stats-list li {
+                color: #ffffff !important;
+                border-bottom: 1px solid #333 !important;
+            }
+            
+            /* ΟΝΟΜΑ ΠΑΙΚΤΗ ΣΤΗΝ ΠΙΣΩ ΟΨΗ */
+            body .card-back h4 {
+                color: #ffffff !important;
+                border-bottom-color: #444 !important;
+                text-shadow: none !important;
+            }
+
+            .stat-header[style*="background:#ccc"] {
+                background: #444 !important;
+                color: #fff !important;
+            }
+
+            /* SQUAD MODAL DARK MODE */
+            #squadList { background-color: #252525 !important; border: 1px solid #444 !important; }
+            #squadList label span { color: #ffffff !important; }
+            #squadModal .form-group[style*="background: #fff3e0"] { background-color: #3e2723 !important; }
+        }
+/* --- ΟΡΙΣΤΙΚΗ ΔΙΟΡΘΩΣΗ ADMIN PANEL (DARK MODE) --- */
+@media (prefers-color-scheme: dark) {
+    /* 1. Γενικό φόντο Modal */
+    #adminModal .modal-content {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+
+    /* 2. Διόρθωση των "ροζ" και "πράσινων" πλαισίων (Live Score, Countdown κτλ) */
+    #adminModal .form-group[style*="background"],
+    #adminModal div[style*="background"],
+    #liveInputs,
+    #specialMatchFields,
+    .admin-scorers-panel {
+        background-color: #252525 !important; /* Σκούρο γκρι αντί για ροζ/πράσινο */
+        border: 1px solid #444 !important;
+        color: #ffffff !important;
+    }
+
+    /* 3. Όλα τα κείμενα μέσα στο Admin */
+    #adminModal label, 
+    #adminModal h2, 
+    #adminModal h3, 
+    #adminModal p, 
+    #adminModal small,
+    #adminModal span {
+        color: #ffffff !important;
+    }
+
+    /* 4. Πεδία Εισαγωγής (Inputs) */
+    #adminModal input, 
+    #adminModal select, 
+    #adminModal textarea {
+        background-color: #333 !important;
+        color: #ffffff !important;
+        border: 1px solid #555 !important;
+    }
+
+    /* 5. Dropdown μενού (Select options) */
+    #adminModal select option {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+
+    /* 6. Διόρθωση για το checkbox "Ενεργοποίηση Live Mode" */
+    #adminModal .form-group input[type="checkbox"] + label {
+        color: #ffffff !important;
+    }
+}
+        
+        /* PIN MODAL STYLES */
+        .pin-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); background: white; transition: all 0.3s ease; }
+        .pin-dot.filled { background: var(--primary-color); transform: scale(1.1); }
+        .pin-btn { width: 70px; height: 70px; font-size: 1.5rem; font-weight: bold; border: 2px solid #ddd; background: white; border-radius: 50%; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .pin-btn:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }
+
+        /* FULL SCREEN MODALS */
+        #shareModal .share-modal-content, #pinModal .modal-content {
+            width: 100% !important; height: 100% !important; max-width: none !important; border-radius: 0 !important; margin: 0 !important;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        #pinModal .modal-content { background-color: #1a1a1a !important; color: white !important; }
+        #pinModal .pin-btn { border: none; background: rgba(255,255,255,0.1); color: white; }
+
+        /* SPLASH SCREEN */
+        #custom-splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 999999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .splash-logo { max-width: 60%; height: auto; }
+        .splash-hidden { opacity: 0; pointer-events: none; }
+       </style>
+       <script>
+window.addEventListener('load', function() {
+    // Εδώ ρυθμίζεις πόση ώρα θα μείνει (3000 = 3 δευτερόλεπτα)
+    setTimeout(function() {
+        var splash = document.getElementById('custom-splash');
+        splash.classList.add('splash-hidden');
+        
+        setTimeout(function() {
+            splash.style.display = 'none';
+        }, 500);
+        
+    }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
+});
+</script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "f3dc6a18-326d-4cb9-a216-0930598247df",
+    });
+  });
+</script>
+</script>
+</head>
+<body>
+    <div id="custom-splash">
+    <img src="logo_front.png" alt="Logo" class="splash-logo">
+</div>
+    <header>
+<div id="announcement-ticker">
+            <span id="announcement-text"></span>
+        </div>
+        <div class="header-top">
+            <div class="logo">
+    <img src="android-chrome-192x192.png" alt="Όλυμπος Δενδροποτάμου">
+</div>
+            <div class="club-info">
+                <h1>ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h1>
+                <p>Κ14 | ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ | Σεζόν 2025-26</p>
+            </div>
+        </div>
+        <nav>
+    <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="#standings" class="nav-link active">My Όλυμπος</a></li>
+        <li><a href="#results" class="nav-link">Αποτελέσματα</a></li>
+        <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
+        <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
+        <li><a href="#news" class="nav-link" onclick="markNewsAsRead()">Νέα - Ειδήσεις <span id="newsBadge" class="notification-badge">NEW</span></a></li>
+        <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
+    </ul>
+</nav>
+    </header>
+
+    <div class="container">
+        <div id="standings" class="page active">
+            <div id="nextMatchContainer"></div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Βαθμολογία Κ14 - ΔΥΤΙΚΟΣ</h2>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table id="standingsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Θέση</th>
+                                <th style="text-align: left;">Ομάδα</th>
+                                <th style="width: 60px;">Β</th> <th style="width: 50px;">Αγ</th>
+                                <th style="width: 50px;">Ν</th>
+                                <th style="width: 50px;">Ι</th>
+                                <th style="width: 50px;">Η</th>
+                                <th style="width: 70px;">ΓΥ-ΓΚ</th>
+                                <th style="width: 110px;">Φόρμα</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standingsBody"></tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <strong>Υπόμνημα:</strong> Αγ=Αγώνες, Ν=Νίκες, Ι=Ισοπαλίες, Η=Ήττες, ΓΥ=Γκολ Υπέρ, ΓΚ=Γκολ Κατά, Β=Βαθμοί
+                </div>
+            </div> 
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>👟 Σκόρερ</h2>
+                </div>
+                <div id="scorersContainer"></div>
+            </div>
+        </div>
+
+        <div id="results" class="page">
+            <div class="card">
+                <h2>⚽ Αποτελέσματα Αγώνων</h2>
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+
+        <div id="fixtures" class="page">
+            <div class="card">
+                <h2>📅 Πρόγραμμα Αγώνων</h2>
+                <div id="fixturesContainer"></div>
+            </div>
+        </div>
+
+        <div id="roster" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>👥 Ρόστερ Ομάδας</h2>
+                </div>
+                <div id="rosterContainer" class="roster-grid"></div>
+            </div>
+        </div>
+
+        <!-- Νέα - Ειδήσεις Page -->
+        <div id="news" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📰 Νέα - Ειδήσεις</h2>
+                </div>
+                <div id="newsContainer"></div>
+            </div>
+        </div>
+    </div>
+<footer style="background: var(--primary-color); color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h3>
+        <p style="opacity: 0.8; font-size: 0.9rem;">Μια οικογένεια, μια ομάδα, ένα πάθος.</p>
+        <div style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.6;">
+            &copy; 2025 Created for K14 Team
+        </div>
+    </div>
+</footer>
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2>🔐 Admin Panel</h2>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Κωδικός Admin:</label>
+                    <input type="password" id="adminPassword" placeholder="Εισάγετε κωδικό" onkeydown="if(event.key === 'Enter') checkPassword()">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn" onclick="checkPassword()">Είσοδος</button>
+                    <button class="btn btn-secondary" onclick="closeAdminPanel()">Ακύρωση</button>
+                </div>
+            </div>
+
+            <div id="adminContent" style="display: none;">
+                <div class="form-group">
+                    <label>📦 Διαχείριση Δεδομένων:</label>
+                    <div class="action-buttons">
+                        <button class="btn btn-success" onclick="exportData()">💾 Export Δεδομένων</button>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+                            <label for="importFile" class="file-input-label">📥 Import Δεδομένων</label>
+                        </div>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">
+                        Κάνε backup των δεδομένων σου τακτικά!
+                    </p>
+                </div>
+<h3 style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
+
+<div class="form-group">
+    <label>Κυλιόμενη Ανακοίνωση (Ticker):</label>
+    <input type="text" id="announcementInput" placeholder="π.χ. Καλή επιτυχία...">
+</div>
+
+<!-- ΝΕΟ: Checkbox για Εμβόλιμο Αγώνα -->
+<div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fff3cd; padding: 1rem; border-radius: 8px; border: 2px solid #ffc107;">
+    <input type="checkbox" id="useSpecialMatchCheckbox" style="width: 20px; height: 20px;" onchange="toggleSpecialMatchFields()">
+    <label for="useSpecialMatchCheckbox" style="margin: 0; cursor: pointer; font-weight: 700; color: #856404;">
+        🏆 Εμβόλιμος Αγώνας (Φιλικό, Κύπελλο κτλ) - Προτεραιότητα στο Banner
+    </label>
+</div>
+
+<!-- ΝΕΑ ΠΕΔΙΑ ΓΙΑ ΤΟΝ ΕΜΒΟΛΙΜΟ ΑΓΩΝΑ -->
+<div id="specialMatchFields" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+    <div class="form-group">
+        <label>Τύπος Αγώνα (π.χ. ΦΙΛΙΚΟΣ, ΚΥΠΕΛΛΟ):</label>
+        <input type="text" id="specialMatchTypeInput" placeholder="π.χ. ΦΙΛΙΚΟΣ ΑΓΩΝΑΣ">
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+            <label>Γηπεδούχος:</label>
+            <input type="text" id="specialHomeInput" placeholder="π.χ. ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ">
+        </div>
+        <div class="form-group">
+            <label>Φιλοξενούμενη:</label>
+            <input type="text" id="specialAwayInput" placeholder="π.χ. ΑΟ ΑΜΠΕΛΟΚΗΠΩΝ">
+        </div>
+    </div>
+</div>
+
+<!-- ΚΑΝΟΝΙΚΑ ΠΕΔΙΑ (για όλους τους αγώνες) -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div class="form-group">
+        <label>Ημερομηνία (Πάνω Αριστερά):</label>
+        <input type="text" id="matchDateInput" placeholder="π.χ. ΣΑΒ 13/12">
+    </div>
+    <div class="form-group">
+        <label>Ώρα (Πάνω Δεξιά):</label>
+        <input type="text" id="matchTimeInput" placeholder="π.χ. 10:45">
+    </div>
+</div>
+<div class="form-group" style="background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #c8e6c9; margin-top: 10px;">
+    <label style="color: #1b5e20; font-weight: bold;">⏳ Ρύθμιση Αντίστροφης Μέτρησης (Ακριβής Ώρα):</label>
+    <input type="datetime-local" id="countdownTargetInput" style="background: white; border: 1px solid #a5d6a7;">
+    <small style="color: #555; display: block; margin-top: 5px;">
+        💡 <b>Προσοχή:</b> Αυτό ρυθμίζει <u>μόνο</u> το ρολόι που μετράει αντίστροφα.
+        Η ημερομηνία/ώρα που φαίνεται στην κάρτα είναι αυτή που γράφεις στα από πάνω κουτάκια.
+    </small>
+</div>
+<div class="form-group">
+    <label>Γήπεδο (Κάτω από ομάδες):</label>
+    <input type="text" id="matchStadiumInput" placeholder="π.χ. Γήπεδο Αμπελοκήπων">
+</div>
+
+<div class="form-group">
+    <label>Link Χάρτη (Google Maps):</label>
+    <input type="text" id="matchMapLinkInput" placeholder="Επικόλληση link...">
+</div>
+        <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 10px; border: 1px solid #ffc1c1; margin-bottom: 20px;">
+    <label style="color: #d32f2f; font-weight: bold; display: block; margin-bottom: 10px;">🔴 ΖΩΝΤΑΝΟ ΣΚΟΡ (LIVE)</label>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <input type="checkbox" id="liveModeCheckbox" style="width: 20px; height: 20px;" onchange="document.getElementById('liveInputs').style.display = this.checked ? 'block' : 'none'">
+        <label for="liveModeCheckbox">Ενεργοποίηση Live Mode</label>
+    </div>
+   <div id="liveInputs" style="display: none;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+        <input type="number" id="liveHomeScore" value="0" style="text-align: center;">
+        <input type="number" id="liveAwayScore" value="0" style="text-align: center;">
+    </div>
+    
+    <div style="background: #fff; padding: 10px; border-radius: 5px; border: 1px solid #ddd; color: #333; margin-bottom:10px;">
+        <label style="font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">⏱️ Ρυθμίσεις Χρονομέτρου:</label>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">
+            <div>
+                <small style="display:block; font-size:0.7rem;">Ημίχρονο:</small>
+                <select id="liveHalf" style="padding:5px;">
+                    <option value="1">1ο</option>
+                    <option value="2">2ο</option>
+                    <option value="3">3ο</option>
+                    <option value="4">4ο</option>
+                    <option value="FT">FT (Τέλος)</option>
+                </select>
+                 </div>
+                 <div>
+                <small style="display:block; font-size:0.7rem;">Διάρκεια (λ):</small>
+                <input type="number" id="liveHalfDuration" value="20" style="text-align: center; padding:5px;">
+                 </div>
+                     <div>
+                <small style="display:block; font-size:0.7rem;">Έναρξη:</small>
+                <input type="time" id="liveStartTime" style="text-align: center; padding:5px;">
+                     </div>
+                     </div>
+                    </div>
+                </div>
+                <div class="modal-buttons" style="margin-bottom: 1.5rem;">
+                 <button class="btn btn-success" onclick="saveGeneralSettings()">💾 Αποθήκευση</button>
+                </div>
+                    </div>
+                <h3>⚽ Αποτελέσματα Αγώνων</h3>
+
+                <div class="form-group">
+                    <label>Επέλεξε Αγωνιστική:</label>
+                    <select id="roundSelect" onchange="loadMatchesForRound()">
+                        <option value="">-- Επέλεξε --</option>
+                    </select>
+                </div>
+
+                <div id="matchInputs"></div>
+
+                <div class="modal-buttons">
+                    <button class="btn" onclick="saveResults()">💾 Αποθήκευση Αποτελεσμάτων</button>
+                </div>
+
+                <h3>👥 Διαχείριση Ρόστερ</h3>
+
+                <div class="form-group">
+                    <label>Αριθμός Φανέλας:</label>
+                    <input type="number" id="playerNumber" placeholder="π.χ. 10" min="1" max="99">
+                </div>
+
+                <div class="form-group">
+                    <label>Όνομα Παίκτη:</label>
+                    <input type="text" id="playerName" placeholder="π.χ. Γιώργος Παπαδόπουλος">
+                </div>
+<div class="form-group">
+    <label>Έτος Γέννησης (για υπολογισμό ηλικίας):</label>
+    <input type="number" id="playerBirthYear" placeholder="π.χ. 2011">
+</div>
+                <div class="form-group">
+    <label>Θέση(εις) - Κράτα Ctrl για πολλαπλές επιλογές:</label>
+    <select id="playerPosition" multiple size="8" style="height: auto;">
+        <option value="">-- Επέλεξε Θέση(εις) --</option>
+        <optgroup label="👨‍🏫 Προπονητής">
+            <option value="Προπονητής">Προπονητής</option>
+        </optgroup>
+        <optgroup label="🥅 Τερματοφύλακας">
+            <option value="Τερματοφύλακας (GK)">Τερματοφύλακας (GK)</option>
+        </optgroup>
+        <optgroup label="🛡️ Αμυντικοί">
+            <option value="Κεντρικός Αμυντικός (CB)">Κεντρικός Αμυντικός (CB)</option>
+            <option value="Λίμπερο (SW)">Λίμπερο (SW)</option>
+            <option value="Πλάγιος Αμυντικός - Αριστερός (LB)">Πλάγιος Αμυντικός - Αριστερός (LB)</option>
+            <option value="Πλάγιος Αμυντικός - Δεξιός (RB)">Πλάγιος Αμυντικός - Δεξιός (RB)</option>
+            <option value="Ακραίος Αμυντικός - Αριστερός (LWB)">Ακραίος Αμυντικός (φουλ-μπακ) - Αριστερός (LWB)</option>
+            <option value="Ακραίος Αμυντικός - Δεξιός (RWB)">Ακραίος Αμυντικός (φουλ-μπακ) - Δεξιός (RWB)</option>
+        </optgroup>
+        <optgroup label="⚙️ Μέσοι">
+            <option value="Κεντρικός Μέσος (CM)">Κεντρικός Μέσος (CM)</option>
+            <option value="Αμυντικός Μέσος (DM)">Αμυντικός Μέσος (DM)</option>
+            <option value="Επιθετικός Μέσος (AM)">Επιθετικός Μέσος (AM)</option>
+            <option value="Πλάγιος Μέσος - Αριστερός (LM)">Πλάγιος Μέσος - Αριστερός (LM)</option>
+            <option value="Πλάγιος Μέσος - Δεξιός (RM)">Πλάγιος Μέσος - Δεξιός (RM)</option>
+        </optgroup>
+        <optgroup label="⚡ Επιθετικοί">
+            <option value="Κεντρικός Επιθετικός (CF)">Κεντρικός Επιθετικός (CF)</option>
+            <option value="Δεύτερος Επιθετικός (SS)">Δεύτερος Επιθετικός (SS)</option>
+            <option value="Πλάγιος Επιθετικός - Αριστερός (LW)">Πλάγιος Επιθετικός - Αριστερός (LW)</option>
+            <option value="Πλάγιος Επιθετικός - Δεξιός (RW)">Πλάγιος Επιθετικός - Δεξιός (RW)</option>
+        </optgroup>
+    </select>
+    <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+        💡 Συμβουλή: Κράτα το Ctrl (ή Cmd σε Mac) και κλικ για να επιλέξεις πολλές θέσεις
+    </small>
+</div>
+
+<div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 1rem;">
+                    <input type="checkbox" id="isCaptainPlayer" style="width: 20px; height: 20px;">
+                    <label for="isCaptainPlayer" style="margin: 0; cursor: pointer;">©️ Είναι Αρχηγός (Captain);</label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn btn-success" onclick="addPlayer()">➕ Προσθήκη Παίκτη</button>
+                    <button class="btn" onclick="clearPlayerForm()">🔄 Καθαρισμός</button>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Τρέχοντες Παίκτες:</label>
+                    <div id="rosterList" class="roster-list"></div>
+                </div>
+
+            <h3 style="margin-top: 2rem;">📰 Διαχείριση Νέων - Ειδήσεων</h3>
+
+<div class="form-group">
+    <label>Τίτλος Είδησης:</label>
+    <input type="text" id="newsTitle" placeholder="π.χ. Μεγάλη νίκη επί του...">
+</div>
+
+<div class="form-group">
+    <label>Περιεχόμενο Είδησης:</label>
+    <textarea id="newsContent" placeholder="Γράψε το περιεχόμενο της είδησης εδώ..." rows="5" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
+</div>
+
+<div class="form-group">
+    <label>Φωτογραφία (Προαιρετικό):</label>
+    <div class="file-input-wrapper">
+        <input type="file" id="newsPhoto" accept="image/*" onchange="previewNewsPhoto(event)">
+        <label for="newsPhoto" class="file-input-label">📷 Επιλογή Φωτογραφίας</label>
+    </div>
+    <div id="newsPhotoPreview" style="margin-top: 1rem; display: none;">
+        <img id="newsPhotoPreviewImg" style="max-width: 100%; max-height: 300px; border-radius: 10px; border: 2px solid #ddd;">
+        <button class="btn btn-danger btn-small" onclick="removeNewsPhoto()" style="margin-top: 0.5rem;">🗑️ Αφαίρεση Φωτογραφίας</button>
+    </div>
+</div>
+
+<div class="modal-buttons">
+    <button class="btn btn-success" onclick="addNews()">➕ Προσθήκη Είδησης</button>
+    <button class="btn" onclick="clearNewsForm()">🔄 Καθαρισμός</button>
+</div>
+
+                <div style="margin-top: 1.5rem;">
+                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Τρέχουσες Ειδήσεις:</label>
+                    <div id="newsList" class="roster-list"></div>
+                </div>
+
+                <div class="modal-buttons" style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #ddd;">
+                    <button class="btn btn-secondary" onclick="closeAdminPanel()">Κλείσιμο</button>
+                    <button class="btn btn-danger" onclick="resetAllData()">⚠️ Επαναφορά Όλων</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="shareModal" class="share-modal" onclick="closeShareModal()">
+    <div class="share-modal-content" onclick="event.stopPropagation()">
+        <h3 style="margin-bottom: 10px; color: var(--primary-color);">📤 Κοινοποίηση</h3>
+        <p id="shareTitlePreview" style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;"></p>
+        
+        <div class="share-options">
+            <div class="share-option" onclick="doShare('whatsapp')">
+                <div class="share-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="share-text">WhatsApp</div>
+            </div>
+            
+            <div class="share-option" onclick="doShare('viber')">
+                <div class="share-icon">
+                    <i class="fab fa-viber"></i>
+                </div>
+                <div class="share-text">Viber</div>
+            </div>
+            
+            <div class="share-option" onclick="doShare('copy')">
+                <div class="share-icon">
+                    <i class="fas fa-copy"></i>
+                </div>
+                <div class="share-text">Αντιγραφή</div>
+            </div>
+            
+             <div class="share-option" onclick="doShare('facebook')">
+                <div class="share-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="share-text">Facebook</div>
+            </div>
+        </div>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 1.5rem;" onclick="closeShareModal()">Ακύρωση</button>
+    </div>
+</div>
+<div id="squadModal" class="modal" style="z-index: 3000;">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3 style="color: var(--primary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">
+            📋 Επιλογή Αποστολής
+        </h3>
+        
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">
+            Επίλεξε τους παίκτες για το μήνυμα.
+        </p>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fff3e0; padding: 10px; border-radius: 5px; border: 1px solid #ffcc80; margin-bottom: 1rem;">
+            <input type="checkbox" id="noSquadCheckbox" style="width: 20px; height: 20px; cursor: pointer;">
+            <label for="noSquadCheckbox" style="margin: 0; font-weight: bold; color: #e65100; cursor: pointer; font-size: 0.95rem;">
+                🚫 Μην στείλεις καθόλου ονόματα (Μόνο Γήπεδο/Ώρα)
+            </label>
+        </div>
+
+        <div id="squadList" style="max-height: 250px; overflow-y: auto; background: #f9f9f9; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 1rem;">
+            </div>
+
+        <div class="form-group">
+            <label style="font-size: 0.9rem;">➕ Προσθήκη από Κ13 (ή άλλοι):</label>
+            <input type="text" id="extraPlayersInput" placeholder="π.χ. Παπαδόπουλος (Κ13)" style="font-size: 0.9rem;">
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn" style="background: var(--primary-color); width: 100%;" onclick="shareFinalSquad()">
+                📤 Δημιουργία & Share στο Viber
+            </button>
+            <button class="btn btn-secondary" style="width: 100%;" onclick="document.getElementById('squadModal').style.display='none'">
+                Ακύρωση
+            </button>
+        </div>
+    </div>
+</div>
+<!-- PIN Modal -->
+<div id="pinModal" class="modal" style="z-index: 4000;">
+    <div class="modal-content" style="max-width: 350px; text-align: center;">
+        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+            🔐 Εισαγωγή PIN
+        </h3>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
+            Για να κάνεις share την αποστολή, εισήγαγε το PIN:
+        </p>
+        
+        <!-- PIN Display -->
+        <div id="pinDisplay" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem;">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+        
+        <!-- Numeric Keypad -->
+        <div id="pinKeypad" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 250px; margin: 0 auto 1rem;">
+            <button class="pin-btn" onclick="enterPin('1')">1</button>
+            <button class="pin-btn" onclick="enterPin('2')">2</button>
+            <button class="pin-btn" onclick="enterPin('3')">3</button>
+            <button class="pin-btn" onclick="enterPin('4')">4</button>
+            <button class="pin-btn" onclick="enterPin('5')">5</button>
+            <button class="pin-btn" onclick="enterPin('6')">6</button>
+            <button class="pin-btn" onclick="enterPin('7')">7</button>
+            <button class="pin-btn" onclick="enterPin('8')">8</button>
+            <button class="pin-btn" onclick="enterPin('9')">9</button>
+            <button class="pin-btn" onclick="clearPin()" style="background: #ff5252; color: white;">✖</button>
+            <button class="pin-btn" onclick="enterPin('0')">0</button>
+            <button class="pin-btn" onclick="deleteLastPin()" style="background: #ffa726; color: white;">⌫</button>
+        </div>
+        
+        <div id="pinError" style="color: #d32f2f; font-size: 0.85rem; margin-bottom: 1rem; min-height: 20px; font-weight: bold;"></div>
+        
+        <button class="btn btn-secondary" style="width: 100%;" onclick="closePinModal()">
+            Ακύρωση
+        </button>
+    </div>
+</div>
+    <script>
+        const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
+        const ADMIN_PASSWORD = 'olympos';
+
+        const TEAMS = [
+            'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ',
+            'ΜΑΚΕΔΟΝΙΚΟΣ (4)',
+            'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ',
+            'ΑΜΣ ΝΙΚΟΠΟΛΗ',
+            'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ',
+            'ΑΕ ΦΙΛΥΡΟΥ',
+            'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ',
+            'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)',
+            'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ',
+            'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ',
+            'ΑΟ ΜΕΣΗΜΒΡΙΑΣ',
+            'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ'
+        ];
+
+        const FIXTURES = [];
+
+        async function loadData() {
+    let localData = null;
+    const saved = localStorage.getItem('footballData');
+    if (saved) {
+        localData = JSON.parse(saved);
+        console.log('Βρέθηκαν τοπικά δεδομένα.');
+    }
+
+    try {
+        // Προσπάθεια φόρτωσης από το GitHub (ή τοπικό server)
+        // Βάζουμε και ένα timestamp για να μην κρατάει cache ο browser
+        const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
+        
+        if (response.ok) {
+            const serverData = await response.json();
+            console.log('Φορτώθηκαν δεδομένα από το olympos-backup.json');
+            
+            // ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ:
+            // Αν τα δεδομένα του server (GitHub) φαίνονται πιο καινούργια ή έγκυρα, τα χρησιμοποιούμε.
+            // Σε αυτή την απλή έκδοση, δίνουμε προτεραιότητα στο αρχείο JSON για τους επισκέπτες.
+            
+            // Αν είμαστε Admin και έχουμε κάνει αλλαγές που δεν ανέβηκαν ακόμα, ίσως θέλουμε τα τοπικά.
+            // Αλλά για να βλέπουν όλοι τα ίδια, επιστρέφουμε του server.
+            return serverData;
+        }
+    } catch (e) {
+        console.warn('Δεν βρέθηκε το olympos-backup.json ή υπάρχει σφάλμα δικτύου.', e);
+    }
+
+    // Αν αποτύχει η φόρτωση από το αρχείο, επιστρέφουμε τα τοπικά (αν υπάρχουν)
+    if (localData) {
+        return localData;
+    }
+
+    // Fallback: Αν δεν υπάρχει τίποτα πουθενά, φόρτωσε τα hardcoded
+    console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
+    return { 
+        fixtures: JSON.parse(JSON.stringify(FIXTURES)),
+        roster: [],
+        news: []
+    };
+}
+function calculateLiveMinute(startTime, half, duration) {
+    if (half === "FT") return "FT";
+    if (!startTime) return "LIVE";
+
+    const now = new Date();
+    const [startHours, startMinutes] = startTime.split(':');
+    const start = new Date();
+    start.setHours(startHours, startMinutes, 0);
+
+    // Διαφορά σε λεπτά
+    let diffInMinutes = Math.floor((now - start) / 60000);
+    
+    if (diffInMinutes < 0) return "0'";
+
+    // Υπολογισμός βάσει ημιχρόνου
+    // Π.χ. αν είναι 2ο ημίχρονο και διάρκεια 20', ξεκινάμε από το 20' + diff
+    let baseMinutes = (parseInt(half) - 1) * parseInt(duration);
+    let currentMatchMinute = baseMinutes + diffInMinutes + 1; // +1 για να ξεκινάει από το 1'
+
+    // Έλεγχος για καθυστερήσεις ημιχρόνου
+    let halfLimit = parseInt(half) * parseInt(duration);
+    if (currentMatchMinute > halfLimit) {
+        let extra = currentMatchMinute - halfLimit;
+        return halfLimit + "+" + extra + "'";
+    }
+
+    return currentMatchMinute + "'";
+}
+        function saveData(dataToSave) {
+            localStorage.setItem('footballData', JSON.stringify(dataToSave));
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `olympos-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Τα δεδομένα εξήχθησαν επιτυχώς!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.fixtures || !Array.isArray(importedData.fixtures)) {
+                        throw new Error('Μη έγκυρη δομή δεδομένων');
+                    }
+
+                    // Μετατροπή παλιών null (ΡΕΠΟ) σε ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ
+                    importedData.fixtures.forEach(round => {
+                        if (round.matches) {
+                            round.matches.forEach(match => {
+                                if (match.home === null) {
+                                    match.home = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                                }
+                                if (match.away === null) {
+                                    match.away = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                                }
+                            });
+                        }
+                    });
+
+                    if (confirm('⚠️ ΠΡΟΣΟΧΗ!\n\nΤα τρέχοντα δεδομένα θα αντικατασταθούν.\nΕίσαι σίγουρος;')) {
+                        data = importedData;
+                        
+                        // Εξασφάλιση ότι υπάρχει το news array
+                        if (!data.news) {
+                            data.news = [];
+                        }
+                        if (!data.roster) {
+                            data.roster = [];
+                        }
+                        
+                        saveData(data);
+                        displayStandings();
+                        displayResults();
+                        displayFixtures();
+                        displayRoster();
+                        displayNews();
+                        updateRosterList();
+                        updateNewsList();
+                        alert('✅ Τα δεδομένα εισήχθησαν επιτυχώς!\n\n' + 
+                              'Roster: ' + (data.roster ? data.roster.length : 0) + ' παίκτες\n' +
+                              'Ειδήσεις: ' + (data.news ? data.news.length : 0));
+                        closeAdminPanel();
+                    }
+                } catch (error) {
+                    console.error('Import Error:', error);
+                    alert('❌ Σφάλμα: Μη έγκυρο αρχείο δεδομένων!\n\nΛεπτομέρειες: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+  function calculateStandings() {
+    const standings = {};
+    
+    // Αρχικοποίηση ομάδων
+    TEAMS.forEach(team => {
+        standings[team] = {
+            team: team,
+            played: 0,
+            won: 0,
+            drawn: 0,
+            lost: 0,
+            gf: 0,
+            ga: 0,
+            gd: 0,
+            points: 0,
+            history: [] // ΝΕΟ: Αποθήκευση ιστορικού αγώνων για τη φόρμα
+        };
+    });
+
+    // Υπολογισμός
+    data.fixtures.forEach(round => {
+        round.matches.forEach(match => {
+            // Υπολογίζουμε μόνο αν έχει σκορ ΚΑΙ δεν είναι αναβληθέν
+            if (match.home && match.away && match.homeScore !== null && match.awayScore !== null && !match.isPostponed) {
+                const home = standings[match.home];
+                const away = standings[match.away];
+
+                home.played++;
+                away.played++;
+
+                home.gf += match.homeScore;
+                home.ga += match.awayScore;
+                away.gf += match.awayScore;
+                away.ga += match.homeScore;
+
+                if (match.homeScore > match.awayScore) {
+                    home.won++;
+                    home.points += 3;
+                    away.lost++;
+                    // Προσθήκη στο ιστορικό (Τελευταίο αποτέλεσμα μπαίνει στο τέλος)
+                    home.history.push('W');
+                    away.history.push('L');
+                } else if (match.homeScore < match.awayScore) {
+                    away.won++;
+                    away.points += 3;
+                    home.lost++;
+                    home.history.push('L');
+                    away.history.push('W');
+                } else {
+                    home.drawn++;
+                    away.drawn++;
+                    home.points++;
+                    away.points++;
+                    home.history.push('D');
+                    away.history.push('D');
+                }
+            }
+        });
+    });
+
+    Object.values(standings).forEach(team => {
+        team.gd = team.gf - team.ga;
+    });
+
+    // Ταξινόμηση
+    const sorted = Object.values(standings).sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        return b.gf - a.gf;
+    });
+
+    return sorted;
+}
+
+function displayStandings() {
+    const standings = calculateStandings();
+    
+    // ΕΠΙΚΕΦΑΛΙΔΕΣ: Αφαιρέσαμε το γκρι φόντο και το bold από το 'Β'
+    const tableHead = document.querySelector('#standingsTable thead tr');
+    tableHead.innerHTML = `
+        <th style="width: 40px;">Θέση</th>
+        <th style="text-align: left;">Ομάδα</th>
+        <th style="width: 40px;">Β</th>  <th style="width: 40px;">Αγ</th>
+        <th style="width: 40px;">Ν</th>
+        <th style="width: 40px;">Ι</th>
+        <th style="width: 40px;">Η</th>
+        <th style="width: 40px;">ΓΥ</th>
+        <th style="width: 40px;">ΓΚ</th>
+        <th style="width: 40px;">ΔΤ</th>
+        <th style="width: 110px;">Φόρμα</th>
+    `;
+
+    const tbody = document.getElementById('standingsBody');
+    tbody.innerHTML = '';
+
+    standings.forEach((team, index) => {
+        const row = document.createElement('tr');
+        if (team.team === MY_TEAM) {
+            row.classList.add('my-team');
+        }
+
+        // Χρώματα Μπάρας
+        let indicatorClass = '';
+        const totalTeams = standings.length;
+        if (index === 0) indicatorClass = 'indicator-green';
+        else if (index === 1 || index === 2) indicatorClass = 'indicator-blue';
+        else if (index >= totalTeams - 2) indicatorClass = 'indicator-red';
+
+        // Φόρμα (Form)
+        const last5 = team.history.slice(-5);
+        let formHTML = '<div class="form-container">';
+        last5.forEach(result => {
+            let badgeClass = '';
+            let letter = '';
+            if (result === 'W') { badgeClass = 'form-win'; letter = 'N'; }
+            else if (result === 'D') { badgeClass = 'form-draw'; letter = 'I'; }
+            else if (result === 'L') { badgeClass = 'form-loss'; letter = 'H'; }
+            else if (result === 'A') { badgeClass = 'form-postponed'; letter = 'A'; }
+            
+            formHTML += `<span class="form-badge ${badgeClass}">${letter}</span>`;
+        });
+        formHTML += '</div>';
+
+        // ΔΕΔΟΜΕΝΑ: Αφαιρέσαμε το γκρι φόντο και το bold από τους βαθμούς
+        row.innerHTML = `
+            <td class="pos-cell ${indicatorClass}">${index + 1}</td>
+            <td>${team.team}</td>
+            <td style="font-size: 1.1rem;">${team.points}</td> <td>${team.played}</td>
+            <td>${team.won}</td>
+            <td>${team.drawn}</td>
+            <td>${team.lost}</td>
+            <td>${team.gf}</td>
+            <td>${team.ga}</td>
+            <td>${team.gd > 0 ? '+' + team.gd : team.gd}</td>
+            <td>${formHTML}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
+  function displayResults() {
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = '';
+    let hasResults = false;
+    const reversedFixtures = [...data.fixtures].reverse();
+
+    reversedFixtures.forEach(round => {
+        const roundMatches = round.matches.filter(m => (m.homeScore !== null && m.awayScore !== null) || m.isPostponed);
+
+        if (roundMatches.length > 0) {
+            hasResults = true;
+            const section = document.createElement('div');
+            section.className = 'round-section';
+            
+            const header = document.createElement('div');
+            header.className = 'round-header';
+            header.textContent = `Αγωνιστική ${round.round}`;
+            section.appendChild(header);
+
+            roundMatches.forEach(match => {
+                const div = document.createElement('div');
+                div.className = 'match-row';
+                div.style.display = 'block'; 
+                div.style.padding = '0';
+
+                if (match.home === MY_TEAM || match.away === MY_TEAM) { div.style.background = '#fffdf0'; }
+
+                // ΑΛΛΑΓΗ ΕΔΩ: Γράφουμε "ΑΝΑΒΟΛΗ" αντί για "ΑΝΑΒΛΗΘΗΚΕ"
+                let centerContent = match.isPostponed ? 
+                    `<span class="postponed-badge">ΑΝΑΒΟΛΗ</span>` : 
+                    `<div class="match-score-box">${match.homeScore} - ${match.awayScore}</div>`;
+
+                let mainMatchHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; padding: 1rem;">
+                        <div class="team-left">${match.home}</div>
+                        <div>${centerContent}</div>
+                        <div class="team-right">${match.away}</div>
+                    </div>`;
+
+                // --- ΕΜΦΑΝΙΣΗ ΣΤΑΤΙΣΤΙΚΩΝ ---
+                let statsHTML = '';
+                let hasStats = false;
+                let contentHTML = [];
+
+                if (match.scorers && match.scorers.length > 0 && !match.isPostponed) {
+                    hasStats = true;
+                    const counts = {};
+                    match.scorers.forEach(name => { counts[name] = (counts[name] || 0) + 1; });
+
+                    for (const [name, count] of Object.entries(counts)) {
+                        let shortName = name;
+                        const parts = name.split(' ');
+                        if(parts.length > 1) shortName = parts.slice(1).join(' ') + ' ' + parts[0].charAt(0) + '.';
+                        const goalsStr = count > 1 ? `(${count})` : '';
+                        contentHTML.push(`<span class="match-scorer-entry">⚽ ${shortName} ${goalsStr}</span>`);
+                    }
+                }
+
+                if (match.cleanSheetHolders && match.cleanSheetHolders.length > 0 && !match.isPostponed) {
+                    hasStats = true;
+                    match.cleanSheetHolders.forEach(name => {
+                         let shortName = name;
+                        const parts = name.split(' ');
+                        if(parts.length > 1) shortName = parts.slice(1).join(' ') + ' ' + parts[0].charAt(0) + '.';
+                        contentHTML.push(`<span class="match-scorer-entry match-cs-entry">🧤 ${shortName}</span>`);
+                    });
+                }
+
+                if (hasStats) {
+                    statsHTML = `<div class="match-scorers">${contentHTML.join('<span style="margin:0 4px; opacity:0.3">|</span>')}</div>`;
+                }
+
+                div.innerHTML = mainMatchHTML + statsHTML;
+                section.appendChild(div);
+            });
+            container.appendChild(section);
+        }
+    });
+
+    if (!hasResults) { container.innerHTML = '<div class="empty-state"><p>⚽ Δεν υπάρχουν αποτελέσματα ακόμα.</p></div>'; }
+}
+function displayFixtures() {
+    const container = document.getElementById('fixturesContainer');
+    container.innerHTML = '';
+
+    let hasFixtures = false;
+
+    data.fixtures.forEach(round => {
+        // Βρίσκουμε αγώνες που ΔΕΝ έχουν σκορ και ΔΕΝ είναι αναβληθέντες
+        const roundMatches = round.matches.filter(m => 
+            m.homeScore === null && m.awayScore === null && !m.isPostponed
+        );
+
+        if (roundMatches.length > 0) {
+            hasFixtures = true;
+            
+            const section = document.createElement('div');
+            section.className = 'round-section';
+            
+            const header = document.createElement('div');
+            header.className = 'round-header';
+            header.textContent = `Αγωνιστική ${round.round}`;
+            section.appendChild(header);
+
+            roundMatches.forEach(match => {
+                const div = document.createElement('div');
+                div.className = 'match-row';
+                
+                if (match.home === MY_TEAM || match.away === MY_TEAM) {
+                    div.style.background = '#fffdf0';
+                }
+
+                const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+
+                div.innerHTML = `
+                    <div class="team-left">${homeTeam}</div>
+                    <div class="match-vs-box">VS</div>
+                    <div class="team-right">${awayTeam}</div>
+                `;
+                section.appendChild(div);
+            });
+
+            container.appendChild(section);
+        }
+    });
+
+    if (!hasFixtures) {
+        container.innerHTML = '<div class="empty-state"><p>🏁 Όλοι οι αγώνες έχουν ολοκληρωθεί!</p></div>';
+    }
+}
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Βρίσκει αναλυτικά τα στατιστικά ενός παίκτη
+function getPlayerDetailedStats(playerName) {
+    let goalsLog = [];
+    let cleanSheetsLog = [];
+
+    // Ψάχνουμε σε όλα τα fixtures
+    data.fixtures.forEach(round => {
+        round.matches.forEach(match => {
+            // Αν δεν έχει γίνει το ματς, το αγνοούμε
+            if (match.homeScore === null) return;
+
+            const opponent = (match.home === MY_TEAM) ? match.away : match.home;
+            const score = `${match.homeScore}-${match.awayScore}`;
+            const info = `vs ${opponent} (${score})`;
+
+            // 1. Έλεγχος για Γκολ
+            if (match.scorers) {
+                // Πόσες φορές υπάρχει το όνομα του παίκτη στη λίστα scorers;
+                const goalsInMatch = match.scorers.filter(s => s === playerName).length;
+                if (goalsInMatch > 0) {
+                    goalsLog.push({ match: info, count: goalsInMatch });
+                }
+            }
+
+            // 2. Έλεγχος για Clean Sheet
+            if (match.cleanSheetHolders && match.cleanSheetHolders.includes(playerName)) {
+                cleanSheetsLog.push({ match: info });
+            }
+        });
+    });
+
+    return { goalsLog, cleanSheetsLog };
+}
+function displayRoster() {
+    const container = document.getElementById('rosterContainer');
+    container.className = ''; 
+    container.innerHTML = '';
+
+    if (!data.roster || data.roster.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>👥 Δεν υπάρχουν παίκτες στο ρόστερ.</p></div>';
+        return;
+    }
+
+    const currentYear = new Date().getFullYear(); 
+    const categories = [
+        { title: 'ΤΕΡΜΑΤΟΦΥΛΑΚΕΣ', keywords: ['(gk)'], icon: '🧤' },
+        { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
+        { title: 'ΜΕΣΟΙ', keywords: ['(cm)', '(dm)', '(am)', '(lm)', '(rm)'], icon: '⚙️' },
+        { title: 'ΕΠΙΘΕΤΙΚΟΙ', keywords: ['(cf)', '(ss)', '(lw)', '(rw)', '(st)'], icon: '⚡' },
+        { title: 'TECHNICAL STAFF', keywords: ['προπονητής', 'coach'], icon: '👨‍🏫' }
+    ];
+
+    let availablePlayers = [...data.roster];
+
+    categories.forEach(category => {
+        const groupPlayers = availablePlayers.filter(p => {
+            const posFull = (p.position || '').toLowerCase();
+            const primaryPos = posFull.split('/')[0]; 
+            return category.keywords.some(keyword => primaryPos.includes(keyword));
+        });
+
+        if (groupPlayers.length > 0) {
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'roster-category-title';
+            titleDiv.innerHTML = `${category.icon} ${category.title}`;
+            container.appendChild(titleDiv);
+
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'roster-grid';
+            groupPlayers.sort((a, b) => (a.number || 999) - (b.number || 999));
+
+            groupPlayers.forEach(player => {
+                const stats = getPlayerDetailedStats(player.name);
+                const isGoalKeeper = player.position.toLowerCase().includes('gk');
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.setAttribute('onclick', "this.classList.toggle('flipped')");
+
+                const isCoach = category.title === 'TECHNICAL STAFF';
+                const photoClass = isCoach ? 'player-photo coach-photo-bg' : 'player-photo';
+                const displayNumber = player.number || (isCoach ? 'COACH' : '-');
+                const captainBadge = player.isCaptain ? `<div class="captain-badge">C</div>` : '';
+
+                let ageHTML = '';
+                if (player.birthYear && !isCoach) { 
+                    ageHTML = `<div class="player-age">${player.birthYear} - ${currentYear - player.birthYear} ετών</div>`;
+                }
+                
+                let backContent = '';
+                if (stats.goalsLog.length > 0) {
+                    backContent += `<div class="stat-header">⚽ ${player.goals || 0} ΓΚΟΛ</div>`;
+                    stats.goalsLog.forEach(log => {
+                        let opponentInfo = log.match.replace('vs ', '').replace('ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ', '').trim();
+                        const scoreMatch = opponentInfo.match(/\(\d+-\d+\)/);
+                        const scoreStr = scoreMatch ? scoreMatch[0].replace('(', '').replace(')', '') : '';
+                        let teamName = opponentInfo.replace(/\(\d+-\d+\)/, '').trim();
+                        
+                        // padding-left: 2px για να κολλήσει αριστερά και font-size: 0.65rem για να μικρύνει
+                        backContent += `
+                            <div style="position: relative; padding: 5px 0 5px 2px; border-bottom: 1px solid rgba(0,0,0,0.05); min-height: 35px; text-align: left;">
+                                <div style="font-weight: 650; font-size: 0.6rem; line-height: 1.2; padding-right: 52px; color: inherit;">
+                                    ${teamName}
+                                </div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: right; width: 48px;">
+                                    <div style="font-size: 0.55rem; color: #666; font-weight: bold;">${scoreStr}</div>
+                                    <div style="font-weight: 800; color: var(--primary-color); font-size: 0.7rem;">⚽&nbsp;<span class="goal-number-back">${log.count}</span></div>
+                                </div>
+                            </div>`;
+                    });
+                } else if (!isGoalKeeper && !isCoach) {
+                    backContent += `<div class="stat-header" style="background:#ccc; color:#555;">⚽ ΚΑΝΕΝΑ ΓΚΟΛ</div>`;
+                }
+
+                if (isGoalKeeper && stats.cleanSheetsLog.length > 0) {
+                    backContent += `<div class="stat-header" style="background:#2e7d32;">🧤 ${player.cleanSheets || 0} CS</div>`;
+                    stats.cleanSheetsLog.forEach(log => {
+                        backContent += `
+                            <div style="position: relative; padding: 5px 0 5px 2px; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: left;">
+                                <div style="font-weight: 700; font-size: 0.65rem; padding-right: 52px;">${log.match.replace('vs ', '')}</div>
+                                <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-weight: 800; color: #2e7d32; font-size: 0.65rem;">🧤✅</div>
+                            </div>`;
+                    });
+                }
+
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:80%; height:4px; background:var(--primary-color); border-radius:0 0 6px 6px;"></div>
+                            <div class="${photoClass}">
+                                <div class="jersey-team-name">ΟΛΥΜΠΟΣ F.C.</div>
+                                <div class="player-number">${displayNumber}</div>
+                                ${captainBadge}
+                            </div>
+                            <div class="player-name">${player.name}</div>
+                            <div class="player-position">${player.position}</div>
+                            ${ageHTML}
+                        </div>
+                        <div class="card-back">
+                            <div style="position:relative; z-index:10; width:100%; padding: 8px;">
+                                <h4 style="font-size: 0.85rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 8px; color: var(--primary-color); text-align: center;">${player.name}</h4>
+                                ${backContent}
+                            </div>
+                        </div>
+                    </div>`;
+                gridDiv.appendChild(card);
+            });
+            container.appendChild(gridDiv);
+            availablePlayers = availablePlayers.filter(p => !groupPlayers.includes(p));
+        }
+    });
+}
+function displayTopScorers() {
+    const container = document.getElementById('scorersContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (!data.roster) return;
+
+    const scorers = data.roster
+        .filter(p => p.goals && p.goals > 0)
+        .sort((a, b) => b.goals - a.goals);
+
+    if (scorers.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #999;">Δεν έχουν σημειωθεί γκολ ακόμα.</div>';
+        return;
+    }
+
+    const list = document.createElement('div');
+    list.className = 'scorers-list';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'scorer-row scorer-header';
+    header.innerHTML = `
+        <div class="col-rank">#</div>
+        <div class="col-name">Παίκτης</div>
+        <div class="col-goals">Goals</div>
+    `;
+    list.appendChild(header);
+
+    scorers.forEach((player, index) => {
+        const rank = index + 1;
+        let rankClass = '';
+        if (rank === 1) rankClass = 'rank-1';
+        else if (rank === 2) rankClass = 'rank-2';
+        else if (rank === 3) rankClass = 'rank-3';
+
+        // Λογική: "Γιώργος Παπαδόπουλος" -> "Παπαδόπουλος Γ."
+        let displayName = player.name;
+        const parts = player.name.trim().split(' ');
+        
+        if (parts.length >= 2) {
+            const firstName = parts[0]; 
+            const lastName = parts.slice(1).join(' ');
+            displayName = `${lastName} ${firstName.charAt(0)}.`;
+        }
+
+        const row = document.createElement('div');
+        row.className = 'scorer-row';
+        
+        row.innerHTML = `
+            <div class="col-rank ${rankClass}">#${rank}</div>
+            <div class="col-name" style="font-weight: 700;">${displayName}</div>
+            <div class="col-goals">
+                <span class="goals-badge">${player.goals}</span>
+            </div>
+        `;
+        list.appendChild(row);
+    });
+
+    container.appendChild(list);
+}
+function addPlayer() {
+    const number = parseInt(document.getElementById('playerNumber').value);
+    const name = document.getElementById('playerName').value.trim();
+    const birthYear = parseInt(document.getElementById('playerBirthYear').value);
+    const positionSelect = document.getElementById('playerPosition');
+    const selectedOptions = Array.from(positionSelect.selectedOptions).map(opt => opt.value);
+    const position = selectedOptions.filter(p => p !== '').join(' / ');
+    const isCaptain = document.getElementById('isCaptainPlayer').checked;
+
+    if (!name || !position) {
+        alert('⚠️ Συμπλήρωσε Όνομα και Θέση!');
+        return;
+    }
+    
+    // Έλεγχος αριθμού
+    if (number && data.roster && data.roster.some(p => p.number === number)) {
+        alert('⚠️ Ο αριθμός φανέλας υπάρχει ήδη!');
+        return;
+    }
+
+    if (!data.roster) data.roster = [];
+
+    data.roster.push({ 
+        number: number || null, 
+        name, 
+        birthYear: birthYear || null,
+        position,
+        isCaptain: isCaptain,
+        goals: 0 // ΝΕΟ: Αρχικοποίηση γκολ
+    });
+    
+    saveData(data);
+    displayRoster();
+    displayTopScorers(); // ΝΕΟ
+    updateRosterList();
+    clearPlayerForm();
+    alert('✅ Ο παίκτης προστέθηκε επιτυχώς!');
+}
+
+function clearPlayerForm() {
+    document.getElementById('playerNumber').value = '';
+    document.getElementById('playerName').value = '';
+    document.getElementById('playerBirthYear').value = ''; // Καθαρισμός έτους
+    document.getElementById('isCaptainPlayer').checked = false;
+    const select = document.getElementById('playerPosition');
+    for (let option of select.options) {
+        option.selected = false;
+    }
+}
+
+function updateRosterList() {
+    const container = document.getElementById('rosterList');
+    container.innerHTML = '';
+
+    if (!data.roster || data.roster.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999;">Δεν υπάρχουν παίκτες</div>';
+        return;
+    }
+
+    const sortedRoster = [...data.roster].sort((a, b) => (a.number || 999) - (b.number || 999));
+
+    sortedRoster.forEach((player) => {
+        const div = document.createElement('div');
+        div.className = 'roster-item';
+        
+        const displayNum = player.number ? `#${player.number}` : '—';
+        const currentGoals = player.goals || 0;
+        const currentCS = player.cleanSheets || 0;
+        const isCoach = player.position && player.position.includes('Προπονητής');
+        const icon = isCoach ? '👨‍🏫' : '';
+
+        div.innerHTML = `
+            <div style="flex: 1;">
+                <strong>${displayNum}</strong> ${player.name} ${icon}
+                <div style="font-size: 0.8rem; color: #666;">${player.position}</div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                <div style="display:flex; gap:5px;">
+                    <div style="font-weight: bold; color: #1a472a; background: #e8f5e9; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; border: 1px solid #c8e6c9;">
+                        ⚽ ${currentGoals}
+                    </div>
+                    <div style="font-weight: bold; color: #333; background: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; border: 1px solid #ccc;">
+                        🧤 ${currentCS}
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-danger btn-small" 
+                    style="margin-left: 10px; height: 35px !important; width: 35px !important; padding: 0 !important; display: flex; align-items: center; justify-content: center;" 
+                    onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
+        `;
+        container.appendChild(div);
+    });
+}
+function deletePlayer(identifier) {
+    if (confirm('⚠️ Θέλεις να διαγράψεις αυτόν τον παίκτη;')) {
+        data.roster = data.roster.filter(p => 
+            p.number !== identifier && p.name !== identifier
+        );
+        saveData(data);
+        displayRoster();
+        displayTopScorers();
+        updateRosterList();
+        alert('✅ Ο παίκτης διαγράφηκε!');
+    }
+}
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
+function changeGoals(playerName, change) {
+    const player = data.roster.find(p => p.name === playerName);
+    if (player) {
+        if (!player.goals) player.goals = 0;
+        player.goals += change;
+        if (player.goals < 0) player.goals = 0; // Όχι αρνητικά γκολ
+        
+        saveData(data);
+        updateRosterList(); // Ενημέρωση λίστας admin
+        displayTopScorers(); // Ενημέρωση πίνακα σκόρερ
+    }
+}
+
+        // ===== ΔΙΑΧΕΙΡΙΣΗ ΝΕΩΝ - ΕΙΔΗΣΕΩΝ =====
+        let newsPhotoBase64 = null;
+
+function previewNewsPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('⚠️ Παρακαλώ επίλεξε μόνο εικόνες!');
+        event.target.value = '';
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert('⚠️ Η φωτογραφία είναι πολύ μεγάλη! Μέγιστο μέγεθος: 5MB');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        newsPhotoBase64 = e.target.result;
+        document.getElementById('newsPhotoPreview').style.display = 'block';
+        document.getElementById('newsPhotoPreviewImg').src = newsPhotoBase64;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeNewsPhoto() {
+    newsPhotoBase64 = null;
+    document.getElementById('newsPhoto').value = '';
+    document.getElementById('newsPhotoPreview').style.display = 'none';
+    document.getElementById('newsPhotoPreviewImg').src = '';
+}
+        function displayNews() {
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = '';
+
+    if (!data.news) { data.news = []; }
+
+    if (data.news.length === 0) {
+        container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
+        return;
+    }
+
+    // Ταξινόμηση
+    const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    sortedNews.forEach(newsItem => {
+        const div = document.createElement('div');
+        // ΠΡΟΣΟΧΗ: Δίνουμε μοναδικό ID στο div για να το βρίσκουμε μετά
+        div.id = `news-item-${newsItem.id}`; 
+        div.className = 'news-item collapsed';
+        
+        const formattedDate = new Date(newsItem.date).toLocaleDateString('el-GR', {
+            day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
+        });
+        
+        let imageHTML = '';
+        if (newsItem.photo) {
+            imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="News Photo">`;
+        }
+        
+        // Προσθέσαμε το κουμπί Share κάτω από τον τίτλο
+        div.innerHTML = `
+            <div class="news-header">
+                <div>
+                    <h3 class="news-title">${newsItem.title} <span class="news-toggle">🔽</span></h3>
+                    <span class="news-date">${formattedDate}</span>
+                </div>
+                <button class="btn-share" onclick="event.stopPropagation(); openShareModal(${newsItem.id})">
+                    📤 Share
+                </button>
+            </div>
+            <div class="news-content">${newsItem.content}</div>
+            ${imageHTML}
+        `;
+        
+        // Λογική για άνοιγμα/κλείσιμο
+        div.addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+        });
+        
+        container.appendChild(div);
+    });
+}
+
+        function addNews() {
+            const title = document.getElementById('newsTitle').value.trim();
+            const content = document.getElementById('newsContent').value.trim();
+
+            if (!title || !content) {
+                alert('⚠️ Συμπλήρωσε τίτλο και περιεχόμενο!');
+                return;
+            }
+
+            if (!data.news) {
+                data.news = [];
+            }
+
+          const newsItem = {
+    id: Date.now(),
+    title: title,
+    content: content,
+    date: new Date().toISOString(),
+    photo: newsPhotoBase64
+};
+
+            data.news.push(newsItem);
+            saveData(data);
+            displayNews();
+            updateNewsList();
+            clearNewsForm();
+            alert('✅ Η είδηση προστέθηκε επιτυχώς!');
+        }
+
+        function deleteNews(id) {
+            if (confirm('⚠️ Θέλεις να διαγράψεις αυτή την είδηση;')) {
+                data.news = data.news.filter(n => n.id !== id);
+                saveData(data);
+                displayNews();
+                updateNewsList();
+                alert('✅ Η είδηση διαγράφηκε!');
+            }
+        }
+
+        function clearNewsForm() {
+    document.getElementById('newsTitle').value = '';
+    document.getElementById('newsContent').value = '';
+    removeNewsPhoto();
+}
+
+        function updateNewsList() {
+            const container = document.getElementById('newsList');
+            container.innerHTML = '';
+
+            if (!data.news) {
+                data.news = [];
+            }
+
+            if (data.news.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;">Δεν υπάρχουν ειδήσεις</div>';
+                return;
+            }
+
+            const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedNews.forEach(newsItem => {
+                const div = document.createElement('div');
+                div.className = 'roster-item';
+                const shortContent = newsItem.content.length > 50 
+                    ? newsItem.content.substring(0, 50) + '...' 
+                    : newsItem.content;
+                
+                div.innerHTML = `
+                    <div>
+                        <strong>${newsItem.title}</strong><br>
+                        <span style="color: #666; font-size: 0.85rem;">${shortContent}</span>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deleteNews(${newsItem.id})">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+      // Κώδικας Πλοήγησης (Με αυτόματο κλείσιμο καρτών)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 1. ΒΡΙΣΚΟΥΜΕ ΟΛΕΣ ΤΙΣ ΓΥΡΙΣΜΕΝΕΣ ΚΑΡΤΕΣ ΚΑΙ ΤΙΣ ΚΛΕΙΝΟΥΜΕ
+                document.querySelectorAll('.player-card.flipped').forEach(card => {
+                    card.classList.remove('flipped');
+                });
+
+                // 2. Η κανονική αλλαγή σελίδας
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                
+                this.classList.add('active');
+                const targetPage = this.getAttribute('href').substring(1);
+                document.getElementById(targetPage).classList.add('active');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('active');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('adminContent').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+function saveGeneralSettings() {
+    data.liveScore = {
+        active: document.getElementById('liveModeCheckbox').checked,
+        home: document.getElementById('liveHomeScore').value || 0,
+        away: document.getElementById('liveAwayScore').value || 0,
+        half: document.getElementById('liveHalf').value,
+        duration: document.getElementById('liveHalfDuration').value || 20,
+        startTime: document.getElementById('liveStartTime').value
+    };
+    saveData(data);
+    displayNextMatch();
+    alert('✅ Ρυθμίσεις Live αποθηκεύτηκαν!');
+}
+let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
+function displayNextMatch() {
+    const container = document.getElementById('nextMatchContainer');
+    if (!container || !data) return;
+    container.innerHTML = '';
+
+    let nextMatch = null;
+    let matchType = 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ';
+
+    if (data.specialMatch && data.specialMatch.home) {
+        nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
+        matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
+    } else {
+        for (const round of data.fixtures) {
+            const m = round.matches.find(m => (m.home === MY_TEAM || m.away === MY_TEAM) && m.homeScore === null);
+            if (m) { nextMatch = m; break; }
+        }
+    }
+
+    if (!nextMatch) return;
+
+    const isLive = data.liveScore && data.liveScore.active;
+
+let liveMinuteDisplay = "";
+if (isLive) {
+    liveMinuteDisplay = calculateLiveMinute(
+        data.liveScore.startTime, 
+        data.liveScore.half, 
+        data.liveScore.duration
+    );
+}
+    
+    // Αν είναι LIVE κρύβουμε την αντίστροφη μέτρηση (display: none)
+    const countdownStyle = isLive ? 'display: none;' : 'display: block;';
+
+    container.innerHTML = `
+        <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
+            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
+                <span>📅 ${data.matchDate || ''}</span>
+                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '🔴 LIVE NOW' : matchType}</span>
+                <span>⏰ ${data.matchTime || ''}</span>
+            </div>
+            
+            <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; ${countdownStyle}">
+            </div>
+
+            <div class="nm-body">
+                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${nextMatch.home}</div>
+                
+                <div class="center-area">
+                    ${isLive ? `
+                        <div style="text-align:center;">
+                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${liveMinuteDisplay}</div>
+                            <div class="live-badge-pulse">LIVE</div>
+                            <div class="live-score-display" style="font-size:2.5rem; font-weight:900; margin:0; color:var(--text-dark);">
+    ${data.liveScore.home || 0} - ${data.liveScore.away || 0}
+</div>
+                    ` : `<div class="nm-vs">VS</div>`}
+                </div>
+
+                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
+            </div>
+            <div class="nm-stadium">🏟️ ${data.matchStadium || ''}</div>
+            <a href="${data.matchMapLink || '#'}" target="_blank" class="nm-footer" style="text-decoration:none;">📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ</a>
+        </div>
+    `;
+
+    // Ξεκινάμε το ρολόι μόνο αν ΔΕΝ είναι Live
+    if (!isLive && data.countdownTarget) {
+        startCountdown(data.countdownTarget);
+    }
+}
+// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Υπολογισμός Χρόνου
+function startCountdown(targetDateString) {
+    const display = document.getElementById('countdown-display');
+    if (!display) return;
+
+    const targetDate = new Date(targetDateString).getTime();
+    
+    // Καθαρισμός προηγούμενου χρονομέτρου για να μην τρέχουν διπλά
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    // Εμφάνιση της μπάρας
+    display.style.display = 'block';
+
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            display.innerHTML = "🔴 LIVE / ΟΛΟΚΛΗΡΩΘΗΚΕ";
+            display.style.background = "#d32f2f"; // Κόκκινο όταν τελειώσει
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        display.innerHTML = `⏳ Σέντρα σε: ${days}μ ${hours}ω ${minutes}λ ${seconds}δ`;
+    }, 1000);
+}
+ function checkPassword() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        loadRoundSelector();
+        updateRosterList();
+        updateNewsList();
+        
+        if (data) {
+            document.getElementById('announcementInput').value = data.announcement || '';
+            document.getElementById('matchDateInput').value = data.matchDate || '';
+            document.getElementById('matchTimeInput').value = data.matchTime || '';
+            document.getElementById('matchStadiumInput').value = data.matchStadium || '';
+            document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
+            document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
+
+            // Φόρτωση του Live Score στα πεδία της εικόνας
+          if (data.liveScore) {
+    document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
+    document.getElementById('liveHomeScore').value = data.liveScore.home ?? 0;
+    document.getElementById('liveAwayScore').value = data.liveScore.away ?? 0;
+    document.getElementById('liveHalf').value = data.liveScore.half || "1";
+    document.getElementById('liveHalfDuration').value = data.liveScore.duration || 20;
+    document.getElementById('liveStartTime').value = data.liveScore.startTime || "";
+}
+            
+            if (data.specialMatch) {
+                document.getElementById('useSpecialMatchCheckbox').checked = true;
+                toggleSpecialMatchFields();
+            }
+        }
+    } else {
+        alert('❌ Λάθος κωδικός!');
+    }
+}
+  function loadRoundSelector() {
+            const select = document.getElementById('roundSelect');
+            select.innerHTML = '<option value="">-- Επέλεξε Αγωνιστική --</option>';
+            
+            data.fixtures.forEach(round => {
+                const option = document.createElement('option');
+                option.value = round.round;
+                option.textContent = `Αγωνιστική ${round.round}`;
+                select.appendChild(option);
+            });
+        }
+
+  function loadMatchesForRound() {
+    const roundNum = parseInt(document.getElementById('roundSelect').value);
+    if (!roundNum) {
+        document.getElementById('matchInputs').innerHTML = '';
+        return;
+    }
+
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const container = document.getElementById('matchInputs');
+    container.innerHTML = '<h4 style="margin-bottom: 1rem;">Αποτελέσματα & Στατιστικά:</h4>';
+
+    round.matches.forEach((match, index) => {
+        const div = document.createElement('div');
+        div.className = 'match-input-row';
+        div.style.flexDirection = 'column'; 
+
+        const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+        const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+        const isPostponed = match.isPostponed ? 'checked' : '';
+        const bgStyle = match.isPostponed ? 'background: #eee;' : '';
+
+        // Έλεγχος αν παίζει ο Όλυμπος
+        const isMyTeamPlaying = homeTeam === MY_TEAM || awayTeam === MY_TEAM;
+        let statsHTML = '';
+
+        if (isMyTeamPlaying) {
+            // --- SCORERS ---
+            let existingScorersList = '';
+            if (match.scorers && match.scorers.length > 0) {
+                match.scorers.forEach((s, sIndex) => {
+                    existingScorersList += `
+                        <div class="scorer-tag">
+                            ⚽ ${s} 
+                            <span style="color:red; cursor:pointer; margin-left:5px;" onclick="removeScorer(${roundNum}, ${index}, ${sIndex})">✖</span>
+                        </div>`;
+                });
+            }
+
+            // --- CLEAN SHEETS (GK) ---
+            let existingCSList = '';
+            if (match.cleanSheetHolders && match.cleanSheetHolders.length > 0) {
+                match.cleanSheetHolders.forEach((gk, gkIndex) => {
+                    existingCSList += `
+                        <div class="scorer-tag" style="border-color: #4caf50;">
+                            🧤 ${gk} 
+                            <span style="color:red; cursor:pointer; margin-left:5px;" onclick="removeCleanSheetFromMatch(${roundNum}, ${index}, ${gkIndex})">✖</span>
+                        </div>`;
+                });
+            }
+
+            // Dropdown παικτών
+            let playerOptions = '<option value="">-- Επέλεξε Παίκτη --</option>';
+            if (data.roster) {
+                data.roster.sort((a,b) => a.name.localeCompare(b.name)).forEach(p => {
+                    playerOptions += `<option value="${p.name}">${p.name}</option>`;
+                });
+            }
+
+            statsHTML = `
+                <div style="display:flex; gap: 5px; width: 100%; margin-top: 5px;">
+                    <button type="button" class="admin-scorers-btn" onclick="togglePanel('scorer', ${index})">⚽ Σκόρερ</button>
+                    <button type="button" class="admin-scorers-btn" style="background:#f1f8e9; color:#2e7d32; border-color:#a5d6a7;" onclick="togglePanel('cs', ${index})">🧤 Clean Sheet</button>
+                </div>
+                
+                <div id="scorer-panel-${index}" class="admin-scorers-panel">
+                    <div style="font-size:0.8rem; font-weight:bold; margin-bottom:5px;">Διαχείριση Σκόρερ:</div>
+                    <div id="scorers-list-${index}">${existingScorersList}</div>
+                    <div style="display:flex; gap:5px; margin-top:10px;">
+                        <select id="new-scorer-select-${index}" style="padding:5px; flex:1;">${playerOptions}</select>
+                        <button class="btn btn-success btn-small" onclick="addScorerToMatch(${roundNum}, ${index})">➕</button>
+                    </div>
+                </div>
+
+                <div id="cs-panel-${index}" class="admin-scorers-panel" style="background: #e8f5e9; border-color: #a5d6a7;">
+                    <div style="font-size:0.8rem; font-weight:bold; margin-bottom:5px; color:#1b5e20;">🧤 Ποιος κράτησε το μηδέν;</div>
+                    <div id="cs-list-${index}">${existingCSList}</div>
+                    <div style="display:flex; gap:5px; margin-top:10px;">
+                        <select id="new-cs-select-${index}" style="padding:5px; flex:1;">${playerOptions}</select>
+                        <button class="btn btn-success btn-small" onclick="addCleanSheetToMatch(${roundNum}, ${index})">➕</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        div.innerHTML = `
+            <div style="display: grid; grid-template-columns: 1fr 140px 1fr; gap: 1rem; align-items: center; width:100%;">
+                <div><input type="text" value="${homeTeam}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
+                <div class="score-inputs-wrapper">
+                    <div class="score-inputs">
+                        <input type="number" class="score-input" id="home-${roundNum}-${index}" value="${match.homeScore !== null ? match.homeScore : ''}" min="0" placeholder="0" style="${bgStyle}">
+                        <span>-</span>
+                        <input type="number" class="score-input" id="away-${roundNum}-${index}" value="${match.awayScore !== null ? match.awayScore : ''}" min="0" placeholder="0" style="${bgStyle}">
+                    </div>
+                    <label class="postpone-label"><input type="checkbox" id="postponed-${roundNum}-${index}" ${isPostponed}> Αναβλήθηκε</label>
+                </div>
+                <div><input type="text" value="${awayTeam}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
+            </div>
+            ${statsHTML}
+        `;
+        container.appendChild(div);
+    });
+}
+// Βοηθητικές Συναρτήσεις (ΠΡΟΣΘΕΣΕ ΤΕΣ ΚΑΤΩ ΑΠΟ ΤΗΝ loadMatchesForRound)
+function toggleScorerPanel(index) {
+    const panel = document.getElementById(`scorer-panel-${index}`);
+    if (panel.style.display === 'none' || panel.style.display === '') {
+        panel.style.display = 'block';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+function addScorerToMatch(roundNum, matchIndex) {
+    const select = document.getElementById(`new-scorer-select-${matchIndex}`);
+    const playerName = select.value;
+    
+    if (!playerName) return;
+
+    // Βρίσκουμε το ματς και προσθέτουμε τον σκόρερ
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+
+    if (!match.scorers) match.scorers = [];
+    match.scorers.push(playerName);
+
+    // Ανανεώνουμε ΜΟΝΟ το Admin UI (δεν σώζουμε ακόμα)
+    saveData(data); // Σώζουμε προσωρινά για να μην χαθεί στο refresh του UI
+    loadMatchesForRound(); // Ξαναφορτώνουμε για να φανεί η αλλαγή
+}
+
+function removeScorer(roundNum, matchIndex, scorerIndex) {
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+    
+    if (match.scorers) {
+        match.scorers.splice(scorerIndex, 1);
+        saveData(data);
+        loadMatchesForRound();
+    }
+}
+
+function saveResults() {
+    const roundNum = parseInt(document.getElementById('roundSelect').value);
+    if (!roundNum) {
+        alert('Επέλεξε πρώτα μια αγωνιστική!');
+        return;
+    }
+
+    const round = data.fixtures.find(r => r.round === roundNum);
+    
+    round.matches.forEach((match, index) => {
+        if (!match.home || !match.away) return;
+        
+        const homeInput = document.getElementById(`home-${roundNum}-${index}`);
+        const awayInput = document.getElementById(`away-${roundNum}-${index}`);
+        const postponedInput = document.getElementById(`postponed-${roundNum}-${index}`);
+        
+        const isPostponed = postponedInput.checked;
+        
+        // Αν τσεκαριστεί το "Αναβλήθηκε", αποθηκεύουμε true και σβήνουμε τα σκορ
+        if (isPostponed) {
+            match.isPostponed = true;
+            match.homeScore = null;
+            match.awayScore = null;
+            // Καθαρίζουμε και τα inputs οπτικά
+            homeInput.value = '';
+            awayInput.value = '';
+        } else {
+            // Αν ΔΕΝ είναι αναβληθέν, αποθηκεύουμε τα σκορ κανονικά
+            match.isPostponed = false;
+            const homeScore = homeInput.value !== '' ? parseInt(homeInput.value) : null;
+            const awayScore = awayInput.value !== '' ? parseInt(awayInput.value) : null;
+            
+            match.homeScore = homeScore;
+            match.awayScore = awayScore;
+        }
+    });
+
+    saveData(data);
+    
+    displayStandings();
+    displayResults();
+    displayFixtures();
+
+    alert('✅ Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
+}
+
+        function resetAllData() {
+            if (confirm('⚠️ ΠΡΟΣΟΧΗ! Θα διαγραφούν ΟΛΑ τα δεδομένα (αποτελέσματα & ρόστερ). Είσαι σίγουρος;')) {
+                if (confirm('Τελευταία επιβεβαίωση - Θα χαθούν όλα τα δεδομένα!')) {
+                    localStorage.removeItem('footballData');
+                    data = { fixtures: JSON.parse(JSON.stringify(FIXTURES)), roster: [], news: [] };
+                    displayStandings();
+                    displayResults();
+                    displayFixtures();
+                    displayRoster();
+                    displayNews();
+                    updateRosterList();
+                    updateNewsList();
+                    alert('✅ Όλα τα δεδομένα διαγράφηκαν!');
+                    closeAdminPanel();
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+    // Περίμενε να φορτώσουν τα δεδομένα (είτε από localStorage, είτε από fetch, είτε από fallback)
+    data = await loadData(); 
+
+    // Έλεγχος αν υπάρχει το news array, αν όχι το προσθέτουμε
+    if (!data.news) {
+        data.news = [];
+    }
+// (NEO) --- Φόρτωση και εμφάνιση του Ticker ---
+        const tickerBar = document.getElementById('announcement-ticker');
+        const tickerText = document.getElementById('announcement-text');
+        
+        if (data && data.announcement && data.announcement.trim() !== '') {
+            tickerText.textContent = data.announcement;
+            tickerBar.style.display = 'block';
+        }
+        setInterval(() => {
+    if (data && data.liveScore && data.liveScore.active) {
+        displayNextMatch();
+    }
+}, 30000); // Ανανέωση κάθε 30 δευτερόλεπτα
+        // --- Τέλος κώδικα Ticker ---
+    // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
+    displayStandings();
+    displayNextMatch();
+    displayTopScorers();
+    displayResults();
+    displayFixtures();
+    displayRoster();
+    displayNews();
+    checkDeepLink();
+    checkNewNews();
+
+});
+
+        document.getElementById('adminModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAdminPanel();
+            }
+        });
+        // --- MOBILE MENU LOGIC ---
+const hamburger = document.querySelector(".hamburger");
+const navMenu = document.querySelector(".nav-menu");
+const navLinks = document.querySelectorAll(".nav-link");
+
+// Όταν πατάς τις 3 γραμμές
+if(hamburger) {
+    hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
+}
+
+// Όταν πατάς ένα λινκ (π.χ. Ρόστερ), να κλείνει το μενού αυτόματα
+navLinks.forEach(n => n.addEventListener("click", () => {
+    if(hamburger) {
+        hamburger.classList.remove("active");
+        navMenu.classList.remove("active");
+    }
+}));
+/* --- SHARE FUNCTIONALITY --- */
+let currentShareId = null;
+
+function openShareModal(id) {
+    const item = data.news.find(n => n.id === id);
+    if(!item) return;
+    
+    currentShareId = id;
+    document.getElementById('shareTitlePreview').textContent = item.title;
+    document.getElementById('shareModal').style.display = 'flex';
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').style.display = 'none';
+    currentShareId = null;
+}
+
+function doShare(platform) {
+    if(!currentShareId) return;
+    
+    // Δημιουργία του "Εξυπνου Link"
+    // Παίρνει το site url και κολλάει το #news-12345
+    const baseUrl = window.location.href.split('#')[0];
+    const deepLink = `${baseUrl}#news-${currentShareId}`;
+    
+    const item = data.news.find(n => n.id === currentShareId);
+    const text = `🔴 ${item.title}\n\nΔείτε το εδώ: ${deepLink}`;
+    
+    let url = '';
+    
+    if (platform === 'whatsapp') {
+        url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    } else if (platform === 'viber') {
+        url = `viber://forward?text=${encodeURIComponent(text)}`;
+    } else if (platform === 'facebook') {
+        // ΣΗΜΕΙΩΣΗ: Το Facebook βλέπει μόνο το Link, όχι το κείμενο
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(deepLink)}`;
+    } else if (platform === 'copy') {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('✅ Το Link αντιγράφηκε!');
+            closeShareModal();
+        }).catch(() => {
+            prompt("Αντιγράψτε το link:", deepLink);
+        });
+        return;
+    }
+    
+    if(url) {
+        window.open(url, '_blank');
+        closeShareModal();
+    }
+}
+
+/* --- DEEP LINK HANDLER (Αυτό ανοίγει την είδηση) --- */
+function checkDeepLink() {
+    // Ελέγχουμε αν το URL έχει hash τύπου #news-12345
+    const hash = window.location.hash;
+    
+    if (hash && hash.startsWith('#news-')) {
+        const id = hash.replace('#news-', '');
+        
+        // 1. Πάμε στη σελίδα Νέα
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        
+        // Βρίσκουμε το Link των νέων και το κάνουμε active
+        const newsLink = document.querySelector('a[href="#news"]');
+        if(newsLink) newsLink.classList.add('active');
+        document.getElementById('news').classList.add('active');
+        
+        // 2. Περιμένουμε λίγο να "χτιστεί" το HTML από το displayNews
+        setTimeout(() => {
+            const element = document.getElementById(`news-item-${id}`);
+            if (element) {
+                // 3. Ανοίγουμε την είδηση (αφαιρούμε το collapsed)
+                element.classList.remove('collapsed');
+                // 4. Σκρολάρουμε εκεί
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 5. Ένα μικρό εφέ (αναβοσβήνει)
+                element.style.border = "2px solid var(--accent-color)";
+                setTimeout(() => {
+                    element.style.border = "";
+                }, 2000);
+            }
+        }, 100); // Μικρή καθυστέρηση 0.1 δευτ.
+    }
+}
+/* --- HELPER FUNCTIONS FOR STATS (SCORERS & CLEAN SHEETS) --- */
+// 1. ΕΛΕΓΧΟΣ ΓΙΑ ΝΕΕΣ ΕΙΔΗΣΕΙΣ (Καλείται όταν φορτώνει η σελίδα)
+function checkNewNews() {
+    if (!data.news || data.news.length === 0) return;
+
+    // Βρίσκουμε την πιο πρόσφατη είδηση (η πρώτη στη λίστα μετά το sort)
+    // Επειδή έχουμε ήδη σορτάρει τα news στο displayNews, παίρνουμε το πιο πρόσφατο από τα data
+    // Θα κάνουμε ένα γρήγορο sort εδώ για σιγουριά
+    const latestNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    
+    if (!latestNews) return;
+
+    const latestId = latestNews.id;
+    const lastReadId = localStorage.getItem('lastReadNewsId');
+
+    // Αν το ID της τελευταίας είδησης είναι διαφορετικό από αυτό που αποθηκεύσαμε
+    // σημαίνει ότι υπάρχει κάτι νέο!
+    if (latestId.toString() !== lastReadId) {
+        const badge = document.getElementById('newsBadge');
+        if (badge) badge.style.display = 'inline-block';
+    }
+}
+
+// 2. ΜΟΛΙΣ ΠΑΤΗΣΕΙ ΤΟ ΚΟΥΜΠΙ "ΝΕΑ"
+function markNewsAsRead() {
+    if (!data.news || data.news.length === 0) return;
+
+    // Βρίσκουμε πάλι το πιο πρόσφατο
+    const latestNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    
+    if (latestNews) {
+        // Αποθηκεύουμε στο κινητό του χρήστη ότι "Είδε" αυτή την είδηση
+        localStorage.setItem('lastReadNewsId', latestNews.id);
+        
+        // Κρύβουμε το σήμα
+        const badge = document.getElementById('newsBadge');
+        if (badge) badge.style.display = 'none';
+    }
+}
+function togglePanel(type, index) {
+    const panelId = type === 'scorer' ? `scorer-panel-${index}` : `cs-panel-${index}`;
+    const panel = document.getElementById(panelId);
+    
+    // Κλείνουμε το άλλο panel για να μην είναι χαμός
+    const otherType = type === 'scorer' ? 'cs' : 'scorer';
+    document.getElementById(`${otherType}-panel-${index}`).style.display = 'none';
+
+    panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+}
+
+// --- SCORERS LOGIC ---
+function addScorerToMatch(roundNum, matchIndex) {
+    const select = document.getElementById(`new-scorer-select-${matchIndex}`);
+    const playerName = select.value;
+    if (!playerName) return;
+
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+
+    if (!match.scorers) match.scorers = [];
+    match.scorers.push(playerName);
+
+    // Αυτόματη αύξηση γκολ στο Ρόστερ
+    const player = data.roster.find(p => p.name === playerName);
+    if (player) {
+        if (!player.goals) player.goals = 0;
+        player.goals++;
+    }
+
+    saveAndRefresh();
+}
+
+function removeScorer(roundNum, matchIndex, scorerIndex) {
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+    
+    if (match.scorers) {
+        const playerName = match.scorers[scorerIndex];
+        match.scorers.splice(scorerIndex, 1);
+
+        // Αυτόματη μείωση γκολ στο Ρόστερ
+        const player = data.roster.find(p => p.name === playerName);
+        if (player && player.goals > 0) player.goals--;
+
+        saveAndRefresh();
+    }
+}
+
+// --- CLEAN SHEETS LOGIC (ΝΕΟ) ---
+function addCleanSheetToMatch(roundNum, matchIndex) {
+    const select = document.getElementById(`new-cs-select-${matchIndex}`);
+    const playerName = select.value;
+    if (!playerName) return;
+
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+
+    if (!match.cleanSheetHolders) match.cleanSheetHolders = [];
+    
+    // Έλεγχος: Μην βάλουμε τον ίδιο παίκτη 2 φορές στο ίδιο ματς
+    if(match.cleanSheetHolders.includes(playerName)) {
+        alert('⚠️ Αυτός ο παίκτης έχει ήδη Clean Sheet σε αυτό το ματς!');
+        return;
+    }
+
+    match.cleanSheetHolders.push(playerName);
+
+    // Αυτόματη αύξηση Clean Sheets στο Ρόστερ
+    const player = data.roster.find(p => p.name === playerName);
+    if (player) {
+        if (!player.cleanSheets) player.cleanSheets = 0;
+        player.cleanSheets++;
+    }
+
+    saveAndRefresh();
+}
+
+function removeCleanSheetFromMatch(roundNum, matchIndex, csIndex) {
+    const round = data.fixtures.find(r => r.round === roundNum);
+    const match = round.matches[matchIndex];
+    
+    if (match.cleanSheetHolders) {
+        const playerName = match.cleanSheetHolders[csIndex];
+        match.cleanSheetHolders.splice(csIndex, 1);
+
+        // Αυτόματη μείωση Clean Sheets στο Ρόστερ
+        const player = data.roster.find(p => p.name === playerName);
+        if (player && player.cleanSheets > 0) player.cleanSheets--;
+
+        saveAndRefresh();
+    }
+}
+
+// Κοινή συνάρτηση αποθήκευσης
+function saveAndRefresh() {
+    saveData(data);
+    loadMatchesForRound(); 
+    updateRosterList();    
+    displayTopScorers();
+    displayResults();
+    displayRoster();
+}
+// Εμφάνιση/Απόκρυψη πεδίων εμβόλιμου αγώνα
+function toggleSpecialMatchFields() {
+    const checkbox = document.getElementById('useSpecialMatchCheckbox');
+    const fields = document.getElementById('specialMatchFields');
+    fields.style.display = checkbox.checked ? 'block' : 'none';
+}
+// Εμφάνιση κουμπιού όταν κατεβαίνουμε λίγο
+window.onscroll = function() {
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        document.getElementById("backToTop").style.display = "block";
+    } else {
+        document.getElementById("backToTop").style.display = "none";
+    }
+};
+// Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
+let currentMatchShareData = {};
+function openSquadModal(home, away, date, time, stadium, mapLink) {
+    currentMatchShareData = { home, away, date, time, stadium, mapLink };
+
+    const list = document.getElementById('squadList');
+    list.innerHTML = ''; 
+
+    document.getElementById('noSquadCheckbox').checked = false;
+
+    const players = [...data.roster].sort((a, b) => (a.number || 999) - (b.number || 999));
+
+    players.forEach(p => {
+        const div = document.createElement('div');
+        div.style.padding = "5px";
+        div.style.borderBottom = "1px solid #eee";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        
+        const isCoach = p.position.includes('Προπονητής');
+        
+        div.innerHTML = `
+            <label style="display: flex; align-items: center; width: 100%; cursor: pointer; margin: 0;">
+                <input type="checkbox" class="squad-checkbox" value="${p.name}" data-pos="${p.position}" ${!isCoach ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 10px;">
+                <span style="font-weight: 600; font-size: 0.9rem;">${p.number ? '#' + p.number : ''} ${p.name}</span>
+                <span style="font-size: 0.75rem; color: #888; margin-left: auto;">${p.position.split('/')[0]}</span>
+            </label>
+        `;
+        list.appendChild(div);
+    });
+
+    document.getElementById('extraPlayersInput').value = '';
+    document.getElementById('squadModal').style.display = 'flex';
+}
+function shareFinalSquad() {
+    // Κλείσιμο του squad modal
+    document.getElementById('squadModal').style.display = 'none';
+    
+    // Άνοιγμα του PIN modal
+    document.getElementById('pinModal').style.display = 'flex';
+}
+// PIN Configuration
+const CORRECT_PIN = '1969'; // ⚠️ ΑΛΛΑΞΕ ΤΟ PIN ΕΔΩ
+let enteredPin = '';
+
+function enterPin(digit) {
+    if (enteredPin.length < 4) {
+        enteredPin += digit;
+        updatePinDisplay();
+        
+        if (enteredPin.length === 4) {
+            setTimeout(checkPin, 300);
+        }
+    }
+}
+
+function deleteLastPin() {
+    if (enteredPin.length > 0) {
+        enteredPin = enteredPin.slice(0, -1);
+        updatePinDisplay();
+        document.getElementById('pinError').textContent = '';
+    }
+}
+
+function clearPin() {
+    enteredPin = '';
+    updatePinDisplay();
+    document.getElementById('pinError').textContent = '';
+}
+
+function updatePinDisplay() {
+    const dots = document.querySelectorAll('.pin-dot');
+    dots.forEach((dot, index) => {
+        if (index < enteredPin.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function checkPin() {
+    if (enteredPin === CORRECT_PIN) {
+        // ✅ Σωστό PIN - Προχωράμε στο share
+        document.getElementById('pinError').textContent = '';
+        closePinModal();
+        executeShareSquad(); // Η πραγματική λειτουργία share
+    } else {
+        // ❌ Λάθος PIN
+        document.getElementById('pinError').textContent = '❌ Λάθος PIN! Προσπάθησε ξανά.';
+        
+        // Κούνημα animation
+        const modal = document.querySelector('#pinModal .modal-content');
+        modal.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            modal.style.animation = '';
+        }, 500);
+        
+        clearPin();
+    }
+}
+
+function closePinModal() {
+    document.getElementById('pinModal').style.display = 'none';
+    clearPin();
+}
+
+// Η πραγματική συνάρτηση share (παλιά shareFinalSquad)
+function executeShareSquad() {
+    const { home, away, date, time, stadium, mapLink } = currentMatchShareData;
+    const siteUrl = window.location.origin + window.location.pathname;
+    
+    const hideSquad = document.getElementById('noSquadCheckbox').checked;
+
+    let squadText = "";
+
+    if (!hideSquad) {
+        const checkboxes = document.querySelectorAll('.squad-checkbox:checked');
+        
+        const gks = [];
+        const defs = [];
+        const mids = [];
+        const fwds = [];
+
+        checkboxes.forEach(box => {
+            const name = box.value;
+            const rawPos = (box.getAttribute('data-pos') || "").toUpperCase();
+            const firstPos = rawPos.split('/')[0];
+            const match = firstPos.match(/\(([A-Z]+)\)/);
+            
+            let category = 'mid';
+
+            if (match && match[1].length >= 2) {
+                const code = match[1];
+                const secondChar = code[1];
+
+                if (secondChar === 'K') {
+                    category = 'gk';
+                } else if (secondChar === 'B') {
+                    category = 'def';
+                } else if (secondChar === 'M') {
+                    category = 'mid';
+                } else if (secondChar === 'F' || secondChar === 'S') {
+                    category = 'fwd';
+                } else if (secondChar === 'W') {
+                    if (code.length === 2 && code !== 'SW') {
+                        category = 'fwd';
+                    } else {
+                        category = 'def';
+                    }
+                }
+            } else {
+                if (firstPos.includes('ΤΕΡΜΑΤΟΦΥΛΑΚΑΣ')) category = 'gk';
+                else if (firstPos.includes('ΑΜΥΝΤΙΚΟΣ')) category = 'def';
+                else if (firstPos.includes('ΕΠΙΘΕΤΙΚΟΣ')) category = 'fwd';
+                else category = 'mid';
+            }
+
+            if (category === 'gk') gks.push(name);
+            else if (category === 'def') defs.push(name);
+            else if (category === 'mid') mids.push(name);
+            else if (category === 'fwd') fwds.push(name);
+        });
+
+        const extras = document.getElementById('extraPlayersInput').value.trim();
+        
+        squadText = "\n📋 *Η ΑΠΟΣΤΟΛΗ ΤΗΣ ΟΜΑΔΑΣ:*";
+        if (gks.length) squadText += "\n🧤 " + gks.join(", ");
+        if (defs.length) squadText += "\n🛡️ " + defs.join(", ");
+        if (mids.length) squadText += "\n⚙️ " + mids.join(", ");
+        if (fwds.length) squadText += "\n⚡ " + fwds.join(", ");
+        
+        if (extras) {
+            squadText += "\n🆕 " + extras;
+        }
+        squadText += "\n"; 
+    }
+
+    const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
+                 `🆚 ${home} - ${away}\n` +
+                 `📅 ${date}  ⏰ ${time}\n` +
+                 `🏟️ ${stadium}\n\n` +
+                 `📍 *Χάρτης Γηπέδου:* ${mapLink}\n` +
+                 `${squadText}\n` + 
+                 `⏳ ${siteUrl}\n\n` + 
+                 `*👨‍👩‍👦 Μια οικογένεια, ⛰️ μια ομάδα, 🔥 ένα πάθος*`;
+
+    if (navigator.share) {
+        navigator.share({ title: 'Επόμενος Αγώνας', text: text }).catch(console.error);
+    } else {
+        const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
+        window.open(viberUrl, '_blank');
+    }
+}
+</script>
+<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Κορυφή">⬆</button>
+</body>
+</html>
