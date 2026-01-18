@@ -1196,11 +1196,11 @@
     }
   ],
   "announcement": "",
-  "matchDate": "Κυριακή 18/1",
-  "matchTime": "9:00",
-  "matchStadium": "Γήπεδο Ελπίδας Ευόσμου",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
   "matchMapLink": "https://maps.app.goo.gl/hJYxMFbAz1hNTKfA6",
-  "countdownTarget": "2026-01-18T09:00",
+  "countdownTarget": "",
   "liveScore": {
     "active": false,
     "home": "2",
@@ -1208,5 +1208,10 @@
     "half": "FT",
     "duration": "20",
     "startTime": "10:16"
+  },
+  "specialMatch": {
+    "type": "",
+    "home": null,
+    "away": null
   }
 }
