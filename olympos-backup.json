@@ -1183,9 +1183,11 @@
   "matchMapLink": "https://maps.app.goo.gl/hJYxMFbAz1hNTKfA6",
   "countdownTarget": "2026-01-18T09:00",
   "liveScore": {
-    "active": false,
+    "active": true,
     "home": "0",
     "away": "0",
-    "minute": "FT"
+    "half": "1",
+    "duration": "20",
+    "startTime": "09:00"
   }
 }
