@@ -2860,6 +2860,49 @@ table thead th:nth-child(2) {
         color: #ffffff !important;
     }
 }
+@media (prefers-color-scheme: dark) {
+   .match-input-row {
+        background-color: #252525 !important;
+        border: 1px solid #444 !important;
+        box-shadow: none !important;
+    }
+    .match-input-row input[type="text"][disabled] {
+        background-color: #333 !important; /* Σκούρο γκρι */
+        color: #eee !important;            /* Άσπρα γράμματα */
+        border: 1px solid #555 !important;
+    }
+    .admin-scorers-btn {
+        background-color: #37474f !important; /* Σκούρο μπλε/γκρι */
+        color: #80cbc4 !important;            /* Ανοιχτό τιρκουάζ γράμμα */
+        border-color: #546e7a !important;
+    }
+    .admin-scorers-btn[style*="background:#f1f8e9"] {
+        background-color: #1b5e20 !important; /* Σκούρο πράσινο φόντο */
+        color: #a5d6a7 !important;            /* Ανοιχτό πράσινο γράμμα */
+        border-color: #2e7d32 !important;
+    }
+
+    .admin-scorers-panel {
+        background-color: #1e1e1e !important;
+        border-color: #444 !important;
+    }
+        .admin-scorers-panel div {
+        color: #e0e0e0 !important;
+    }
+    .scorer-tag {
+        background-color: #333 !important;
+        border-color: #555 !important;
+        color: #fff !important;
+    }
+    .admin-scorers-panel select {
+        background-color: #333 !important;
+        color: #fff !important;
+        border: 1px solid #555 !important;
+    }
+        .postpone-label {
+        color: #ff8a80 !important; /* Ανοιχτό κόκκινο για να διαβάζεται */
+    }
+}
         
         /* PIN MODAL STYLES */
         .pin-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); background: white; transition: all 0.3s ease; }
