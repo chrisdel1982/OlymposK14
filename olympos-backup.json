@@ -1184,7 +1184,7 @@
   "countdownTarget": "2026-01-18T09:00",
   "liveScore": {
     "active": true,
-    "home": "0",
+    "home": "1",
     "away": "0",
     "half": "2",
     "duration": "20",
