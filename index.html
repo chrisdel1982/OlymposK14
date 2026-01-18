@@ -4349,6 +4349,7 @@ function removeNewsPhoto() {
             document.getElementById('adminModal').classList.remove('active');
         }
 function saveGeneralSettings() {
+    // 1. Αποθήκευση Live Score (όπως πριν)
     data.liveScore = {
         active: document.getElementById('liveModeCheckbox').checked,
         home: document.getElementById('liveHomeScore').value || 0,
@@ -4357,9 +4358,45 @@ function saveGeneralSettings() {
         duration: document.getElementById('liveHalfDuration').value || 20,
         startTime: document.getElementById('liveStartTime').value
     };
+
+    // 2. Αποθήκευση Ticker (Κυλιόμενη Ανακοίνωση)
+    data.announcement = document.getElementById('announcementInput').value;
+
+    // 3. Αποθήκευση Στοιχείων Επόμενου Αγώνα (Ημερομηνία, Ώρα, Γήπεδο, Χάρτης)
+    data.matchDate = document.getElementById('matchDateInput').value;
+    data.matchTime = document.getElementById('matchTimeInput').value;
+    data.matchStadium = document.getElementById('matchStadiumInput').value;
+    data.matchMapLink = document.getElementById('matchMapLinkInput').value;
+    
+    // 4. Αποθήκευση Αντίστροφης Μέτρησης
+    data.countdownTarget = document.getElementById('countdownTargetInput').value;
+
+    // 5. Αποθήκευση Εμβόλιμου Αγώνα (Special Match)
+    const isSpecial = document.getElementById('useSpecialMatchCheckbox').checked;
+    data.specialMatch = {
+        type: document.getElementById('specialMatchTypeInput').value,
+        // Αν είναι τσεκαρισμένο αποθηκεύουμε τις ομάδες, αλλιώς null για να πάρει το αυτόματο πρόγραμμα
+        home: isSpecial ? document.getElementById('specialHomeInput').value : null,
+        away: isSpecial ? document.getElementById('specialAwayInput').value : null
+    };
+
+    // Αποθήκευση στη μνήμη
     saveData(data);
+    
+    // Ανανέωση της εμφάνισης αμέσως
     displayNextMatch();
-    alert('✅ Ρυθμίσεις Live αποθηκεύτηκαν!');
+
+    // Ανανέωση του Ticker (αν άλλαξε)
+    const tickerText = document.getElementById('announcement-text');
+    const tickerBar = document.getElementById('announcement-ticker');
+    if (data.announcement && data.announcement.trim() !== '') {
+        tickerText.textContent = data.announcement;
+        tickerBar.style.display = 'block';
+    } else {
+        tickerBar.style.display = 'none';
+    }
+
+    alert('✅ Όλες οι ρυθμίσεις αποθηκεύτηκαν επιτυχώς!');
 }
 let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
 function displayNextMatch() {
@@ -5218,7 +5255,7 @@ function executeShareSquad() {
         squadText += "\n"; 
     }
 
-    const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* \n\n` +
+    const text = `⚽ *ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ* ⚽\n\n` +
                  `🆚 ${home} - ${away}\n` +
                  `📅 ${date}  ⏰ ${time}\n` +
                  `🏟️ ${stadium}\n\n` +
