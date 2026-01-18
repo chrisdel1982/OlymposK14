@@ -1196,11 +1196,11 @@
     }
   ],
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "https://maps.app.goo.gl/hJYxMFbAz1hNTKfA6",
-  "countdownTarget": "",
+  "matchDate": "Σάββατο 24/1",
+  "matchTime": "10:45",
+  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης» ",
+  "matchMapLink": "https://maps.app.goo.gl/FbiX1W6dnKBSL1FV7?g_st=ic",
+  "countdownTarget": "2026-01-24T10:45",
   "liveScore": {
     "active": false,
     "home": "2",
