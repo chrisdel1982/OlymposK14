@@ -1183,7 +1183,7 @@
   "matchMapLink": "https://maps.app.goo.gl/hJYxMFbAz1hNTKfA6",
   "countdownTarget": "2026-01-18T09:00",
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "2",
     "away": "3",
     "half": "FT",
