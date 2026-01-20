@@ -291,9 +291,9 @@
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
-          "homeScore": null,
-          "awayScore": null,
-          "isPostponed": true
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
