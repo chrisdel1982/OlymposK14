@@ -1202,16 +1202,16 @@
   "matchMapLink": "https://maps.app.goo.gl/FbiX1W6dnKBSL1FV7?g_st=ic",
   "countdownTarget": "2026-01-24T10:45",
   "liveScore": {
-    "active": false,
-    "home": "2",
-    "away": "3",
-    "half": "FT",
+    "active": true,
+    "home": "0",
+    "away": "0",
+    "half": "1",
     "duration": "20",
-    "startTime": "10:16"
+    "startTime": "10:45"
   },
   "specialMatch": {
     "type": "",
-    "home": null,
-    "away": null
+    "home": "",
+    "away": ""
   }
 }
