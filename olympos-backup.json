@@ -1204,9 +1204,9 @@
   "liveScore": {
     "active": true,
     "home": "0",
-    "away": "0",
+    "away": "1",
     "half": "1",
-    "duration": "20",
+    "duration": "40",
     "startTime": "10:45"
   },
   "specialMatch": {
