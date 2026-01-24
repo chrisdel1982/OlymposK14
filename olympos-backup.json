@@ -429,37 +429,47 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": 2,
-          "awayScore": 2
+          "awayScore": 0,
+          "scorers": [
+            "Μάνος Σαράτσογλου",
+            "Άγγελος Μπατσακίδης"
+          ],
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": 2,
-          "awayScore": 0
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": 1,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         }
       ]
     },
@@ -1009,7 +1019,7 @@
       "name": "Άγγελος Μπατσακίδης",
       "birthYear": 2015,
       "position": "Επιθετικός Μέσος (AM)/ Αμυντικός Μέσος (DM)",
-      "goals": 2
+      "goals": 3
     },
     {
       "number": 11,
@@ -1057,7 +1067,7 @@
       "name": "Μάνος Σαράτσογλου",
       "birthYear": 2012,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Κεντρικός Επιθετικός (CF)",
-      "goals": 5
+      "goals": 6
     },
     {
       "number": 7,
@@ -1196,13 +1206,13 @@
     }
   ],
   "announcement": "",
-  "matchDate": "Σάββατο 24/1",
-  "matchTime": "10:45",
-  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης» ",
-  "matchMapLink": "https://maps.app.goo.gl/FbiX1W6dnKBSL1FV7?g_st=ic",
-  "countdownTarget": "2026-01-24T10:45",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "2",
     "away": "2",
     "half": "FT",
