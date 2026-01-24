@@ -436,9 +436,9 @@
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": 2,
-          "awayScore": 0,
+          "awayScore": 2,
           "scorers": [
-            "Μάνος Σαράτσογλου",
+            "Μιχάλης Τσοτουλίδης",
             "Άγγελος Μπατσακίδης"
           ],
           "isPostponed": false
@@ -446,8 +446,8 @@
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 0,
+          "awayScore": 4,
           "isPostponed": false
         },
         {
