@@ -2939,12 +2939,6 @@ window.addEventListener('load', function() {
     }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
 });
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then(() => {
-        console.log('✅ Service Worker registered');
-    });
-}
-
 </script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -3186,6 +3180,7 @@ if ('serviceWorker' in navigator) {
                 <select id="liveHalf" style="padding:5px;">
                     <option value="1">1ο</option>
                     <option value="2">2ο</option>
+                    <option value="HT">HT (Ημίχρονο)</option>
                     <option value="3">3ο</option>
                     <option value="4">4ο</option>
                     <option value="FT">FT (Τέλος)</option>
@@ -3507,6 +3502,7 @@ if ('serviceWorker' in navigator) {
 }
 function calculateLiveMinute(startTime, half, duration) {
     if (half === "FT") return "FT";
+    if (half === 'HT') return 'HT';
     if (!startTime) return "LIVE";
 
     const now = new Date();
@@ -4524,9 +4520,9 @@ if (isLive) {
     // HTML Κάρτας
     container.innerHTML = `
         <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
-            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
+            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff333;' : ''}">
                 <span>📅 ${data.matchDate || ''}</span>
-                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '🔴 LIVE NOW' : matchType}</span>
+                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '✨ MATCH DAY' : matchType}</span>
                 <span>⏰ ${data.matchTime || ''}</span>
             </div>
             
