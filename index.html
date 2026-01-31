@@ -3179,6 +3179,7 @@ window.addEventListener('load', function() {
                 <select id="liveHalf" style="padding:5px;">
                     <option value="1">1ο</option>
                     <option value="2">2ο</option>
+                    <option value="HT">HT (Ημίχρονο)</option>
                     <option value="3">3ο</option>
                     <option value="4">4ο</option>
                     <option value="FT">FT (Τέλος)</option>
@@ -3507,6 +3508,7 @@ async function loadData() {
 }
     function calculateLiveMinute(startTime, half, duration) {
     if (half === "FT") return "FT";
+    if (half === "HT") return "HT";
     if (!startTime) return "LIVE";
 
     const now = new Date();
