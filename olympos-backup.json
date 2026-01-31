@@ -1222,9 +1222,9 @@
     "active": true,
     "home": "2",
     "away": "0",
-    "half": "ft",
+    "half": "3",
     "duration": "20",
-    "startTime": "11:32"
+    "startTime": "12:00"
   },
   "specialMatch": {
     "type": "",
