@@ -4410,11 +4410,9 @@ document.querySelectorAll('.nav-link').forEach(link => {
             document.getElementById('adminModal').classList.remove('active');
         }
 function saveGeneralSettings() {
-    console.log('🔄 Ξεκινάει η διαδικασία αποθήκευσης...');
+    console.log('🔄 Ξεκινάει η διαδικασία αποθήκευσης (Full + Auto Count)...');
 
-    // ---------------------------------------------------------
-    // 1. ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ ΕΠΟΜΕΝΟΥ ΑΓΩΝΑ (Ημερομηνία, Γήπεδο κλπ)
-    // ---------------------------------------------------------
+    // 1. ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ & LIVE
     const dateInput = document.getElementById('matchDateInput');
     const timeInput = document.getElementById('matchTimeInput');
     const stadiumInput = document.getElementById('matchStadiumInput');
@@ -4429,9 +4427,6 @@ function saveGeneralSettings() {
     if (countdownInput) data.countdownTarget = countdownInput.value;
     if (announcementInput) data.announcement = announcementInput.value;
 
-    // ---------------------------------------------------------
-    // 2. ΑΠΟΘΗΚΕΥΣΗ LIVE SCORE (Τρέχον Σκορ, Χρόνος)
-    // ---------------------------------------------------------
     const liveCheck = document.getElementById('liveModeCheckbox');
     const liveHome = document.getElementById('liveHomeScore');
     const liveAway = document.getElementById('liveAwayScore');
@@ -4439,9 +4434,7 @@ function saveGeneralSettings() {
     const liveDur = document.getElementById('liveHalfDuration');
     const liveStart = document.getElementById('liveStartTime');
 
-    // Αρχικοποίηση αν δεν υπάρχει
     if (!data.liveScore) data.liveScore = {};
-
     if (liveCheck) data.liveScore.active = liveCheck.checked;
     if (liveHome) data.liveScore.home = liveHome.value || 0;
     if (liveAway) data.liveScore.away = liveAway.value || 0;
@@ -4449,66 +4442,98 @@ function saveGeneralSettings() {
     if (liveDur) data.liveScore.duration = liveDur.value || 20;
     if (liveStart) data.liveScore.startTime = liveStart.value;
 
-    // ---------------------------------------------------------
-    // 3. ΑΠΟΘΗΚΕΥΣΗ ΕΜΒΟΛΙΜΟΥ ΑΓΩΝΑ (Special Match)
-    // ---------------------------------------------------------
+    // Special Match
     const specialCheck = document.getElementById('useSpecialMatchCheckbox');
     const specialType = document.getElementById('specialMatchTypeInput');
     const specialHome = document.getElementById('specialHomeInput');
     const specialAway = document.getElementById('specialAwayInput');
 
     if (!data.specialMatch) data.specialMatch = {};
-    
-    // Αποθήκευση μόνο αν υπάρχει το checkbox και είναι τσεκαρισμένο
     if (specialCheck && specialCheck.checked) {
         data.specialMatch.type = specialType ? specialType.value : 'ΦΙΛΙΚΟΣ ΑΓΩΝΑΣ';
         data.specialMatch.home = specialHome ? specialHome.value : '';
         data.specialMatch.away = specialAway ? specialAway.value : '';
     } else {
-        // Αν το ξε-τσέκαρες, καθαρίζουμε τα πεδία για να φανεί ο κανονικός αγώνας
         data.specialMatch.home = null;
         data.specialMatch.away = null;
     }
 
-    // ---------------------------------------------------------
-    // 4. ΑΠΟΘΗΚΕΥΣΗ ΑΠΟΤΕΛΕΣΜΑΤΩΝ ΠΡΩΤΑΘΛΗΜΑΤΟΣ (Σκορ Ομάδων)
-    // ---------------------------------------------------------
+    // 2. ΑΠΟΘΗΚΕΥΣΗ ΑΠΟΤΕΛΕΣΜΑΤΩΝ & ΣΚΟΡΕΡ ΑΠΟ ΤΗΝ ΟΘΟΝΗ
     if (data.fixtures) {
         data.fixtures.forEach((round, roundIndex) => {
             round.matches.forEach((match, matchIndex) => {
-                // Βρίσκουμε τα inputs με βάση τα IDs που φτιάξαμε στο HTML
                 const homeScoreIn = document.getElementById(`score-home-${roundIndex}-${matchIndex}`);
                 const awayScoreIn = document.getElementById(`score-away-${roundIndex}-${matchIndex}`);
                 const postponeIn = document.getElementById(`postpone-${roundIndex}-${matchIndex}`);
 
-                // Αν υπάρχουν τα κουτάκια, παίρνουμε την τιμή τους
                 if (homeScoreIn) {
                     const hVal = homeScoreIn.value.trim();
                     match.homeScore = (hVal === '') ? null : parseInt(hVal);
                 }
-                
                 if (awayScoreIn) {
                     const aVal = awayScoreIn.value.trim();
                     match.awayScore = (aVal === '') ? null : parseInt(aVal);
                 }
-
                 if (postponeIn) {
                     match.postponed = postponeIn.checked;
+                }
+
+                // Αποθήκευση Σκόρερ από τα καρτελάκια
+                if (homeScoreIn) {
+                    const row = homeScoreIn.closest('.match-input-row') || homeScoreIn.parentElement.parentElement;
+                    if (row) {
+                        const scorerTags = row.querySelectorAll('.scorer-tag');
+                        const currentScorers = [];
+                        scorerTags.forEach(tag => {
+                            let name = tag.innerText.replace('×', '').trim();
+                            if(name) currentScorers.push(name);
+                        });
+                        match.scorers = currentScorers;
+                    }
                 }
             });
         });
     }
 
     // ---------------------------------------------------------
-    // 5. ΚΑΤΕΒΑΣΜΑ ΑΡΧΕΙΟΥ
+    // 3. ΑΥΤΟΜΑΤΟΣ ΥΠΟΛΟΓΙΣΜΟΣ ΓΚΟΛ ΣΤΟ ΡΟΣΤΕΡ (ΝΕΟ)
     // ---------------------------------------------------------
-    saveData(data); // Αυτό καλεί τη συνάρτηση που κατεβάζει το JSON
+    if (data.roster && data.fixtures) {
+        // Βήμα Α: Μηδενισμός γκολ όλων των παικτών (για να μην διπλομετρήσουμε)
+        data.roster.forEach(player => {
+            player.goals = 0;
+        });
+
+        // Βήμα Β: Σάρωση όλων των αγώνων
+        data.fixtures.forEach(round => {
+            round.matches.forEach(match => {
+                // Αν υπάρχουν σκόρερ σε αυτό το ματς
+                if (match.scorers && Array.isArray(match.scorers)) {
+                    match.scorers.forEach(scorerName => {
+                        // Βήμα Γ: Βρες τον παίκτη στο ρόστερ και πρόσθεσε γκολ
+                        // ΠΡΟΣΟΧΗ: Το όνομα πρέπει να είναι ακριβώς ίδιο
+                        const player = data.roster.find(p => p.name === scorerName);
+                        if (player) {
+                            player.goals += 1; // +1 γκολ
+                        }
+                    });
+                }
+            });
+        });
+        
+        console.log('✅ Τα γκολ των παικτών ενημερώθηκαν αυτόματα!');
+    }
+
+    // 4. ΛΗΨΗ ΑΡΧΕΙΟΥ
+    saveData(data); 
     
-    // Ενημέρωση της οθόνης αμέσως για να δεις ότι πέτυχε
+    // Ανανέωση εμφάνισης
     displayNextMatch();
     renderStandings(); 
+    // Αν έχεις συνάρτηση για Top Scorers, καλό είναι να την καλέσεις εδώ, π.χ.:
+    // if (typeof renderTopScorers === 'function') renderTopScorers();
 
-    alert('💾 ΤΑ ΔΕΔΟΜΕΝΑ ΑΠΟΘΗΚΕΥΤΗΚΑΝ (ΛΗΨΗ ΑΡΧΕΙΟΥ)!\n\n⚠️ ΣΗΜΑΝΤΙΚΟ: Τώρα πρέπει να ανεβάσεις το αρχείο "data.json" που κατέβηκε στο GitHub για να ενημερωθούν όλοι.');
+    alert('💾 ΑΠΟΘΗΚΕΥΣΗ ΕΠΙΤΥΧΗΣ!\n\n1. Τα σκορ αποθηκεύτηκαν.\n2. Οι σκόρερ καταγράφηκαν.\n3. Τα συνολικά γκολ των παικτών ΕΝΗΜΕΡΩΘΗΚΑΝ!\n\nΤώρα ανέβασε το αρχείο στο GitHub.');
 }
 let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
 function displayNextMatch() {
