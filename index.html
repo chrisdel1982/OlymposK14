@@ -3455,50 +3455,37 @@ window.addEventListener('load', function() {
         ];
 
         const FIXTURES = [];
-
-        async function loadData() {
-    let localData = null;
+async function loadData() {
+    // 1. Έλεγχος Local Storage (Προτεραιότητα στον Admin)
     const saved = localStorage.getItem('footballData');
     if (saved) {
-        localData = JSON.parse(saved);
-        console.log('Βρέθηκαν τοπικά δεδομένα.');
+        console.log('📂 Βρέθηκαν τοπικά δεδομένα (Admin Draft) - Χρήση αυτών.');
+        return JSON.parse(saved);
     }
 
+    // 2. Αν δεν υπάρχουν τοπικά, φόρτωσε από τον Server (Για τους επισκέπτες)
     try {
-        // Προσπάθεια φόρτωσης από το GitHub (ή τοπικό server)
-        // Βάζουμε και ένα timestamp για να μην κρατάει cache ο browser
+        // Βάζουμε timestamp για να μην κρατάει cache
         const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
         
         if (response.ok) {
             const serverData = await response.json();
-            console.log('Φορτώθηκαν δεδομένα από το olympos-backup.json');
-            
-            // ΕΔΩ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ:
-            // Αν τα δεδομένα του server (GitHub) φαίνονται πιο καινούργια ή έγκυρα, τα χρησιμοποιούμε.
-            // Σε αυτή την απλή έκδοση, δίνουμε προτεραιότητα στο αρχείο JSON για τους επισκέπτες.
-            
-            // Αν είμαστε Admin και έχουμε κάνει αλλαγές που δεν ανέβηκαν ακόμα, ίσως θέλουμε τα τοπικά.
-            // Αλλά για να βλέπουν όλοι τα ίδια, επιστρέφουμε του server.
+            console.log('☁️ Φορτώθηκαν δεδομένα από Server.');
             return serverData;
         }
     } catch (e) {
-        console.warn('Δεν βρέθηκε το olympos-backup.json ή υπάρχει σφάλμα δικτύου.', e);
+        console.warn('⚠️ Δεν βρέθηκε το JSON στον server ή πρόβλημα δικτύου.');
     }
 
-    // Αν αποτύχει η φόρτωση από το αρχείο, επιστρέφουμε τα τοπικά (αν υπάρχουν)
-    if (localData) {
-        return localData;
-    }
-
-    // Fallback: Αν δεν υπάρχει τίποτα πουθενά, φόρτωσε τα hardcoded
-    console.log('Χρήση ενσωματωμένων δεδομένων (fallback).');
+    // 3. Fallback (Αν όλα αποτύχουν)
+    console.log('🔧 Χρήση ενσωματωμένων δεδομένων (fallback).');
     return { 
         fixtures: JSON.parse(JSON.stringify(FIXTURES)),
         roster: [],
         news: []
     };
 }
-function calculateLiveMinute(startTime, half, duration) {
+        function calculateLiveMinute(startTime, half, duration) {
     if (half === "FT") return "FT";
     if (!startTime) return "LIVE";
 
