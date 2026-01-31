@@ -1213,16 +1213,16 @@
     }
   ],
   "announcement": "",
-  "matchDate": "Σάββατο 31/1",
-  "matchTime": "10:45",
-  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης»",
-  "matchMapLink": "https://maps.app.goo.gl/T5mXbcNCRT6mDgL36?g_st=ic",
-  "countdownTarget": "2026-01-31T10:45",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
   "liveScore": {
-    "active": false,
+    "active": true,
     "home": "3",
     "away": "2",
-    "half": "ft",
+    "half": "FT",
     "duration": "20",
     "startTime": "12:21"
   },
