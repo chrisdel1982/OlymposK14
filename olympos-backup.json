@@ -1220,11 +1220,11 @@
   "countdownTarget": "",
   "liveScore": {
     "active": true,
-    "home": "3",
+    "home": "2",
     "away": "2",
-    "half": "FT",
+    "half": "4",
     "duration": "20",
-    "startTime": "12:21"
+    "startTime": "14:21"
   },
   "specialMatch": {
     "type": "",
