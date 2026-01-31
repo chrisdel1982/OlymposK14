@@ -4410,54 +4410,105 @@ document.querySelectorAll('.nav-link').forEach(link => {
             document.getElementById('adminModal').classList.remove('active');
         }
 function saveGeneralSettings() {
-    // 1. Αποθήκευση Live Score (όπως πριν)
-    data.liveScore = {
-        active: document.getElementById('liveModeCheckbox').checked,
-        home: document.getElementById('liveHomeScore').value || 0,
-        away: document.getElementById('liveAwayScore').value || 0,
-        half: document.getElementById('liveHalf').value,
-        duration: document.getElementById('liveHalfDuration').value || 20,
-        startTime: document.getElementById('liveStartTime').value
-    };
+    console.log('🔄 Ξεκινάει η διαδικασία αποθήκευσης...');
 
-    // 2. Αποθήκευση Ticker (Κυλιόμενη Ανακοίνωση)
-    data.announcement = document.getElementById('announcementInput').value;
+    // ---------------------------------------------------------
+    // 1. ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ ΕΠΟΜΕΝΟΥ ΑΓΩΝΑ (Ημερομηνία, Γήπεδο κλπ)
+    // ---------------------------------------------------------
+    const dateInput = document.getElementById('matchDateInput');
+    const timeInput = document.getElementById('matchTimeInput');
+    const stadiumInput = document.getElementById('matchStadiumInput');
+    const mapInput = document.getElementById('matchMapLinkInput');
+    const countdownInput = document.getElementById('countdownTargetInput');
+    const announcementInput = document.getElementById('announcementInput');
 
-    // 3. Αποθήκευση Στοιχείων Επόμενου Αγώνα (Ημερομηνία, Ώρα, Γήπεδο, Χάρτης)
-    data.matchDate = document.getElementById('matchDateInput').value;
-    data.matchTime = document.getElementById('matchTimeInput').value;
-    data.matchStadium = document.getElementById('matchStadiumInput').value;
-    data.matchMapLink = document.getElementById('matchMapLinkInput').value;
+    if (dateInput) data.matchDate = dateInput.value;
+    if (timeInput) data.matchTime = timeInput.value;
+    if (stadiumInput) data.matchStadium = stadiumInput.value;
+    if (mapInput) data.matchMapLink = mapInput.value;
+    if (countdownInput) data.countdownTarget = countdownInput.value;
+    if (announcementInput) data.announcement = announcementInput.value;
+
+    // ---------------------------------------------------------
+    // 2. ΑΠΟΘΗΚΕΥΣΗ LIVE SCORE (Τρέχον Σκορ, Χρόνος)
+    // ---------------------------------------------------------
+    const liveCheck = document.getElementById('liveModeCheckbox');
+    const liveHome = document.getElementById('liveHomeScore');
+    const liveAway = document.getElementById('liveAwayScore');
+    const liveHalf = document.getElementById('liveHalf');
+    const liveDur = document.getElementById('liveHalfDuration');
+    const liveStart = document.getElementById('liveStartTime');
+
+    // Αρχικοποίηση αν δεν υπάρχει
+    if (!data.liveScore) data.liveScore = {};
+
+    if (liveCheck) data.liveScore.active = liveCheck.checked;
+    if (liveHome) data.liveScore.home = liveHome.value || 0;
+    if (liveAway) data.liveScore.away = liveAway.value || 0;
+    if (liveHalf) data.liveScore.half = liveHalf.value;
+    if (liveDur) data.liveScore.duration = liveDur.value || 20;
+    if (liveStart) data.liveScore.startTime = liveStart.value;
+
+    // ---------------------------------------------------------
+    // 3. ΑΠΟΘΗΚΕΥΣΗ ΕΜΒΟΛΙΜΟΥ ΑΓΩΝΑ (Special Match)
+    // ---------------------------------------------------------
+    const specialCheck = document.getElementById('useSpecialMatchCheckbox');
+    const specialType = document.getElementById('specialMatchTypeInput');
+    const specialHome = document.getElementById('specialHomeInput');
+    const specialAway = document.getElementById('specialAwayInput');
+
+    if (!data.specialMatch) data.specialMatch = {};
     
-    // 4. Αποθήκευση Αντίστροφης Μέτρησης
-    data.countdownTarget = document.getElementById('countdownTargetInput').value;
-
-    // 5. Αποθήκευση Εμβόλιμου Αγώνα (Special Match)
-    const isSpecial = document.getElementById('useSpecialMatchCheckbox').checked;
-    data.specialMatch = {
-        type: document.getElementById('specialMatchTypeInput').value,
-        // Αν είναι τσεκαρισμένο αποθηκεύουμε τις ομάδες, αλλιώς null για να πάρει το αυτόματο πρόγραμμα
-        home: isSpecial ? document.getElementById('specialHomeInput').value : null,
-        away: isSpecial ? document.getElementById('specialAwayInput').value : null
-    };
-
-    // Αποθήκευση στη μνήμη
-    saveData(data);
-    
-    // Ανανέωση της εμφάνισης αμέσως
-    displayNextMatch();
-
-    // Ανανέωση του Ticker (αν άλλαξε)
-    const tickerText = document.getElementById('announcement-text');
-    const tickerBar = document.getElementById('announcement-ticker');
-    if (data.announcement && data.announcement.trim() !== '') {
-        tickerText.textContent = data.announcement;
-        tickerBar.style.display = 'block';
+    // Αποθήκευση μόνο αν υπάρχει το checkbox και είναι τσεκαρισμένο
+    if (specialCheck && specialCheck.checked) {
+        data.specialMatch.type = specialType ? specialType.value : 'ΦΙΛΙΚΟΣ ΑΓΩΝΑΣ';
+        data.specialMatch.home = specialHome ? specialHome.value : '';
+        data.specialMatch.away = specialAway ? specialAway.value : '';
     } else {
-        tickerBar.style.display = 'none';
+        // Αν το ξε-τσέκαρες, καθαρίζουμε τα πεδία για να φανεί ο κανονικός αγώνας
+        data.specialMatch.home = null;
+        data.specialMatch.away = null;
     }
 
-    alert('✅ Όλες οι ρυθμίσεις αποθηκεύτηκαν επιτυχώς!');
+    // ---------------------------------------------------------
+    // 4. ΑΠΟΘΗΚΕΥΣΗ ΑΠΟΤΕΛΕΣΜΑΤΩΝ ΠΡΩΤΑΘΛΗΜΑΤΟΣ (Σκορ Ομάδων)
+    // ---------------------------------------------------------
+    if (data.fixtures) {
+        data.fixtures.forEach((round, roundIndex) => {
+            round.matches.forEach((match, matchIndex) => {
+                // Βρίσκουμε τα inputs με βάση τα IDs που φτιάξαμε στο HTML
+                const homeScoreIn = document.getElementById(`score-home-${roundIndex}-${matchIndex}`);
+                const awayScoreIn = document.getElementById(`score-away-${roundIndex}-${matchIndex}`);
+                const postponeIn = document.getElementById(`postpone-${roundIndex}-${matchIndex}`);
+
+                // Αν υπάρχουν τα κουτάκια, παίρνουμε την τιμή τους
+                if (homeScoreIn) {
+                    const hVal = homeScoreIn.value.trim();
+                    match.homeScore = (hVal === '') ? null : parseInt(hVal);
+                }
+                
+                if (awayScoreIn) {
+                    const aVal = awayScoreIn.value.trim();
+                    match.awayScore = (aVal === '') ? null : parseInt(aVal);
+                }
+
+                if (postponeIn) {
+                    match.postponed = postponeIn.checked;
+                }
+            });
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 5. ΚΑΤΕΒΑΣΜΑ ΑΡΧΕΙΟΥ
+    // ---------------------------------------------------------
+    saveData(data); // Αυτό καλεί τη συνάρτηση που κατεβάζει το JSON
+    
+    // Ενημέρωση της οθόνης αμέσως για να δεις ότι πέτυχε
+    displayNextMatch();
+    renderStandings(); 
+
+    alert('💾 ΤΑ ΔΕΔΟΜΕΝΑ ΑΠΟΘΗΚΕΥΤΗΚΑΝ (ΛΗΨΗ ΑΡΧΕΙΟΥ)!\n\n⚠️ ΣΗΜΑΝΤΙΚΟ: Τώρα πρέπει να ανεβάσεις το αρχείο "data.json" που κατέβηκε στο GitHub για να ενημερωθούν όλοι.');
 }
 let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
 function displayNextMatch() {
