@@ -2938,7 +2938,6 @@ window.addEventListener('load', function() {
         
     }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
 });
-
 </script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -3180,7 +3179,6 @@ window.addEventListener('load', function() {
                 <select id="liveHalf" style="padding:5px;">
                     <option value="1">1ο</option>
                     <option value="2">2ο</option>
-                    <option value="HT">HT (Ημίχρονο)</option>
                     <option value="3">3ο</option>
                     <option value="4">4ο</option>
                     <option value="FT">FT (Τέλος)</option>
@@ -3502,7 +3500,6 @@ window.addEventListener('load', function() {
 }
 function calculateLiveMinute(startTime, half, duration) {
     if (half === "FT") return "FT";
-    if (half === 'HT') return 'HT';
     if (!startTime) return "LIVE";
 
     const now = new Date();
@@ -4486,43 +4483,24 @@ function displayNextMatch() {
     if (!nextMatch) return;
 
     // Logic για Live Score
-const isLive = data.liveScore && data.liveScore.active;
-let liveMinuteDisplay = "";
-
-// 🔴 ΣΤΑΜΑΤΑΜΕ ΤΥΧΟΝ ΠΑΛΙΟ ΧΡΟΝΟΜΕΤΡΟ
-if (window.liveMinuteInterval) {
-    clearInterval(window.liveMinuteInterval);
-}
-
-if (isLive) {
-    liveMinuteDisplay = calculateLiveMinute(
-        data.liveScore.startTime, 
-        data.liveScore.half, 
-        data.liveScore.duration
-    );
-
-    // 🔴 ΞΕΚΙΝΑΜΕ REAL-TIME UPDATE ΤΟΥ ΧΡΟΝΟΥ (κάθε δευτερόλεπτο)
-    window.liveMinuteInterval = setInterval(() => {
-        const updatedMinute = calculateLiveMinute(
+    const isLive = data.liveScore && data.liveScore.active;
+    let liveMinuteDisplay = "";
+    if (isLive) {
+        liveMinuteDisplay = calculateLiveMinute(
             data.liveScore.startTime, 
             data.liveScore.half, 
             data.liveScore.duration
         );
-        const minuteElement = document.querySelector('.live-minute-display');
-        if (minuteElement) {
-            minuteElement.textContent = updatedMinute;
-        }
-    }, 1000); // Ανανέωση κάθε 1 δευτερόλεπτο
-}
+    }
     
     const countdownStyle = isLive ? 'display: none;' : 'display: block;';
 
     // HTML Κάρτας
     container.innerHTML = `
         <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
-            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff333;' : ''}">
+            <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
                 <span>📅 ${data.matchDate || ''}</span>
-                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '✨ MATCH DAY' : matchType}</span>
+                <span style="font-weight:800; text-transform: uppercase;">${isLive ? '🔴 LIVE NOW' : matchType}</span>
                 <span>⏰ ${data.matchTime || ''}</span>
             </div>
             
@@ -4534,8 +4512,8 @@ if (isLive) {
                 
                 <div class="center-area">
                     ${isLive ? `
-                             <div style="text-align:center;">
-                             <div class="live-minute-display" style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${liveMinuteDisplay}</div>
+                        <div style="text-align:center;">
+                            <div style="color:#ff0046; font-weight:bold; font-size:1.1rem;">${liveMinuteDisplay}</div>
                             <div class="live-badge-pulse">LIVE</div>
                             <div class="live-score-display" style="font-size:2.5rem; font-weight:900; margin:0; color:var(--text-dark);">
                                 ${data.liveScore.home || 0} - ${data.liveScore.away || 0}
@@ -4857,44 +4835,44 @@ function saveResults() {
             }
         }
 
-document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+    // Περίμενε να φορτώσουν τα δεδομένα (είτε από localStorage, είτε από fetch, είτε από fallback)
     data = await loadData(); 
 
+    // Έλεγχος αν υπάρχει το news array, αν όχι το προσθέτουμε
     if (!data.news) {
         data.news = [];
     }
-
-    const tickerBar = document.getElementById('announcement-ticker');
-    const tickerText = document.getElementById('announcement-text');
-    
-    if (data && data.announcement && data.announcement.trim() !== '') {
-        tickerText.textContent = data.announcement;
-        tickerBar.style.display = 'block';
-    }
- // 🔴 AUTO-REFRESH κάθε 10 δευτερόλεπτα
-    setInterval(async () => {
-        try {
-            const newData = await loadData();
-
-            if (newData) {
-                data = newData;
-
-                if (data.liveScore && data.liveScore.active) {
-                    displayNextMatch();
-                }
-                
-                if (data.announcement) {
-                    if (tickerText && tickerText.textContent !== data.announcement) {
-                        tickerText.textContent = data.announcement;
-                        tickerBar.style.display = 'block';
-                    }
-                }
-            }
-        } catch (e) {
-            console.error('Refresh error:', e);
+// (NEO) --- Φόρτωση και εμφάνιση του Ticker ---
+        const tickerBar = document.getElementById('announcement-ticker');
+        const tickerText = document.getElementById('announcement-text');
+        
+        if (data && data.announcement && data.announcement.trim() !== '') {
+            tickerText.textContent = data.announcement;
+            tickerBar.style.display = 'block';
         }
-    }, 10000);
+setInterval(async () => {
+    const newData = await loadData();
 
+    if (newData) {
+        data = newData;
+
+        if (data.liveScore && data.liveScore.active) {
+            displayNextMatch();
+        }
+        
+        if (data.announcement) {
+            const tickerText = document.getElementById('announcement-text');
+            const tickerBar = document.getElementById('announcement-ticker');
+            if (tickerText && tickerText.textContent !== data.announcement) {
+                tickerText.textContent = data.announcement;
+                tickerBar.style.display = 'block';
+            }
+        }
+    }
+}, 20000);
+        // --- Τέλος κώδικα Ticker ---
+    // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
     displayNextMatch();
     displayTopScorers();
@@ -4904,31 +4882,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     displayNews();
     checkDeepLink();
     checkNewNews();
-   // 🔴 Refresh όταν η app επιστρέφει από background
-    document.addEventListener('visibilitychange', async () => {
-        if (!document.hidden) {
-            console.log('📱 App returned to foreground');
-            data = await loadData();
-            
-            if (data.liveScore && data.liveScore.active) {
-                displayNextMatch();
-            }
-            displayStandings();
-            displayResults();
-        }
-    });
-
-    window.addEventListener('focus', async () => {
-        console.log('🔄 Window focused');
-        const freshData = await loadData();
-        if (JSON.stringify(freshData) !== JSON.stringify(data)) {
-            data = freshData;
-            displayNextMatch();
-            displayStandings();
-        }
-    });
 
 });
+
         document.getElementById('adminModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeAdminPanel();
