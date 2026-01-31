@@ -1219,12 +1219,12 @@
   "matchMapLink": "https://maps.app.goo.gl/T5mXbcNCRT6mDgL36?g_st=ic",
   "countdownTarget": "2026-01-31T10:45",
   "liveScore": {
-    "active": false,
-    "home": "2",
-    "away": "2",
+    "active": true,
+    "home": "0",
+    "away": "0",
     "half": "FT",
-    "duration": "45",
-    "startTime": "11:38"
+    "duration": "20",
+    "startTime": "10:55"
   },
   "specialMatch": {
     "type": "",
