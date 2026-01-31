@@ -498,15 +498,15 @@
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 1,
+          "awayScore": 6,
           "isPostponed": false
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 6,
+          "awayScore": 4,
           "isPostponed": false
         },
         {
