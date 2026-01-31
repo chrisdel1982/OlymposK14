@@ -3456,36 +3456,56 @@ window.addEventListener('load', function() {
 
         const FIXTURES = [];
 async function loadData() {
-    // 1. Έλεγχος Local Storage (Προτεραιότητα στον Admin)
+    let localData = null;
+    let serverData = null;
+
+    // 1. Διάβασμα Τοπικής Μνήμης
     const saved = localStorage.getItem('footballData');
     if (saved) {
-        console.log('📂 Βρέθηκαν τοπικά δεδομένα (Admin Draft) - Χρήση αυτών.');
-        return JSON.parse(saved);
+        try {
+            localData = JSON.parse(saved);
+        } catch (e) { console.error('Local Data Error', e); }
     }
 
-    // 2. Αν δεν υπάρχουν τοπικά, φόρτωσε από τον Server (Για τους επισκέπτες)
+    // 2. Διάβασμα από Server (GitHub)
     try {
-        // Βάζουμε timestamp για να μην κρατάει cache
         const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
-        
         if (response.ok) {
-            const serverData = await response.json();
-            console.log('☁️ Φορτώθηκαν δεδομένα από Server.');
-            return serverData;
+            serverData = await response.json();
         }
     } catch (e) {
-        console.warn('⚠️ Δεν βρέθηκε το JSON στον server ή πρόβλημα δικτύου.');
+        console.warn('Server fetch error:', e);
     }
 
-    // 3. Fallback (Αν όλα αποτύχουν)
-    console.log('🔧 Χρήση ενσωματωμένων δεδομένων (fallback).');
+    // 3. ΣΥΓΚΡΙΣΗ: Ποιο είναι πιο φρέσκο;
+    if (localData && serverData) {
+        const localTime = localData.lastUpdated || 0;
+        const serverTime = serverData.lastUpdated || 0;
+
+        // Αν το GitHub έχει πιο καινούργια ώρα από το κινητό σου...
+        if (serverTime > localTime) {
+            console.log('🔄 Βρέθηκαν πιο φρέσκα δεδομένα στο GitHub! Ενημέρωση...');
+            // Ενημερώνουμε και την τοπική μνήμη για να είμαστε συγχρονισμένοι
+            localStorage.setItem('footballData', JSON.stringify(serverData));
+            return serverData;
+        } else {
+            console.log('📂 Τα τοπικά δεδομένα είναι πιο πρόσφατα (Draft).');
+            return localData;
+        }
+    }
+
+    // Αν υπάρχει μόνο το ένα από τα δύο, επιστρέφουμε αυτό που βρήκαμε
+    if (localData) return localData;
+    if (serverData) return serverData;
+
+    // Αν δεν βρέθηκε τίποτα (πρώτη φορά)
     return { 
         fixtures: JSON.parse(JSON.stringify(FIXTURES)),
         roster: [],
         news: []
     };
 }
-        function calculateLiveMinute(startTime, half, duration) {
+    function calculateLiveMinute(startTime, half, duration) {
     if (half === "FT") return "FT";
     if (!startTime) return "LIVE";
 
@@ -3514,8 +3534,10 @@ async function loadData() {
     return currentMatchMinute + "'";
 }
         function saveData(dataToSave) {
-            localStorage.setItem('footballData', JSON.stringify(dataToSave));
-        }
+    // Προσθέτουμε την τρέχουσα ώρα ως "υπογραφή" (Timestamp)
+    dataToSave.lastUpdated = new Date().getTime();
+    localStorage.setItem('footballData', JSON.stringify(dataToSave));
+}
 
         function exportData() {
             const dataStr = JSON.stringify(data, null, 2);
