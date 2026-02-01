@@ -3457,49 +3457,28 @@ window.addEventListener('load', function() {
 
         const FIXTURES = [];
 async function loadData() {
-    let localData = null;
-    let serverData = null;
-
-    // 1. Διάβασμα Τοπικής Μνήμης
-    const saved = localStorage.getItem('footballData');
-    if (saved) {
-        try {
-            localData = JSON.parse(saved);
-        } catch (e) { console.error('Local Data Error', e); }
-    }
-
-    // 2. Διάβασμα από Server (GitHub)
+    // 1. Πρώτα προσπάθεια φόρτωσης από GitHub (Server First)
     try {
+        // Το ?t=... εξασφαλίζει ότι παίρνουμε πάντα το φρέσκο, όχι cached
         const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
+        
         if (response.ok) {
-            serverData = await response.json();
+            const serverData = await response.json();
+            console.log('☁️ Φορτώθηκαν δεδομένα από Server (GitHub).');
+            return serverData;
         }
     } catch (e) {
-        console.warn('Server fetch error:', e);
+        console.warn('⚠️ Πρόβλημα σύνδεσης με GitHub, ψάχνω τοπικά...', e);
     }
 
-    // 3. ΣΥΓΚΡΙΣΗ: Ποιο είναι πιο φρέσκο;
-    if (localData && serverData) {
-        const localTime = localData.lastUpdated || 0;
-        const serverTime = serverData.lastUpdated || 0;
-
-        // Αν το GitHub έχει πιο καινούργια ώρα από το κινητό σου...
-        if (serverTime > localTime) {
-            console.log('🔄 Βρέθηκαν πιο φρέσκα δεδομένα στο GitHub! Ενημέρωση...');
-            // Ενημερώνουμε και την τοπική μνήμη για να είμαστε συγχρονισμένοι
-            localStorage.setItem('footballData', JSON.stringify(serverData));
-            return serverData;
-        } else {
-            console.log('📂 Τα τοπικά δεδομένα είναι πιο πρόσφατα (Draft).');
-            return localData;
-        }
+    // 2. Αν αποτύχει το GitHub (π.χ. offline), ψάξε τοπικά
+    const saved = localStorage.getItem('footballData');
+    if (saved) {
+        console.log('📂 Φόρτωση τοπικών δεδομένων (Offline Mode).');
+        return JSON.parse(saved);
     }
 
-    // Αν υπάρχει μόνο το ένα από τα δύο, επιστρέφουμε αυτό που βρήκαμε
-    if (localData) return localData;
-    if (serverData) return serverData;
-
-    // Αν δεν βρέθηκε τίποτα (πρώτη φορά)
+    // 3. Fallback (Αν είναι όλα άδεια)
     return { 
         fixtures: JSON.parse(JSON.stringify(FIXTURES)),
         roster: [],
@@ -4656,43 +4635,82 @@ function startCountdown(targetDateString) {
         display.innerHTML = `⏳ Σέντρα σε: ${days}μ ${hours}ω ${minutes}λ ${seconds}δ`;
     }, 1000);
 }
- function checkPassword() {
+function checkPassword() {
     const password = document.getElementById('adminPassword').value;
+    
     if (password === ADMIN_PASSWORD) {
+        // 1. Εμφάνιση του Admin Panel
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-        loadRoundSelector();
-        updateRosterList();
-        updateNewsList();
-        
-        if (data) {
-            document.getElementById('announcementInput').value = data.announcement || '';
-            document.getElementById('matchDateInput').value = data.matchDate || '';
-            document.getElementById('matchTimeInput').value = data.matchTime || '';
-            document.getElementById('matchStadiumInput').value = data.matchStadium || '';
-            document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
-            document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
 
-            // Φόρτωση του Live Score στα πεδία της εικόνας
-          if (data.liveScore) {
-    document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
-    document.getElementById('liveHomeScore').value = data.liveScore.home ?? 0;
-    document.getElementById('liveAwayScore').value = data.liveScore.away ?? 0;
-    document.getElementById('liveHalf').value = data.liveScore.half || "1";
-    document.getElementById('liveHalfDuration').value = data.liveScore.duration || 20;
-    document.getElementById('liveStartTime').value = data.liveScore.startTime || "";
-}
-            
-            if (data.specialMatch) {
-                document.getElementById('useSpecialMatchCheckbox').checked = true;
-                toggleSpecialMatchFields();
+        // 2. ΕΛΕΓΧΟΣ ΓΙΑ "ΠΡΟΧΕΙΡΑ" ΔΕΔΟΜΕΝΑ (DRAFTS)
+        const localDraft = localStorage.getItem('footballData');
+        
+        if (localDraft) {
+            // Ρωτάμε τον Admin τι θέλει να κάνει
+            const userChoice = confirm(
+                "⚠️ ΒΡΕΘΗΚΑΝ ΑΠΟΘΗΚΕΥΜΕΝΕΣ ΑΛΛΑΓΕΣ ΣΤΟΝ ΥΠΟΛΟΓΙΣΤΗ ΣΟΥ!\n\n" +
+                "Πατήστε 'OK' για να συνεχίσετε την επεξεργασία τους (Draft).\n" +
+                "Πατήστε 'Ακύρωση' για να φορτώσετε τα δεδομένα του GitHub (Live)."
+            );
+
+            if (userChoice) {
+                // Φόρτωσε τα τοπικά
+                data = JSON.parse(localDraft);
+                console.log('✏️ Admin: Φορτώθηκαν τα τοπικά Drafts.');
+            } else {
+                // Κράτα του GitHub (που έχουν ήδη φορτώσει από το loadData)
+                // Και ΚΑΘΑΡΙΣΕ τα τοπικά για να μην μπερδεύουν
+                localStorage.removeItem('footballData');
+                console.log('☁️ Admin: Φορτώθηκαν τα Live δεδομένα. Τα τοπικά διαγράφηκαν.');
             }
         }
+
+        // 3. Ενημέρωση της φόρμας με τα δεδομένα που επιλέχθηκαν (Local ή GitHub)
+        refreshAdminForms();
+        
     } else {
         alert('❌ Λάθος κωδικός!');
     }
 }
-  function loadRoundSelector() {
+
+// Βοηθητική συνάρτηση για να γεμίσουν τα κουτάκια (για να μην γράφουμε τον ίδιο κώδικα 2 φορές)
+function refreshAdminForms() {
+    loadRoundSelector();
+    updateRosterList();
+    updateNewsList();
+    
+    if (data) {
+        // Γενικά
+        document.getElementById('announcementInput').value = data.announcement || '';
+        document.getElementById('matchDateInput').value = data.matchDate || '';
+        document.getElementById('matchTimeInput').value = data.matchTime || '';
+        document.getElementById('matchStadiumInput').value = data.matchStadium || '';
+        document.getElementById('matchMapLinkInput').value = data.matchMapLink || '';
+        document.getElementById('countdownTargetInput').value = data.countdownTarget || '';
+
+        // Live Score
+        if (data.liveScore) {
+            document.getElementById('liveModeCheckbox').checked = data.liveScore.active || false;
+            document.getElementById('liveHomeScore').value = data.liveScore.home ?? 0;
+            document.getElementById('liveAwayScore').value = data.liveScore.away ?? 0;
+            document.getElementById('liveHalf').value = data.liveScore.half || "1";
+            document.getElementById('liveHalfDuration').value = data.liveScore.duration || 20;
+            document.getElementById('liveStartTime').value = data.liveScore.startTime || "";
+            document.getElementById('liveInputs').style.display = data.liveScore.active ? 'block' : 'none';
+        }
+        
+        // Special Match
+        if (data.specialMatch) {
+            document.getElementById('useSpecialMatchCheckbox').checked = (data.specialMatch.home !== null);
+            document.getElementById('specialMatchTypeInput').value = data.specialMatch.type || '';
+            document.getElementById('specialHomeInput').value = data.specialMatch.home || '';
+            document.getElementById('specialAwayInput').value = data.specialMatch.away || '';
+            toggleSpecialMatchFields();
+        }
+    }
+}
+ function loadRoundSelector() {
             const select = document.getElementById('roundSelect');
             select.innerHTML = '<option value="">-- Επέλεξε Αγωνιστική --</option>';
             
