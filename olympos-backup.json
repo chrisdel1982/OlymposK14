@@ -493,7 +493,7 @@
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": true
+          "isPostponed": false
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
