@@ -493,7 +493,7 @@
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
@@ -514,7 +514,7 @@
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
