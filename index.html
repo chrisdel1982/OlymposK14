@@ -4943,12 +4943,33 @@ function saveResults() {
             tickerText.textContent = data.announcement;
             tickerBar.style.display = 'block';
         }
+// --- SMART AUTO-REFRESH (Χωρίς Τρεμόπαιγμα) ---
 setInterval(async () => {
     const newData = await loadData();
 
     if (newData) {
+        // 1. ΣΥΓΚΡΙΣΗ: Κρατάμε "φωτογραφία" των παλιών ρυθμίσεων Live/Αγώνα
+        const prevMatchData = JSON.stringify({
+            d: data.matchDate, 
+            t: data.matchTime, 
+            l: data.liveScore, 
+            s: data.specialMatch, 
+            c: data.countdownTarget
+        });
+        
+        const newMatchData = JSON.stringify({
+            d: newData.matchDate, 
+            t: newData.matchTime, 
+            l: newData.liveScore, 
+            s: newData.specialMatch, 
+            c: newData.countdownTarget
+        });
+
+        // 2. ΕΝΗΜΕΡΩΣΗ ΜΝΗΜΗΣ
         data = newData;
 
+        // 3. Ανανέωση των πινάκων (μόνο αν ο χρήστης τους βλέπει εκείνη τη στιγμή)
+        // Εδώ δεν μας πειράζει το refresh γιατί δεν έχουν animations που χαλάνε
         if (document.getElementById('standings').classList.contains('active')) {
             displayStandings();
             displayTopScorers();
@@ -4962,8 +4983,14 @@ setInterval(async () => {
             displayFixtures();
         }
 
-        displayNextMatch();
+        // 4. ΕΞΥΠΝΗ ΕΝΗΜΕΡΩΣΗ NEXT MATCH 💡
+        // Ξαναζωγραφίζουμε την κάρτα ΜΟΝΟ αν όντως άλλαξε κάτι στα δεδομένα της!
+        // Έτσι, το χρονόμετρο δεν θα εξαφανίζεται κάθε 20 δευτερόλεπτα.
+        if (prevMatchData !== newMatchData) {
+            displayNextMatch();
+        }
         
+        // 5. Ticker & News
         if (data.announcement) {
             const tickerText = document.getElementById('announcement-text');
             const tickerBar = document.getElementById('announcement-ticker');
@@ -4975,7 +5002,7 @@ setInterval(async () => {
         
         checkNewNews();
     }
-}, 20000);
+}, 20000); // Κάθε 20 δευτερόλεπτα
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
