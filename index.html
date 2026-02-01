@@ -16,6 +16,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* --- TOAST NOTIFICATIONS (Native Style) --- */
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000; /* Πάνω από όλα, ακόμα και από τα Modals */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; /* Για να μην εμποδίζει τα κλικ από πίσω */
+    width: max-content;
+    max-width: 90%;
+}
+
+.toast {
+    background: rgba(30, 30, 30, 0.95); /* Σκούρο γκρι, σχεδόν μαύρο */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px; /* Οβάλ σχήμα (Pill shape) */
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    
+    /* Animation */
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Εφέ "ελατηρίου" */
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.toast.success { border-left: 4px solid #00e676; } /* Πράσινη γραμμή */
+.toast.error { border-left: 4px solid #ff1744; }   /* Κόκκινη γραμμή */
         /* LIVE SCORE STYLES */
 .live-badge-pulse { 
     background: #ff0046; color: white; padding: 2px 8px; border-radius: 4px; 
@@ -2938,6 +2980,36 @@ window.addEventListener('load', function() {
         
     }, 500); // <-- ΧΡΟΝΟΣ ΑΝΑΜΟΝΗΣ
 });
+// ΣΥΝΑΡΤΗΣΗ ΓΙΑ TOAST NOTIFICATIONS 🍞
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    
+    // Δημιουργία του στοιχείου
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    // Εικονίδιο ανάλογα τον τύπο
+    const icon = type === 'success' ? '✅' : '⚠️';
+    
+    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+    
+    // Προσθήκη στη σελίδα
+    container.appendChild(toast);
+
+    // Εμφάνιση (με μικρή καθυστέρηση για να παίξει το animation)
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    // Αυτόματη αφαίρεση μετά από 3 δευτερόλεπτα
+    setTimeout(() => {
+        toast.classList.remove('show');
+        // Περιμένουμε να τελειώσει το animation εξαφάνισης πριν το διαγράψουμε τελείως
+        setTimeout(() => {
+            toast.remove();
+        }, 300); 
+    }, 3000);
+}
 </script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -3529,7 +3601,7 @@ async function loadData() {
             link.download = `olympos-backup-${new Date().toISOString().split('T')[0]}.json`;
             link.click();
             URL.revokeObjectURL(url);
-            alert('✅ Τα δεδομένα εξήχθησαν επιτυχώς!');
+            showToast('Τα δεδομένα εξήχθησαν');
         }
 
         function importData(event) {
@@ -3578,14 +3650,14 @@ async function loadData() {
                         displayNews();
                         updateRosterList();
                         updateNewsList();
-                        alert('✅ Τα δεδομένα εισήχθησαν επιτυχώς!\n\n' + 
+                        showToast('Τα δεδομένα εισήχθησαν επιτυχώς!\n\n' + 
                               'Roster: ' + (data.roster ? data.roster.length : 0) + ' παίκτες\n' +
                               'Ειδήσεις: ' + (data.news ? data.news.length : 0));
                         closeAdminPanel();
                     }
                 } catch (error) {
                     console.error('Import Error:', error);
-                    alert('❌ Σφάλμα: Μη έγκυρο αρχείο δεδομένων!\n\nΛεπτομέρειες: ' + error.message);
+                    showToast(' Σφάλμα: Μη έγκυρο αρχείο δεδομένων!\n\nΛεπτομέρειες: ' + error.message);
                 }
             };
             reader.readAsText(file);
@@ -4086,13 +4158,13 @@ function addPlayer() {
     const isCaptain = document.getElementById('isCaptainPlayer').checked;
 
     if (!name || !position) {
-        alert('⚠️ Συμπλήρωσε Όνομα και Θέση!');
+        showToast(' Συμπλήρωσε Όνομα και Θέση!');
         return;
     }
     
     // Έλεγχος αριθμού
     if (number && data.roster && data.roster.some(p => p.number === number)) {
-        alert('⚠️ Ο αριθμός φανέλας υπάρχει ήδη!');
+        showToast(' Ο αριθμός φανέλας υπάρχει ήδη!');
         return;
     }
 
@@ -4112,7 +4184,7 @@ function addPlayer() {
     displayTopScorers(); // ΝΕΟ
     updateRosterList();
     clearPlayerForm();
-    alert('✅ Ο παίκτης προστέθηκε επιτυχώς!');
+    showToast(' Ο παίκτης προστέθηκε επιτυχώς!');
 }
 
 function clearPlayerForm() {
@@ -4180,7 +4252,7 @@ function deletePlayer(identifier) {
         displayRoster();
         displayTopScorers();
         updateRosterList();
-        alert('✅ Ο παίκτης διαγράφηκε!');
+        showToast(' Ο παίκτης διαγράφηκε!');
     }
 }
 // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
@@ -4205,13 +4277,13 @@ function previewNewsPhoto(event) {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-        alert('⚠️ Παρακαλώ επίλεξε μόνο εικόνες!');
+        showToast(' Παρακαλώ επίλεξε μόνο εικόνες!');
         event.target.value = '';
         return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-        alert('⚠️ Η φωτογραφία είναι πολύ μεγάλη! Μέγιστο μέγεθος: 5MB');
+        showToast(' Η φωτογραφία είναι πολύ μεγάλη! Μέγιστο μέγεθος: 5MB');
         event.target.value = '';
         return;
     }
@@ -4289,7 +4361,7 @@ function removeNewsPhoto() {
             const content = document.getElementById('newsContent').value.trim();
 
             if (!title || !content) {
-                alert('⚠️ Συμπλήρωσε τίτλο και περιεχόμενο!');
+                showToast(' Συμπλήρωσε τίτλο και περιεχόμενο!');
                 return;
             }
 
@@ -4310,7 +4382,7 @@ function removeNewsPhoto() {
             displayNews();
             updateNewsList();
             clearNewsForm();
-            alert('✅ Η είδηση προστέθηκε επιτυχώς!');
+            showToast('Η είδηση προστέθηκε επιτυχώς!');
         }
 
         function deleteNews(id) {
@@ -4319,7 +4391,7 @@ function removeNewsPhoto() {
                 saveData(data);
                 displayNews();
                 updateNewsList();
-                alert('✅ Η είδηση διαγράφηκε!');
+                showToast(' Η είδηση διαγράφηκε!');
             }
         }
 
@@ -4510,7 +4582,7 @@ function saveGeneralSettings() {
     displayNextMatch();
     displayStandings() 
 
-    alert('✅ Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
+    showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
 }
         let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
 function displayNextMatch() {
@@ -4689,7 +4761,7 @@ function checkPassword() {
         refreshAdminForms();
         
     } else {
-        alert('❌ Λάθος κωδικός!');
+        showToast(' Λάθος κωδικός!');
     }
 }
 
@@ -4885,7 +4957,7 @@ function removeScorer(roundNum, matchIndex, scorerIndex) {
 function saveResults() {
     const roundNum = parseInt(document.getElementById('roundSelect').value);
     if (!roundNum) {
-        alert('Επέλεξε πρώτα μια αγωνιστική!');
+        showToast('Επέλεξε πρώτα μια αγωνιστική!');
         return;
     }
 
@@ -4925,7 +4997,7 @@ function saveResults() {
     displayResults();
     displayFixtures();
 
-    alert('✅ Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
+    showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
 }
 
         function resetAllData() {
@@ -4940,7 +5012,7 @@ function saveResults() {
                     displayNews();
                     updateRosterList();
                     updateNewsList();
-                    alert('✅ Όλα τα δεδομένα διαγράφηκαν!');
+                    showToast(' Όλα τα δεδομένα διαγράφηκαν!');
                     closeAdminPanel();
                 }
             }
@@ -5100,7 +5172,7 @@ function doShare(platform) {
         url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(deepLink)}`;
     } else if (platform === 'copy') {
         navigator.clipboard.writeText(text).then(() => {
-            alert('✅ Το Link αντιγράφηκε!');
+            showToast(' Το Link αντιγράφηκε!');
             closeShareModal();
         }).catch(() => {
             prompt("Αντιγράψτε το link:", deepLink);
@@ -5249,7 +5321,7 @@ function addCleanSheetToMatch(roundNum, matchIndex) {
     
     // Έλεγχος: Μην βάλουμε τον ίδιο παίκτη 2 φορές στο ίδιο ματς
     if(match.cleanSheetHolders.includes(playerName)) {
-        alert('⚠️ Αυτός ο παίκτης έχει ήδη Clean Sheet σε αυτό το ματς!');
+        showToast('Αυτός ο παίκτης έχει ήδη Clean Sheet σε αυτό το ματς!');
         return;
     }
 
@@ -5500,5 +5572,6 @@ function executeShareSquad() {
 }
 </script>
 <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+<div id="toast-container"></div>
 </body>
 </html>
