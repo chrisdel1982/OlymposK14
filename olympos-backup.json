@@ -1239,11 +1239,11 @@
   "countdownTarget": "2026-02-07T12:30",
   "liveScore": {
     "active": true,
-    "home": "0",
+    "home": "1",
     "away": "0",
     "half": "2",
     "duration": "20",
-    "startTime": "12:55"
+    "startTime": "12:58"
   },
   "specialMatch": {
     "type": "",
