@@ -571,8 +571,8 @@
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 0,
+          "awayScore": 3,
           "isPostponed": false
         }
       ]
