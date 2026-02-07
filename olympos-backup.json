@@ -1245,7 +1245,7 @@
   "matchMapLink": "",
   "countdownTarget": "",
   "liveScore": {
-    "active": false,
+    "active": true,
     "home": "4",
     "away": "3",
     "half": "FT",
