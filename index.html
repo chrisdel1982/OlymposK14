@@ -3554,25 +3554,23 @@ function showToast(message, type = 'success') {
 
         const FIXTURES = [];
 async function loadData() {
-    // 1. Πρώτα προσπάθεια φόρτωσης από GitHub (Server First)
-    try {
-        // Το ?t=... εξασφαλίζει ότι παίρνουμε πάντα το φρέσκο, όχι cached
-        const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
-        
-        if (response.ok) {
-            const serverData = await response.json();
-            console.log('☁️ Φορτώθηκαν δεδομένα από Server (GitHub).');
-            return serverData;
-        }
-    } catch (e) {
-        console.warn('⚠️ Πρόβλημα σύνδεσης με GitHub, ψάχνω τοπικά...', e);
-    }
-
-    // 2. Αν αποτύχει το GitHub (π.χ. offline), ψάξε τοπικά
+    // 1. ΠΡΩΤΑ ΕΛΕΓΧΟΣ ΤΟΠΙΚΗΣ ΜΝΗΜΗΣ (Priority to Admin)
+    // Αν εσύ έχεις πατήσει αποθήκευση, κρατάμε τα δικά σου δεδομένα και αγνοούμε το GitHub
     const saved = localStorage.getItem('footballData');
     if (saved) {
-        console.log('📂 Φόρτωση τοπικών δεδομένων (Offline Mode).');
+        console.log('📂 Βρέθηκαν τοπικά δεδομένα (Admin Drafts). Αγνοώ το GitHub.');
         return JSON.parse(saved);
+    }
+
+    // 2. ΑΝ ΔΕΝ ΥΠΑΡΧΟΥΝ ΤΟΠΙΚΑ -> ΦΟΡΤΩΣΗ ΑΠΟ GITHUB (Για τους γονείς)
+    try {
+        const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
+        if (response.ok) {
+            console.log('☁️ Φόρτωση από GitHub.');
+            return await response.json();
+        }
+    } catch (e) {
+        console.warn('⚠️ Πρόβλημα σύνδεσης...', e);
     }
 
     // 3. Fallback (Αν είναι όλα άδεια)
