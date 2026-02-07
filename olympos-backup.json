@@ -1238,12 +1238,12 @@
   "matchMapLink": "https://maps.app.goo.gl/fCT2xRW1EWRcTp3E8",
   "countdownTarget": "2026-02-07T12:30",
   "liveScore": {
-    "active": false,
-    "home": "3",
-    "away": "2",
+    "active": true,
+    "home": "0",
+    "away": "0",
     "half": "FT",
     "duration": "20",
-    "startTime": "14:21"
+    "startTime": "12:40"
   },
   "specialMatch": {
     "type": "",
