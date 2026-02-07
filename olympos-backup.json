@@ -532,37 +532,48 @@
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 4,
+          "awayScore": 3,
+          "scorers": [
+            "Νίκος Κυρτζαλιώτης",
+            "Άγγελος Μπατσακίδης",
+            "Γιώργος Βότσης"
+          ],
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         }
       ]
     },
@@ -1030,7 +1041,7 @@
       "name": "Άγγελος Μπατσακίδης",
       "birthYear": 2015,
       "position": "Επιθετικός Μέσος (AM)/ Αμυντικός Μέσος (DM)",
-      "goals": 3
+      "goals": 4
     },
     {
       "number": 11,
@@ -1052,7 +1063,7 @@
       "name": "Γιώργος Βότσης",
       "birthYear": 2012,
       "position": "Πλάγιος Επιθετικός - Αριστερός (LW)",
-      "goals": 3
+      "goals": 4
     },
     {
       "number": null,
@@ -1093,7 +1104,7 @@
       "birthYear": 2012,
       "position": "Κεντρικός Μέσος (CM) / Αμυντικός Μέσος (DM) / Επιθετικός Μέσος (AM)",
       "isCaptain": true,
-      "goals": 8
+      "goals": 9
     },
     {
       "number": 4,
@@ -1245,7 +1256,7 @@
   "matchMapLink": "",
   "countdownTarget": "",
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "4",
     "away": "3",
     "half": "FT",
@@ -1254,8 +1265,8 @@
   },
   "specialMatch": {
     "type": "",
-    "home": "",
-    "away": ""
+    "home": null,
+    "away": null
   },
-  "lastUpdated": 1770470931082
+  "lastUpdated": 1770483322918
 }
