@@ -4497,11 +4497,9 @@ document.querySelectorAll('.nav-link').forEach(link => {
             document.getElementById('adminModal').classList.remove('active');
         }
 function saveGeneralSettings() {
-    console.log('🔄 Ξεκινάει η διαδικασία αποθήκευσης (Full Version)...');
+    console.log('🔄 Αποθήκευση Ρυθμίσεων...');
 
-    // ---------------------------------------------------------
-    // 1. ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ & LIVE (Όπως πριν)
-    // ---------------------------------------------------------
+    // 1. ΡΥΘΜΙΣΕΙΣ (Ημερομηνίες, Ώρες κλπ - Μένουν ίδια)
     const dateInput = document.getElementById('matchDateInput');
     const timeInput = document.getElementById('matchTimeInput');
     const stadiumInput = document.getElementById('matchStadiumInput');
@@ -4516,7 +4514,7 @@ function saveGeneralSettings() {
     if (countdownInput) data.countdownTarget = countdownInput.value;
     if (announcementInput) data.announcement = announcementInput.value;
 
-    // Live Score Settings
+    // 2. LIVE SCORE (Μένει ίδιο)
     const liveCheck = document.getElementById('liveModeCheckbox');
     const liveHome = document.getElementById('liveHomeScore');
     const liveAway = document.getElementById('liveAwayScore');
@@ -4532,7 +4530,7 @@ function saveGeneralSettings() {
     if (liveDur) data.liveScore.duration = liveDur.value || 20;
     if (liveStart) data.liveScore.startTime = liveStart.value;
 
-    // Special Match
+    // 3. SPECIAL MATCH (Μένει ίδιο)
     const specialCheck = document.getElementById('useSpecialMatchCheckbox');
     const specialType = document.getElementById('specialMatchTypeInput');
     const specialHome = document.getElementById('specialHomeInput');
@@ -4548,65 +4546,35 @@ function saveGeneralSettings() {
         data.specialMatch.away = null;
     }
 
-    // ---------------------------------------------------------
-    // 2. ΑΠΟΘΗΚΕΥΣΗ ΣΚΟΡ & ΣΚΟΡΕΡ (Το Νέο Κομμάτι)
-    // ---------------------------------------------------------
+    // 4. ΑΠΟΘΗΚΕΥΣΗ ΣΚΟΡ ΑΓΩΝΩΝ (Μόνο τα νούμερα, ΟΧΙ τους σκόρερ από το DOM)
     if (data.fixtures) {
         data.fixtures.forEach((round, roundIndex) => {
             round.matches.forEach((match, matchIndex) => {
-                // Βρίσκουμε τα input scores
                 const homeScoreIn = document.getElementById(`score-home-${roundIndex}-${matchIndex}`);
                 const awayScoreIn = document.getElementById(`score-away-${roundIndex}-${matchIndex}`);
                 const postponeIn = document.getElementById(`postpone-${roundIndex}-${matchIndex}`);
 
-                // Α. Αποθήκευση Σκορ (Νούμερα)
-                if (homeScoreIn) {
+                if (homeScoreIn && awayScoreIn) {
                     const hVal = homeScoreIn.value.trim();
                     match.homeScore = (hVal === '') ? null : parseInt(hVal);
-                }
-                if (awayScoreIn) {
+                    
                     const aVal = awayScoreIn.value.trim();
                     match.awayScore = (aVal === '') ? null : parseInt(aVal);
                 }
                 if (postponeIn) {
                     match.postponed = postponeIn.checked;
                 }
-
-                // Β. Αποθήκευση Σκόρερ (ΑΥΤΟ ΕΛΕΙΠΕ!)
-                // Βρίσκουμε τη γραμμή (row) του αγώνα
-                if (homeScoreIn) {
-                    // Πάμε στον γονέα (τη γραμμή) για να ψάξουμε μέσα της
-                    const row = homeScoreIn.closest('.match-input-row') || homeScoreIn.parentElement.parentElement;
-                    
-                    if (row) {
-                        // Ψάχνουμε όλα τα ταμπελάκια με την κλάση .scorer-tag μέσα σε αυτή τη γραμμή
-                        const scorerTags = row.querySelectorAll('.scorer-tag');
-                        
-                        // Φτιάχνουμε μια νέα λίστα και βάζουμε τα ονόματα
-                        const currentScorers = [];
-                        scorerTags.forEach(tag => {
-                            // Παίρνουμε το κείμενο και καθαρίζουμε τυχόν κενά ή το "x"
-                            // (Υποθέτουμε ότι το όνομα είναι το κείμενο του tag)
-                            let name = tag.innerText.replace('×', '').trim(); // Αφαιρούμε το x κλεισίματος αν υπάρχει στο text
-                            if(name) currentScorers.push(name);
-                        });
-
-                        // Ενημερώνουμε τα δεδομένα!
-                        match.scorers = currentScorers;
-                    }
-                }
             });
         });
     }
 
-    // ---------------------------------------------------------
-    // 3. ΛΗΨΗ ΑΡΧΕΙΟΥ
-    // ---------------------------------------------------------
-    saveData(data); 
-    
-    displayNextMatch();
-    displayStandings() 
+    // --- Η ΔΙΟΡΘΩΣΗ: ΚΑΛΟΥΜΕ ΤΟ RECALCULATE ---
+    // Αυτό θα καθαρίσει τυχόν "σκουπίδια" και θα φτιάξει τα γκολ
+    recalculateAllStats();
 
+    displayNextMatch();
+    displayStandings();
+    
     showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
 }
         let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
@@ -4978,7 +4946,6 @@ function removeScorer(roundNum, matchIndex, scorerIndex) {
         loadMatchesForRound();
     }
 }
-
 function saveResults() {
     const roundNum = parseInt(document.getElementById('roundSelect').value);
     if (!roundNum) {
@@ -4989,40 +4956,39 @@ function saveResults() {
     const round = data.fixtures.find(r => r.round === roundNum);
     
     round.matches.forEach((match, index) => {
-        if (!match.home || !match.away) return;
-        
+        // ... (Ο κώδικας για τα inputs μένει ίδιος) ...
         const homeInput = document.getElementById(`home-${roundNum}-${index}`);
         const awayInput = document.getElementById(`away-${roundNum}-${index}`);
         const postponedInput = document.getElementById(`postponed-${roundNum}-${index}`);
         
-        const isPostponed = postponedInput.checked;
-        
-        // Αν τσεκαριστεί το "Αναβλήθηκε", αποθηκεύουμε true και σβήνουμε τα σκορ
-        if (isPostponed) {
-            match.isPostponed = true;
-            match.homeScore = null;
-            match.awayScore = null;
-            // Καθαρίζουμε και τα inputs οπτικά
-            homeInput.value = '';
-            awayInput.value = '';
-        } else {
-            // Αν ΔΕΝ είναι αναβληθέν, αποθηκεύουμε τα σκορ κανονικά
-            match.isPostponed = false;
-            const homeScore = homeInput.value !== '' ? parseInt(homeInput.value) : null;
-            const awayScore = awayInput.value !== '' ? parseInt(awayInput.value) : null;
-            
-            match.homeScore = homeScore;
-            match.awayScore = awayScore;
+        if (homeInput && awayInput && postponedInput) {
+            const isPostponed = postponedInput.checked;
+            if (isPostponed) {
+                match.isPostponed = true;
+                match.homeScore = null;
+                match.awayScore = null;
+                homeInput.value = '';
+                awayInput.value = '';
+            } else {
+                match.isPostponed = false;
+                match.homeScore = homeInput.value !== '' ? parseInt(homeInput.value) : null;
+                match.awayScore = awayInput.value !== '' ? parseInt(awayInput.value) : null;
+            }
         }
     });
 
-    saveData(data);
+    // --- Η ΜΕΓΑΛΗ ΑΛΛΑΓΗ ΕΔΩ ---
+    // Αντί απλά να σώσουμε, κάνουμε επανυπολογισμό για να φτιαχτούν τα γκολ
+    recalculateAllStats(); 
     
+    // Ανανέωση των οθονών
     displayStandings();
     displayResults();
     displayFixtures();
+    displayTopScorers(); // Τώρα θα δείξει σωστά τους σκόρερ!
+    updateRosterList();  // Και στο ρόστερ τα γκολ θα είναι σωστά
 
-    showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
+    showToast('Τα αποτελέσματα & οι σκόρερ αποθηκεύτηκαν!');
 }
 
         function resetAllData() {
@@ -5594,6 +5560,55 @@ function executeShareSquad() {
         const viberUrl = `viber://forward?text=${encodeURIComponent(text)}`;
         window.open(viberUrl, '_blank');
     }
+}
+// --- ΝΕΑ ΣΥΝΑΡΤΗΣΗ: ΥΠΟΛΟΓΙΣΜΟΣ ΟΛΩΝ ΤΩΝ ΣΤΑΤΙΣΤΙΚΩΝ ΑΠΟ ΤΗΝ ΑΡΧΗ ---
+function recalculateAllStats() {
+    console.log("🔄 Επαναυπολογισμός Στατιστικών...");
+
+    // 1. Μηδενισμός όλων των παικτών στο Ρόστερ
+    if (data.roster) {
+        data.roster.forEach(player => {
+            player.goals = 0;
+            player.cleanSheets = 0;
+        });
+    }
+
+    // 2. Σάρωση όλων των αγώνων και μέτρημα από την αρχή
+    if (data.fixtures) {
+        data.fixtures.forEach(round => {
+            round.matches.forEach(match => {
+                
+                // Υπολογισμός Γκολ (Scorers)
+                if (match.scorers && Array.isArray(match.scorers)) {
+                    // ΚΑΘΑΡΙΣΜΟΣ ΟΝΟΜΑΤΩΝ (Αφαιρούμε τυχόν '⚽' που έμειναν από το λάθος)
+                    match.scorers = match.scorers.map(s => s.replace('⚽', '').replace('🧤', '').trim());
+
+                    match.scorers.forEach(scorerName => {
+                        const player = data.roster.find(p => p.name.trim() === scorerName.trim());
+                        if (player) {
+                            player.goals = (player.goals || 0) + 1;
+                        }
+                    });
+                }
+
+                // Υπολογισμός Clean Sheets
+                if (match.cleanSheetHolders && Array.isArray(match.cleanSheetHolders)) {
+                    match.cleanSheetHolders = match.cleanSheetHolders.map(s => s.replace('⚽', '').replace('🧤', '').trim());
+
+                    match.cleanSheetHolders.forEach(gkName => {
+                        const player = data.roster.find(p => p.name.trim() === gkName.trim());
+                        if (player) {
+                            player.cleanSheets = (player.cleanSheets || 0) + 1;
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // 3. Αποθήκευση των διορθωμένων δεδομένων
+    saveData(data);
+    console.log("✅ Τα στατιστικά διορθώθηκαν!");
 }
 </script>
 <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
