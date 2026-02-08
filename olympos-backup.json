@@ -550,8 +550,8 @@
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 4,
+          "awayScore": 2,
           "isPostponed": false
         },
         {
