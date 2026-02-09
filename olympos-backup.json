@@ -1250,23 +1250,23 @@
     }
   ],
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "",
-  "countdownTarget": "",
+  "matchDate": "Σάββατο 14/02",
+  "matchTime": "12:30",
+  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης»",
+  "matchMapLink": "https://maps.app.goo.gl/anGgCNt4aL6FiQ6x6",
+  "countdownTarget": "2026-02-14T12:30",
   "liveScore": {
     "active": false,
-    "home": "4",
-    "away": "3",
-    "half": "FT",
+    "home": "40",
+    "away": "30",
+    "half": "1",
     "duration": "20",
-    "startTime": "13:48"
+    "startTime": "12:30"
   },
   "specialMatch": {
     "type": "",
     "home": null,
     "away": null
   },
-  "lastUpdated": 1770483322930
+  "lastUpdated": 1770644796305
 }
