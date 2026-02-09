@@ -3554,15 +3554,19 @@ function showToast(message, type = 'success') {
 
         const FIXTURES = [];
 async function loadData() {
-    // 1. ΠΡΩΤΑ ΕΛΕΓΧΟΣ ΤΟΠΙΚΗΣ ΜΝΗΜΗΣ (Priority to Admin)
-    // Αν εσύ έχεις πατήσει αποθήκευση, κρατάμε τα δικά σου δεδομένα και αγνοούμε το GitHub
-    const saved = localStorage.getItem('footballData');
-    if (saved) {
-        console.log('📂 Βρέθηκαν τοπικά δεδομένα (Admin Drafts). Αγνοώ το GitHub.');
-        return JSON.parse(saved);
+    // 1️⃣ ΕΛΕΓΧΟΣ: Είμαι σε Admin Mode;
+    const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+    
+    // 2️⃣ ΑΝ ΕΙΣΑΙ ADMIN: Πρώτα τσέκαρε localStorage
+    if (isAdmin) {
+        const saved = localStorage.getItem('footballData');
+        if (saved) {
+            console.log('⚙️ Admin Mode: Χρήση τοπικών drafts.');
+            return JSON.parse(saved);
+        }
     }
-
-    // 2. ΑΝ ΔΕΝ ΥΠΑΡΧΟΥΝ ΤΟΠΙΚΑ -> ΦΟΡΤΩΣΗ ΑΠΟ GITHUB (Για τους γονείς)
+    
+    // 3️⃣ ΦΟΡΤΩΣΗ ΑΠΟ GITHUB (default για όλους)
     try {
         const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
         if (response.ok) {
@@ -3573,11 +3577,11 @@ async function loadData() {
         console.warn('⚠️ Πρόβλημα σύνδεσης...', e);
     }
 
-    // 3. Fallback (Αν είναι όλα άδεια)
+    // 4️⃣ FALLBACK
     return { 
-        fixtures: JSON.parse(JSON.stringify(FIXTURES)),
-        roster: [],
-        news: []
+        fixtures: JSON.parse(JSON.stringify(FIXTURES)), 
+        roster: [], 
+        news: [] 
     };
 }
         function calculateLiveMinute(startTime, half, duration) {
@@ -4765,45 +4769,50 @@ function startCountdown(targetDateString) {
     // Ξεκινάμε την επανάληψη κάθε δευτερόλεπτο
     countdownInterval = setInterval(updateTimer, 1000);
 }
-function checkPassword() {
+async function checkPassword() {
     const password = document.getElementById('adminPassword').value;
     
     if (password === ADMIN_PASSWORD) {
-        // 1. Εμφάνιση του Admin Panel
+        // 1️⃣ Εμφάνιση Admin Panel
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-
-        // 2. ΕΛΕΓΧΟΣ ΓΙΑ "ΠΡΟΧΕΙΡΑ" ΔΕΔΟΜΕΝΑ (DRAFTS)
+        
+        // 2️⃣ ΕΝΕΡΓΟΠΟΙΗΣΗ ADMIN MODE
+        sessionStorage.setItem('isAdmin', 'true');
+        
+        // 3️⃣ ΕΛΕΓΧΟΣ ΓΙΑ DRAFTS
         const localDraft = localStorage.getItem('footballData');
         
         if (localDraft) {
-            // Ρωτάμε τον Admin τι θέλει να κάνει
             const userChoice = confirm(
                 "⚠️ ΒΡΕΘΗΚΑΝ ΑΠΟΘΗΚΕΥΜΕΝΕΣ ΑΛΛΑΓΕΣ ΣΤΟΝ ΥΠΟΛΟΓΙΣΤΗ ΣΟΥ!\n\n" +
                 "Πατήστε 'OK' για να συνεχίσετε την επεξεργασία τους (Draft).\n" +
                 "Πατήστε 'Ακύρωση' για να φορτώσετε τα δεδομένα του GitHub (Live)."
             );
-
+            
             if (userChoice) {
-                // Φόρτωσε τα τοπικά
+                // Κράτα τα drafts
                 data = JSON.parse(localDraft);
-                console.log('✏️ Admin: Φορτώθηκαν τα τοπικά Drafts.');
+                console.log('✏️ Admin: Χρήση τοπικών Drafts.');
             } else {
-                // Κράτα του GitHub (που έχουν ήδη φορτώσει από το loadData)
-                // Και ΚΑΘΑΡΙΣΕ τα τοπικά για να μην μπερδεύουν
+                // Διέγραψε τα drafts και ξαναφόρτωσε από GitHub
                 localStorage.removeItem('footballData');
-                console.log('☁️ Admin: Φορτώθηκαν τα Live δεδομένα. Τα τοπικά διαγράφηκαν.');
+                data = await loadData(); // Τώρα θα φορτώσει GitHub
+                console.log('☁️ Admin: Φόρτωση Live δεδομένων. Drafts διαγράφηκαν.');
             }
+        } else {
+            // Δεν υπάρχουν drafts, φόρτωσε από GitHub
+            data = await loadData();
+            console.log('☁️ Admin: Φόρτωση από GitHub (δεν υπάρχουν drafts).');
         }
-
-        // 3. Ενημέρωση της φόρμας με τα δεδομένα που επιλέχθηκαν (Local ή GitHub)
+        
+        // 4️⃣ Ανανέωση φορμών
         refreshAdminForms();
         
     } else {
-        showToast(' Λάθος κωδικός!');
+        showToast('❌ Λάθος κωδικός!', 'error');
     }
 }
-
 // Βοηθητική συνάρτηση για να γεμίσουν τα κουτάκια (για να μην γράφουμε τον ίδιο κώδικα 2 φορές)
 function refreshAdminForms() {
     loadRoundSelector();
