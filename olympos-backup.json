@@ -270,9 +270,9 @@
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
-          "homeScore": null,
-          "awayScore": null,
-          "isPostponed": true
+          "homeScore": 0,
+          "awayScore": 3,
+          "isPostponed": false
         },
         {
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
