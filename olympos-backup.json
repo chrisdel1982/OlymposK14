@@ -1256,12 +1256,12 @@
   "matchMapLink": "https://maps.app.goo.gl/anGgCNt4aL6FiQ6x6",
   "countdownTarget": "2026-02-14T12:30",
   "liveScore": {
-    "active": false,
-    "home": "40",
-    "away": "30",
+    "active": true,
+    "home": "0",
+    "away": "0",
     "half": "1",
     "duration": "20",
-    "startTime": "12:30"
+    "startTime": "12:40"
   },
   "specialMatch": {
     "type": "",
