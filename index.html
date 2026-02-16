@@ -4414,12 +4414,15 @@ function removeNewsPhoto() {
             <div class="news-content">${newsItem.content}</div>
             ${imageHTML}
             
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 10px;">
-                <button onclick="event.stopPropagation(); toggleLike('${newsItem.id}')" class="btn-secondary" style="padding: 8px 16px; cursor: pointer; font-size: 0.9rem;">
-                    ${likeIcon} Like
-                </button>
-                <span style="color: #888; font-size: 0.85rem;">${likes} ${likes === 1 ? 'like' : 'likes'}</span>
-            </div>
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px;">
+             <button onclick="event.stopPropagation(); toggleLike('${newsItem.id}')" 
+            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px 8px; transition: transform 0.2s;"
+            onmouseover="this.style.transform='scale(1.2)'" 
+            onmouseout="this.style.transform='scale(1)'">
+        ${likeIcon}
+    </button>
+    <span style="color: #999; font-size: 0.8rem;">${likes}</span>
+    </div>
         `;
         
         // Λογική για άνοιγμα/κλείσιμο
@@ -5657,29 +5660,48 @@ async function toggleLike(newsId) {
     const hasLiked = localStorage.getItem(userLikedKey);
     
     try {
+        let newCount = 0;
+        
         if (hasLiked) {
             // Unlike
             await likesRef.transaction((currentLikes) => {
-                return Math.max(0, (currentLikes || 0) - 1);
+                newCount = Math.max(0, (currentLikes || 0) - 1);
+                return newCount;
             });
             localStorage.removeItem(userLikedKey);
-            showToast('💔 Αφαίρεση Like', 'success');
         } else {
             // Like
             await likesRef.transaction((currentLikes) => {
-                return (currentLikes || 0) + 1;
+                newCount = (currentLikes || 0) + 1;
+                return newCount;
             });
             localStorage.setItem(userLikedKey, 'true');
-            showToast('❤️ Like!', 'success');
         }
         
-        displayNews();
+        // Ενημέρωση μόνο του συγκεκριμένου άρθρου (χωρίς reload)
+        updateLikeDisplay(newsId, newCount, !hasLiked);
+        
     } catch (error) {
         console.error('Σφάλμα like:', error);
-        showToast('⚠️ Πρόβλημα σύνδεσης', 'error');
     }
 }
 
+// Νέα συνάρτηση: Ενημερώνει μόνο το UI του like (χωρίς reload)
+function updateLikeDisplay(newsId, count, isLiked) {
+    const newsItem = document.getElementById('news-item-' + newsId);
+    if (!newsItem) return;
+    
+    const likeBtn = newsItem.querySelector('[onclick*="toggleLike"]');
+    const likeCount = newsItem.querySelector('span[style*="color: #888"]');
+    
+    if (likeBtn) {
+        likeBtn.innerHTML = (isLiked ? '❤️' : '🤍') + ' Like';
+    }
+    
+    if (likeCount) {
+        likeCount.textContent = count + (count === 1 ? ' like' : ' likes');
+    }
+}
 async function getLikes(newsId) {
     try {
         const snapshot = await database.ref('likes/' + newsId).once('value');
