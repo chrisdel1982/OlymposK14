@@ -39,9 +39,11 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Firebase SDK (Compat version για ευκολία) -->
+
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     
     <style>
         /* --- TOAST NOTIFICATIONS (Native Style) --- */
@@ -3038,49 +3040,6 @@ function showToast(message, type = 'success') {
         }, 300); 
     }, 3000);
 }
-// ===== LIKE FUNCTIONALITY =====
-async function toggleLike(newsId) {
-    const likesRef = database.ref('likes/' + newsId);
-    const userLikedKey = 'liked_' + newsId;
-    
-    // Έλεγχος αν έχει ήδη κάνει like
-    const hasLiked = localStorage.getItem(userLikedKey);
-    
-    try {
-        if (hasLiked) {
-            // Unlike
-            await likesRef.transaction((currentLikes) => {
-                return Math.max(0, (currentLikes || 0) - 1);
-            });
-            localStorage.removeItem(userLikedKey);
-            showToast('💔 Αφαίρεση Like', 'success');
-        } else {
-            // Like
-            await likesRef.transaction((currentLikes) => {
-                return (currentLikes || 0) + 1;
-            });
-            localStorage.setItem(userLikedKey, 'true');
-            showToast('❤️ Like!', 'success');
-        }
-        
-        // Ανανέωση εμφάνισης
-        displayNews();
-    } catch (error) {
-        console.error('Σφάλμα like:', error);
-        showToast('⚠️ Πρόβλημα σύνδεσης', 'error');
-    }
-}
-
-// Φόρτωση likes από Firebase
-async function getLikes(newsId) {
-    try {
-        const snapshot = await database.ref('likes/' + newsId).once('value');
-        return snapshot.val() || 0;
-    } catch (error) {
-        console.error('Σφάλμα φόρτωσης likes:', error);
-        return 0;
-    }
-}
 </script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -4405,47 +4364,72 @@ function removeNewsPhoto() {
     document.getElementById('newsPhotoPreview').style.display = 'none';
     document.getElementById('newsPhotoPreviewImg').src = '';
 }
-  async function displayNews() {
-    const newsSection = document.getElementById('newsList');
-    if (!newsSection) return;
+    async function displayNews() {
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = '';
 
-    if (!data.news || data.news.length === 0) {
-        newsSection.innerHTML = '<p style="text-align:center; color: #888;">Δεν υπάρχουν νέα προς το παρόν.</p>';
+    if (!data.news) { data.news = []; }
+
+    if (data.news.length === 0) {
+        container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
         return;
     }
 
-    let html = '';
-    for (const article of data.news) {
-        // Βεβαιώσου ότι υπάρχει ID (αν όχι, δημιούργησέ το)
-        if (!article.id) {
-            article.id = 'news_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    for (const newsItem of sortedNews) {
+        // Βεβαιώσου ότι υπάρχει ID
+        if (!newsItem.id) {
+            newsItem.id = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
+
+        const div = document.createElement('div');
+        div.id = `news-item-${newsItem.id}`; 
+        div.className = 'news-item collapsed';
         
-        const likes = await getLikes(article.id); // Φόρτωση likes
-        const hasLiked = localStorage.getItem('liked_' + article.id);
+        const formattedDate = new Date(newsItem.date).toLocaleDateString('el-GR', {
+            day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
+        });
+        
+        let imageHTML = '';
+        if (newsItem.photo) {
+            imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="News Photo">`;
+        }
+
+        // Φόρτωση likes
+        const likes = await getLikes(newsItem.id);
+        const hasLiked = localStorage.getItem('liked_' + newsItem.id);
         const likeIcon = hasLiked ? '❤️' : '🤍';
         
-        html += `
-            <div class="news-item">
-                <div class="news-header">
-                    <span class="news-date">${article.date}</span>
+        div.innerHTML = `
+            <div class="news-header">
+                <div>
+                    <h3 class="news-title">${newsItem.title} <span class="news-toggle">🔽</span></h3>
+                    <span class="news-date">${formattedDate}</span>
                 </div>
-                <h3>${article.title}</h3>
-                <p>${article.content}</p>
-                ${article.image ? `<img src="${article.image}" alt="${article.title}" class="news-image">` : ''}
-                
-                <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
-                    <button onclick="toggleLike('${article.id}')" class="btn-secondary" style="padding: 8px 16px; cursor: pointer;">
-                        ${likeIcon} Like
-                    </button>
-                    <span style="color: #888; font-size: 0.9rem;">${likes} ${likes === 1 ? 'like' : 'likes'}</span>
-                </div>
+                <button class="btn-share" onclick="event.stopPropagation(); openShareModal(${newsItem.id})">
+                    📤 Share
+                </button>
+            </div>
+            <div class="news-content">${newsItem.content}</div>
+            ${imageHTML}
+            
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 10px;">
+                <button onclick="event.stopPropagation(); toggleLike('${newsItem.id}')" class="btn-secondary" style="padding: 8px 16px; cursor: pointer; font-size: 0.9rem;">
+                    ${likeIcon} Like
+                </button>
+                <span style="color: #888; font-size: 0.85rem;">${likes} ${likes === 1 ? 'like' : 'likes'}</span>
             </div>
         `;
+        
+        // Λογική για άνοιγμα/κλείσιμο
+        div.addEventListener('click', function() {
+            this.classList.toggle('collapsed');
+        });
+        
+        container.appendChild(div);
     }
-    newsSection.innerHTML = html;
 }
-
         function addNews() {
             const title = document.getElementById('newsTitle').value.trim();
             const content = document.getElementById('newsContent').value.trim();
@@ -5665,6 +5649,47 @@ function executeShareSquad() {
         window.open(viberUrl, '_blank');
     }
 }
+// ===== LIKE FUNCTIONALITY =====
+async function toggleLike(newsId) {
+    const likesRef = database.ref('likes/' + newsId);
+    const userLikedKey = 'liked_' + newsId;
+    
+    const hasLiked = localStorage.getItem(userLikedKey);
+    
+    try {
+        if (hasLiked) {
+            // Unlike
+            await likesRef.transaction((currentLikes) => {
+                return Math.max(0, (currentLikes || 0) - 1);
+            });
+            localStorage.removeItem(userLikedKey);
+            showToast('💔 Αφαίρεση Like', 'success');
+        } else {
+            // Like
+            await likesRef.transaction((currentLikes) => {
+                return (currentLikes || 0) + 1;
+            });
+            localStorage.setItem(userLikedKey, 'true');
+            showToast('❤️ Like!', 'success');
+        }
+        
+        displayNews();
+    } catch (error) {
+        console.error('Σφάλμα like:', error);
+        showToast('⚠️ Πρόβλημα σύνδεσης', 'error');
+    }
+}
+
+async function getLikes(newsId) {
+    try {
+        const snapshot = await database.ref('likes/' + newsId).once('value');
+        return snapshot.val() || 0;
+    } catch (error) {
+        console.error('Σφάλμα φόρτωσης likes:', error);
+        return 0;
+    }
+}
+</script>
 </script>
 <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
 <div id="toast-container"></div>
