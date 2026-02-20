@@ -590,9 +590,9 @@
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
-          "homeScore": null,
-          "awayScore": null,
-          "isPostponed": true
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
@@ -622,9 +622,9 @@
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
-          "homeScore": null,
-          "awayScore": null,
-          "isPostponed": true
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         }
       ]
     },
