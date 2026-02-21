@@ -1267,23 +1267,23 @@
     }
   ],
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "",
-  "countdownTarget": "",
+  "matchDate": "Σάββατο 28/02",
+  "matchTime": "9:30",
+  "matchStadium": "ΔΑΚ ΠΟΛΙΧΝΗΣ 11x11",
+  "matchMapLink": "https://maps.app.goo.gl/o8AHxjchbYGKD4XW6",
+  "countdownTarget": "2026-02-28T09:30",
   "liveScore": {
     "active": false,
-    "home": "2",
-    "away": "3",
-    "half": "FT",
+    "home": "0",
+    "away": "30",
+    "half": "1",
     "duration": "20",
-    "startTime": "13:55"
+    "startTime": "09:30"
   },
   "specialMatch": {
     "type": "",
     "home": null,
     "away": null
   },
-  "lastUpdated": 1771074745938
+  "lastUpdated": 1771694539032
 }
