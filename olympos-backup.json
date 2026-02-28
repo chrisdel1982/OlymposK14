@@ -1276,9 +1276,9 @@
     "active": true,
     "home": "0",
     "away": "3",
-    "half": "3",
+    "half": "4",
     "duration": "20",
-    "startTime": "10:12"
+    "startTime": "10:28"
   },
   "specialMatch": {
     "type": "",
