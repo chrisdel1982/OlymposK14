@@ -1275,8 +1275,8 @@
   "liveScore": {
     "active": true,
     "home": "0",
-    "away": "FT",
-    "half": "4",
+    "away": "4",
+    "half": "FT",
     "duration": "20",
     "startTime": "10:28"
   },
