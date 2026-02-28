@@ -1273,12 +1273,12 @@
   "matchMapLink": "https://maps.app.goo.gl/o8AHxjchbYGKD4XW6",
   "countdownTarget": "2026-02-28T09:30",
   "liveScore": {
-    "active": false,
+    "active": true,
     "home": "0",
     "away": "30",
     "half": "1",
     "duration": "20",
-    "startTime": "09:30"
+    "startTime": "09:35"
   },
   "specialMatch": {
     "type": "",
