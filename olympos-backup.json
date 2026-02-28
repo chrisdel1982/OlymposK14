@@ -1169,6 +1169,22 @@
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Πλάγιος Αμυντικός - Δεξιός (RB)",
       "isCaptain": false,
       "goals": 0
+    },
+    {
+      "number": 90,
+      "name": "Χρήστος Κατσιγιάννης",
+      "birthYear": 2011,
+      "position": "Κεντρικός Επιθετικός (CF) / Πλάγιος Επιθετικός - Αριστερός (LW) / Πλάγιος Επιθετικός - Δεξιός (RW)",
+      "isCaptain": false,
+      "goals": 0
+    },
+    {
+      "number": 40,
+      "name": "Φάνης Καμπέρης",
+      "birthYear": 2011,
+      "position": "Κεντρικός Αμυντικός (CB)",
+      "isCaptain": false,
+      "goals": 0
     }
   ],
   "news": [
@@ -1285,5 +1301,5 @@
     "home": null,
     "away": null
   },
-  "lastUpdated": 1771694539032
+  "lastUpdated": 1772275156278
 }
