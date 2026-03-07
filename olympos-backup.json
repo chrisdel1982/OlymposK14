@@ -690,38 +690,48 @@
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 6,
+          "awayScore": 1,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 0,
+          "awayScore": 0,
+          "isPostponed": false
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 2,
+          "awayScore": 1,
+          "scorers": [
+            "Νίκος Κυρτζαλιώτης",
+            "Χρήστος Μπατσακίδης"
+          ],
+          "isPostponed": false
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         }
       ]
     },
@@ -1129,7 +1139,7 @@
       "birthYear": 2012,
       "position": "Κεντρικός Μέσος (CM) / Αμυντικός Μέσος (DM) / Επιθετικός Μέσος (AM)",
       "isCaptain": true,
-      "goals": 10
+      "goals": 11
     },
     {
       "number": 4,
@@ -1191,7 +1201,7 @@
       "name": "Χρήστος Μπατσακίδης",
       "birthYear": 2012,
       "position": "Αμυντικός Μέσος (DM)/ Ακραίος Αμυντικός - Αριστερός (LWB)",
-      "goals": 3
+      "goals": 4
     },
     {
       "number": 19,
@@ -1305,13 +1315,13 @@
     }
   ],
   "announcement": "",
-  "matchDate": "Σάββατο",
-  "matchTime": "12:30",
-  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης»",
-  "matchMapLink": "https://maps.app.goo.gl/vkRcoLgTT8oWZhZFA",
-  "countdownTarget": "2026-03-07T12:30",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "2",
     "away": "1",
     "half": "FT",
@@ -1323,5 +1333,5 @@
     "home": null,
     "away": null
   },
-  "lastUpdated": 1772430705966
+  "lastUpdated": 1772888499842
 }
