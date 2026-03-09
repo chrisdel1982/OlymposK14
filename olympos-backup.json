@@ -731,7 +731,7 @@
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         }
       ]
     },
