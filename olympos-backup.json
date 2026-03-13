@@ -729,9 +729,9 @@
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
-          "homeScore": null,
-          "awayScore": null,
-          "isPostponed": true
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPostponed": false
         }
       ]
     },
