@@ -774,8 +774,8 @@
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 4,
+          "awayScore": 0,
           "isPostponed": false
         },
         {
