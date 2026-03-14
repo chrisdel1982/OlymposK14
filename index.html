@@ -3637,17 +3637,37 @@ async function loadData() {
     localStorage.setItem('footballData', JSON.stringify(dataToSave));
 }
 
-        function exportData() {
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `olympos-backup-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
-            showToast('Τα δεδομένα εξήχθησαν');
-        }
+       function exportData() {
+    // 🔝 ΑΝΑΔΙΑΤΑΞΗ: Live Score & Settings πρώτα, μετά fixtures, roster, news
+    const sortedData = {
+        // 🔴 LIVE SCORE (ΠΡΩΤΟ ΓΙΑ ΕΥΚΟΛΟ EDITING)
+        liveScore: data.liveScore || null,
+        
+        // 📅 ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ
+        announcement: data.announcement || "",
+        matchDate: data.matchDate || "",
+        matchTime: data.matchTime || "",
+        matchStadium: data.matchStadium || "",
+        matchMapLink: data.matchMapLink || "",
+        countdownTarget: data.countdownTarget || "",
+        specialMatch: data.specialMatch || null,
+        
+        // ⚽ ΥΠΟΛΟΙΠΑ ΔΕΔΟΜΕΝΑ
+        fixtures: data.fixtures || [],
+        roster: data.roster || [],
+        news: data.news || []
+    };
+    
+    const dataStr = JSON.stringify(sortedData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `olympos-backup-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Τα δεδομένα εξήχθησαν - Live Score στην κορυφή!');
+}
 
         function importData(event) {
             const file = event.target.files[0];
