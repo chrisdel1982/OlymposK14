@@ -1344,11 +1344,11 @@
     }
   ],
   "announcement": "",
-  "matchDate": "Σάββατο 14/3",
-  "matchTime": "12:30",
-  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης» ",
-  "matchMapLink": "https://maps.app.goo.gl/UuiYRr9mQNrRkFkG6?g_st=ic",
-  "countdownTarget": "2026-03-14T12:30",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
   "liveScore": {
     "active": false,
     "home": "0",
