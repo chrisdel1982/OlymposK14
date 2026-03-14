@@ -1328,7 +1328,7 @@
   "matchMapLink": "https://maps.app.goo.gl/UuiYRr9mQNrRkFkG6?g_st=ic",
   "countdownTarget": "2026-03-14T12:30",
   "liveScore": {
-    "active": false,
+    "active": true,
     "home": "0",
     "away": "0",
     "half": "1",
