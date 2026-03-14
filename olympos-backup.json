@@ -1350,10 +1350,10 @@
   "matchMapLink": "https://maps.app.goo.gl/UuiYRr9mQNrRkFkG6?g_st=ic",
   "countdownTarget": "2026-03-14T12:30",
   "liveScore": {
-    "active": true,
-    "home": "7",
-    "away": "1",
-    "half": "FT",
+    "active": false,
+    "home": "0",
+    "away": "0",
+    "half": "1",
     "duration": "20",
     "startTime": "13:14"
   },
