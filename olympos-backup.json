@@ -1329,9 +1329,9 @@
   "countdownTarget": "2026-03-14T12:30",
   "liveScore": {
     "active": true,
-    "home": "3",
+    "home": "4",
     "away": "0",
-    "half": "1",
+    "half": "HT",
     "duration": "40",
     "startTime": "12:30"
   },
