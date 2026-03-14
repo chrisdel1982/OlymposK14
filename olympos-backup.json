@@ -1331,8 +1331,8 @@
     "active": true,
     "home": "7",
     "away": "1",
-    "half": "2",
-    "duration": "40",
+    "half": "FT",
+    "duration": "20",
     "startTime": "13:14"
   },
   "specialMatch": {
