@@ -8,11 +8,11 @@
     "startTime": "12:30"
   },
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "",
-  "countdownTarget": "",
+  "matchDate": "Κυριακή 29/3",
+  "matchTime": "10:00",
+  "matchStadium": "Γήπεδο Μεςήμβριας ",
+  "matchMapLink": "https://maps.app.goo.gl/gyKgTVSgRM9XJsGaA?g_st=ic",
+  "countdownTarget": "2026-03-29T10:00",
   "specialMatch": {
     "type": "",
     "home": null,
