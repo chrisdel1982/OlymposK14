@@ -1,11 +1,11 @@
 {
   "liveScore": {
     "active": false,
-    "home": "4",
-    "away": "3",
-    "half": "FT",
+    "home": "0",
+    "away": "0",
+    "half": "1",
     "duration": "20",
-    "startTime": "11:15"
+    "startTime": "12:30"
   },
   "announcement": "",
   "matchDate": "Σάββατο 4/4",
@@ -1187,7 +1187,7 @@
       "goals": 13
     },
     {
-      "number": 4,
+      "number": 94,
       "name": "Νίκος Τσοτουλίδης",
       "birthYear": 2014,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB)"
@@ -1257,7 +1257,7 @@
       "goals": 0
     },
     {
-      "number": 94,
+      "number": 4,
       "name": "Θάνος Βαφειάδης",
       "birthYear": 2013,
       "position": "Κεντρικός Αμυντικός (CB)",
