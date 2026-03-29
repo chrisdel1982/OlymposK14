@@ -1,6 +1,6 @@
 {
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "4",
     "away": "3",
     "half": "FT",
@@ -8,11 +8,11 @@
     "startTime": "11:15"
   },
   "announcement": "",
-  "matchDate": "Κυριακή 29/3",
-  "matchTime": "10:00",
-  "matchStadium": "Γήπεδο Αγχιάλου ",
-  "matchMapLink": "https://maps.app.goo.gl/tcaCQgjdPwaNSacp6?g_st=ic",
-  "countdownTarget": "2026-03-29T10:00",
+  "matchDate": "Σάββατο 4/4",
+  "matchTime": "12:30",
+  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης»",
+  "matchMapLink": "https://maps.app.goo.gl/ASawffE3LxM7ehwQ9?g_st=ic",
+  "countdownTarget": "2026-04-04T12:30",
   "specialMatch": {
     "type": "",
     "home": null,
@@ -817,37 +817,48 @@
           "home": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "homeScore": 5,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": 0,
-          "awayScore": 2
+          "awayScore": 2,
+          "isPostponed": false
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": 3,
-          "awayScore": 6
+          "awayScore": 6,
+          "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": 2,
-          "awayScore": 3
+          "awayScore": 3,
+          "isPostponed": false
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 4,
+          "awayScore": 3,
+          "scorers": [
+            "Παναγιώτης Παπαδόπουλος",
+            "Νίκος Κυρτζαλιώτης",
+            "Παναγιώτης Παπαδόπουλος"
+          ],
+          "isPostponed": false
         }
       ]
     },
@@ -1173,7 +1184,7 @@
       "birthYear": 2012,
       "position": "Κεντρικός Μέσος (CM) / Αμυντικός Μέσος (DM) / Επιθετικός Μέσος (AM)",
       "isCaptain": true,
-      "goals": 12
+      "goals": 13
     },
     {
       "number": 4,
@@ -1192,7 +1203,7 @@
       "name": "Παναγιώτης Παπαδόπουλος",
       "birthYear": 2013,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Επιθετικός Μέσος (AM)",
-      "goals": 1
+      "goals": 3
     },
     {
       "number": 5,
@@ -1242,6 +1253,14 @@
       "name": "Χρήστος Τοπούζης",
       "birthYear": 2012,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Πλάγιος Αμυντικός - Δεξιός (RB)",
+      "isCaptain": false,
+      "goals": 0
+    },
+    {
+      "number": 94,
+      "name": "Θάνος Βαφειάδης",
+      "birthYear": 2013,
+      "position": "Κεντρικός Αμυντικός (CB)",
       "isCaptain": false,
       "goals": 0
     }
