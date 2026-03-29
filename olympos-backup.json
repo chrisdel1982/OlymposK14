@@ -790,7 +790,7 @@
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
