@@ -846,7 +846,7 @@
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
