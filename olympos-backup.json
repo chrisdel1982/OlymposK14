@@ -875,15 +875,15 @@
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 4,
+          "awayScore": 4,
           "isPostponed": false
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 1,
+          "awayScore": 1,
           "isPostponed": false
         },
         {
