@@ -1,6 +1,6 @@
 {
   "liveScore": {
-    "active": true,
+    "active": false,
     "home": "5",
     "away": "3",
     "half": "FT",
@@ -8,11 +8,11 @@
     "startTime": "13:45"
   },
   "announcement": "",
-  "matchDate": "Σάββατο 4/4",
-  "matchTime": "12:30",
-  "matchStadium": "Δημοτικό Γήπεδο Αμπελοκήπων «Απόστολος Αστρεινίδης»",
-  "matchMapLink": "https://maps.app.goo.gl/ASawffE3LxM7ehwQ9?g_st=ic",
-  "countdownTarget": "2026-04-04T12:30",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
   "specialMatch": {
     "type": "",
     "home": null,
@@ -869,37 +869,50 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
-          "homeScore": null,
-          "awayScore": null
+          "homeScore": 5,
+          "awayScore": 3,
+          "scorers": [
+            "Παναγιώτης Παπαδόπουλος",
+            "Βασίλης Μέλλιος",
+            "Λεωνίδας Τσιότσικας",
+            "Άγγελος Κλαδάς",
+            "Άγγελος Μπατσακίδης"
+          ],
+          "isPostponed": false
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": false
         }
       ]
     },
@@ -1114,14 +1127,15 @@
       "number": 2,
       "name": "Άγγελος Κλαδάς",
       "birthYear": 2013,
-      "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Ακραίος Αμυντικός - Αριστερός (LWB) "
+      "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Ακραίος Αμυντικός - Αριστερός (LWB) ",
+      "goals": 1
     },
     {
       "number": 27,
       "name": "Άγγελος Μπατσακίδης",
       "birthYear": 2015,
       "position": "Επιθετικός Μέσος (AM)/ Αμυντικός Μέσος (DM)",
-      "goals": 5
+      "goals": 6
     },
     {
       "number": 11,
@@ -1136,7 +1150,7 @@
       "birthYear": 2013,
       "position": "Κεντρικός Επιθετικός (CF) / Δεύτερος Επιθετικός (SS) / Πλάγιος Επιθετικός - Δεξιός (RW)",
       "isCaptain": false,
-      "goals": 3
+      "goals": 4
     },
     {
       "number": 15,
@@ -1158,11 +1172,19 @@
       "goals": 3
     },
     {
+      "number": 4,
+      "name": "Θάνος Βαφειάδης",
+      "birthYear": 2013,
+      "position": "Κεντρικός Αμυντικός (CB)",
+      "isCaptain": false,
+      "goals": 0
+    },
+    {
       "number": 14,
       "name": "Λεωνίδας Τσιότσικας",
       "birthYear": 2014,
       "position": "Πλάγιος Επιθετικός - Αριστερός (LW)",
-      "goals": 2
+      "goals": 3
     },
     {
       "number": 10,
@@ -1203,7 +1225,7 @@
       "name": "Παναγιώτης Παπαδόπουλος",
       "birthYear": 2013,
       "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Επιθετικός Μέσος (AM)",
-      "goals": 3
+      "goals": 4
     },
     {
       "number": 5,
@@ -1253,14 +1275,6 @@
       "name": "Χρήστος Τοπούζης",
       "birthYear": 2012,
       "position": "Πλάγιος Αμυντικός - Αριστερός (LB) / Πλάγιος Αμυντικός - Δεξιός (RB)",
-      "isCaptain": false,
-      "goals": 0
-    },
-    {
-      "number": 4,
-      "name": "Θάνος Βαφειάδης",
-      "birthYear": 2013,
-      "position": "Κεντρικός Αμυντικός (CB)",
       "isCaptain": false,
       "goals": 0
     }
