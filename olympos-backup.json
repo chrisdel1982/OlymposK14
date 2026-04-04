@@ -163,8 +163,8 @@
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
-          "homeScore": 1,
-          "awayScore": 2,
+          "homeScore": 3,
+          "awayScore": 0,
           "isPostponed": false,
           "scorers": [
             "Χρήστος Μπατσακίδης",
@@ -223,7 +223,7 @@
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": 2,
           "awayScore": 4,
-          "isPostponed": false,
+          "isPostponed": true,
           "scorers": [
             "Νίκος Κυρτζαλιώτης",
             "Φάνης Βότσης",
