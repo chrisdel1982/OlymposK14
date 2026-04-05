@@ -870,7 +870,7 @@
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
@@ -891,7 +891,7 @@
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
