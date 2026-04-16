@@ -8,15 +8,15 @@
     "startTime": "13:45"
   },
   "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "",
-  "countdownTarget": "",
+  "matchDate": "ΠΑΡΑΣΚΕΥΗ",
+  "matchTime": "17:35",
+  "matchStadium": "ΔΗΜΟΤΙΚΟ ΓΗΠΕΔΟ ΣΙΝΔΟΥ",
+  "matchMapLink": "https://maps.app.goo.gl/48RKchCUDtf7MuQWA",
+  "countdownTarget": "2026-04-17T17:35",
   "specialMatch": {
-    "type": "",
-    "home": null,
-    "away": null
+    "type": "4ο ΤΟΥΡΝΟΥΑ ΟΜΟΝΟΙΑΣ ΣΙΝΔΟΥ",
+    "home": "ΝΙΚΟΠΟΛΗ & ΟΜΟΝΟΙΑ ΣΙΝΔΟY",
+    "away": "ΟΛΥΜΠΟΣ"
   },
   "fixtures": [
     {
