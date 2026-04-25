@@ -922,8 +922,8 @@
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 4,
+          "awayScore": 2,
           "isPostponed": false
         },
         {
@@ -947,7 +947,8 @@
           "awayScore": 3,
           "scorers": [
             "Μιχάλης Τσοτουλίδης",
-            "Νίκος Κυρτζαλιώτης"
+            "Νίκος Κυρτζαλιώτης",
+            "Μιχάλης Τσοτουλίδης"
           ],
           "isPostponed": false
         },
