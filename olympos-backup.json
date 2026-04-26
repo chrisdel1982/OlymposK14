@@ -955,15 +955,15 @@
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 3,
+          "awayScore": 2,
           "isPostponed": false
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 5,
+          "awayScore": 11,
           "isPostponed": false
         }
       ]
