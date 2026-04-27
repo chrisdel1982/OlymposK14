@@ -943,12 +943,9 @@
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
-          "homeScore": 6,
-          "awayScore": 3,
+          "homeScore": null,
+          "awayScore": null,
           "scorers": [
-            "Μιχάλης Τσοτουλίδης",
-            "Νίκος Κυρτζαλιώτης",
-            "Μιχάλης Τσοτουλίδης"
           ],
           "isPostponed": false
         },
