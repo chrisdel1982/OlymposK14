@@ -7,14 +7,14 @@
     "duration": "20",
     "startTime": "12:05"
   },
-  "announcement": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ - ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ ----- ΜΑΤΑΙΩΝΕΤΑΙ----- ",
+  "announcement": "",
   "matchDate": "",
   "matchTime": "",
   "matchStadium": "",
   "matchMapLink": "",
   "countdownTarget": "",
   "specialMatch": {
-    "type": "4ο ΤΟΥΡΝΟΥΑ ΟΜΟΝΟΙΑΣ ΣΙΝΔΟΥ",
+    "type": "",
     "home": null,
     "away": null
   },
@@ -1009,8 +1009,8 @@
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
-          "homeScore": null,
-          "awayScore": null,
+          "homeScore": 1,
+          " awayScore": 2,
           "isPostponed": false
         }
       ]
