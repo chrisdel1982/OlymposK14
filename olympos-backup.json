@@ -976,7 +976,7 @@
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
@@ -1004,7 +1004,7 @@
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
           "awayScore": null,
-          "isPostponed": false
+          "isPostponed": true
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
