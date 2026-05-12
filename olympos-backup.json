@@ -1069,37 +1069,43 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "away": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "away": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "away": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΕ ΦΙΛΥΡΟΥ",
           "away": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         }
       ]
     },
@@ -1110,37 +1116,43 @@
           "home": "ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)",
           "away": "ΑΟ ΜΕΣΗΜΒΡΙΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ",
           "away": "ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ",
           "away": "ΜΑΚΕΔΟΝΙΚΟΣ (4)",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΜΣ ΝΙΚΟΠΟΛΗ",
           "away": "ΑΕ ΦΙΛΥΡΟΥ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ",
           "away": "ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         },
         {
           "home": "ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ",
           "away": "ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ",
           "homeScore": null,
-          "awayScore": null
+          "awayScore": null,
+          "isPostponed": true
         }
       ]
     }
