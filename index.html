@@ -4690,17 +4690,36 @@ function displayNextMatch() {
     let nextMatch = null;
     let matchType = 'ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ';
 
-    // 1. Έλεγχος για Εμβόλιμο Αγώνα
-    if (data.specialMatch && data.specialMatch.home) {
-        nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
-        matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
-    } else {
-        // 2. Εύρεση επόμενου αγώνα
-        for (const round of data.fixtures) {
-            const m = round.matches.find(m => (m.home === MY_TEAM || m.away === MY_TEAM) && m.homeScore === null);
-            if (m) { nextMatch = m; break; }
+// 1. Έλεγχος για Εμβόλιμο Αγώνα
+if (data.specialMatch && data.specialMatch.home) {
+    nextMatch = { home: data.specialMatch.home, away: data.specialMatch.away };
+    matchType = data.specialMatch.type || 'ΕΜΒΟΛΙΜΟΣ ΑΓΩΝΑΣ';
+} else {
+    // 2. Εύρεση επόμενου αγώνα (φιλτράροντας και τα αναβληθέντα)
+    for (const round of data.fixtures) {
+        const m = round.matches.find(m => 
+            (m.home === MY_TEAM || m.away === MY_TEAM) && 
+            m.homeScore === null && 
+            !m.isPostponed // Μην δείχνεις αναβληθέντα ως "επόμενα"
+        );
+        if (m) { 
+            nextMatch = m; 
+            break; 
         }
     }
+}
+
+// 3. Η ΚΡΙΣΙΜΗ ΠΡΟΣΘΗΚΗ: Τι γίνεται αν δεν βρέθηκε αγώνας;
+const nextMatchContainer = document.getElementById('nextMatchContainer'); // Βεβαιώσου ότι έχεις το σωστό ID
+if (!nextMatch) {
+    if (nextMatchContainer) {
+        nextMatchContainer.innerHTML = `
+            <div class="empty-state" style="padding: 20px; text-align: center;">
+                <p>🏁 Το πρωτάθλημα ολοκληρώθηκε!Τα λέμε του χρόνου στην Κ15! ⚪🟢</p>
+            </div>`;
+    }
+    return; // Σταματάει η εκτέλεση της συνάρτησης εδώ
+}
 
     if (!nextMatch) return;
 
