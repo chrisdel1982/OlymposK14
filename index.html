@@ -4709,16 +4709,17 @@ if (data.specialMatch && data.specialMatch.home) {
     }
 }
 
-// 3. Η ΚΡΙΣΙΜΗ ΠΡΟΣΘΗΚΗ: Τι γίνεται αν δεν βρέθηκε αγώνας;
-const nextMatchContainer = document.getElementById('nextMatchContainer'); // Βεβαιώσου ότι έχεις το σωστό ID
+// 3.Αν δεν υπάρχει επόμενος αγώνας (π.χ. τέλος σεζόν)
 if (!nextMatch) {
-    if (nextMatchContainer) {
-        nextMatchContainer.innerHTML = `
-            <div class="empty-state" style="padding: 20px; text-align: center;">
-                <p>🏁 Το πρωτάθλημα ολοκληρώθηκε!Τα λέμε του χρόνου στην Κ15! ⚪🟢</p>
-            </div>`;
-    }
-    return; // Σταματάει η εκτέλεση της συνάρτησης εδώ
+    container.innerHTML = `
+        <div class="card" style="text-align: center; padding: 30px; border-top: 5px solid var(--accent-color);">
+            <h2 style="color: var(--primary-color); margin-bottom: 10px;">🏁 Τέλος Αγωνιστικής Περιόδου</h2>
+            <p style="font-size: 1.1rem; color: #555; font-weight: 500;">
+                Ραντεβού του χρόνου με τους αγώνες της <strong>Κ15</strong>! ⚪🟢
+            </p>
+        </div>
+    `;
+    return;
 }
 
     if (!nextMatch) return;
