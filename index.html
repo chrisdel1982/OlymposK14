@@ -2996,6 +2996,10 @@ table thead th:nth-child(2) {
         #custom-splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 999999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
         .splash-logo { max-width: 60%; height: auto; }
         .splash-hidden { opacity: 0; pointer-events: none; }
+#seasonToolsBox summary::-webkit-details-marker { display: none; }
+#seasonToolsBox summary::before { content: '▸ '; color: #1a472a; }
+#seasonToolsBox[open] summary::before { content: '▾ '; }
+#seasonToolsBox summary:hover { background: #eef6f0; border-radius: 8px; }
        </style>
        <script>
 window.addEventListener('load', function() {
@@ -3050,7 +3054,6 @@ function showToast(message, type = 'success') {
     });
   });
 </script>
-</script>
 </head>
 <body>
     <div id="custom-splash">
@@ -3066,7 +3069,7 @@ function showToast(message, type = 'success') {
 </div>
             <div class="club-info">
                 <h1>ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h1>
-                <p>Κ14 | ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ | Σεζόν 2025-26</p>
+                <p id="seasonHeaderLabel">ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ</p>
             </div>
         </div>
         <nav>
@@ -3082,6 +3085,7 @@ function showToast(message, type = 'success') {
         <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
         <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
         <li><a href="#news" class="nav-link" onclick="markNewsAsRead()">Νέα - Ειδήσεις <span id="newsBadge" class="notification-badge">NEW</span></a></li>
+        <li><a href="#history" class="nav-link">Ιστορικό</a></li>
         <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
     </ul>
 </nav>
@@ -3093,7 +3097,7 @@ function showToast(message, type = 'success') {
             
             <div class="card">
                 <div class="card-header">
-                    <h2>📊 Βαθμολογία Κ14 - ΔΥΤΙΚΟΣ</h2>
+                    <h2 id="standingsHeaderLabel">📊 Βαθμολογία</h2>
                 </div>
                 
                 <div class="table-wrapper">
@@ -3159,13 +3163,30 @@ function showToast(message, type = 'success') {
                 <div id="newsContainer"></div>
             </div>
         </div>
+
+        <div id="history" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🏛️ Ιστορικό</h2>
+                </div>
+                <div style="padding:12px;">
+                    <p style="font-size:0.85rem; color:#666; margin-bottom:10px;">
+                        Οι περασμένες σεζόν του Ολύμπου. Μόνο για ανάγνωση — η ιστορία δεν πειράζεται.
+                    </p>
+                    <select id="historySeasonSelect" onchange="loadHistorySeason()" style="width:100%; padding:10px; font-size:1rem;">
+                        <option value="">— Φόρτωση σεζόν… —</option>
+                    </select>
+                    <div id="historyContent" style="margin-top:16px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 <footer style="background: var(--primary-color); color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem;">
     <div style="max-width: 1200px; margin: 0 auto;">
         <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ</h3>
         <p style="opacity: 0.8; font-size: 0.9rem;">Μια οικογένεια, μια ομάδα, ένα πάθος.</p>
         <div style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.6;">
-            &copy; 2025 Created for K14 Team
+            <span id="footerLabel">&copy; 2026 Olympos FC</span>
         </div>
     </div>
 </footer>
@@ -3185,8 +3206,10 @@ function showToast(message, type = 'success') {
             </div>
 
             <div id="adminContent" style="display: none;">
+
                 <div class="form-group">
                     <label>📦 Διαχείριση Δεδομένων:</label>
+                    <div id="storageMeter" style="margin-bottom:10px;"></div>
                     <div class="action-buttons">
                         <button class="btn btn-success" onclick="exportData()">💾 Export Δεδομένων</button>
                         <div class="file-input-wrapper">
@@ -3405,6 +3428,7 @@ function showToast(message, type = 'success') {
     <div id="newsPhotoPreview" style="margin-top: 1rem; display: none;">
         <img id="newsPhotoPreviewImg" style="max-width: 100%; max-height: 300px; border-radius: 10px; border: 2px solid #ddd;">
         <button class="btn btn-danger btn-small" onclick="removeNewsPhoto()" style="margin-top: 0.5rem;">🗑️ Αφαίρεση Φωτογραφίας</button>
+        <div id="photoUploadReminder"></div>
     </div>
 </div>
 
@@ -3417,6 +3441,105 @@ function showToast(message, type = 'success') {
                     <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Τρέχουσες Ειδήσεις:</label>
                     <div id="newsList" class="roster-list"></div>
                 </div>
+
+                <!-- ═══════ ΕΡΓΑΛΕΙΑ ΣΕΖΟΝ — κλειστά, μία φορά τον χρόνο ═══════ -->
+                <details id="seasonToolsBox" style="margin-top:2rem; border:1px solid #c8ddcd; border-radius:8px; background:#f6fbf7;">
+                    <summary style="cursor:pointer; padding:12px; font-weight:800; color:#1a472a; list-style:none;">
+                        🔧 Εργαλεία Σεζόν
+                        <span style="font-weight:400; color:#777; font-size:0.8rem;">— ομάδες, πρόγραμμα, έλεγχος</span>
+                    </summary>
+                    <div style="padding:0 12px 12px;">
+                
+                <div class="form-group" style="padding:4px 2px;">
+                    <label style="font-weight:800; color:#1a472a;">🆕 Στήσιμο Νέας Σεζόν</label>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+                        <div>
+                            <label style="font-size:0.8rem;">Σεζόν</label>
+                            <input type="text" id="seasonInput" placeholder="2026-27" style="width:100%;">
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem;">Κατηγορία</label>
+                            <input type="text" id="categoryInput" placeholder="Κ15" style="width:100%;">
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem;">Όμιλος</label>
+                            <input type="text" id="groupInput" placeholder="ΔΥΤΙΚΟΣ" style="width:100%;">
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem;">Επόμενη κατηγορία</label>
+                            <input type="text" id="nextCategoryInput" placeholder="Κ16" style="width:100%;">
+                        </div>
+                    </div>
+
+                    <label style="font-size:0.8rem; margin-top:10px; display:block;">
+                        Ομάδες ομίλου — <strong>μία ανά γραμμή</strong>
+                    </label>
+                    <textarea id="teamsInput" rows="8" placeholder="ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ&#10;ΜΑΚΕΔΟΝΙΚΟΣ (4)&#10;..." style="width:100%; font-family:monospace; font-size:0.85rem;"></textarea>
+
+                    <div style="margin-top:8px;">
+                        <button class="btn btn-success" onclick="saveSeasonSetup()">💾 Αποθήκευση ομάδων</button>
+                    </div>
+
+                    <hr style="margin:14px 0; border:none; border-top:1px dashed #bbb;">
+
+                    <label style="font-weight:800; color:#1a472a;">📋 Πρόγραμμα από ΕΠΣΜ</label>
+                    <p style="font-size:0.78rem; color:#666; margin:4px 0 6px;">
+                        Κάνε επικόλληση το πρόγραμμα όπως το βρήκες. Δέχεται επικεφαλίδες
+                        («1η ΑΓΩΝΙΣΤΙΚΗ», «ΑΓΩΝΙΣΤΙΚΗ 1», ή σκέτο «1»), ημερομηνίες, ώρες,
+                        αρίθμηση, τόνους, πεζά, σκορ και αναβολές. Πάτα πρώτα
+                        <strong>Έλεγχος</strong> για να δεις τι κατάλαβε.
+                    </p>
+                    <textarea id="fixturesPasteInput" rows="10"
+                        placeholder="1η ΑΓΩΝΙΣΤΙΚΗ&#10;ΣΑΒ 12/09 10:00 ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ - ΜΑΚΕΔΟΝΙΚΟΣ (4)&#10;ΑΕ ΦΙΛΥΡΟΥ - ΑΜΣ ΝΙΚΟΠΟΛΗ&#10;&#10;2η ΑΓΩΝΙΣΤΙΚΗ&#10;..."
+                        style="width:100%; font-family:monospace; font-size:0.85rem;"></textarea>
+
+                    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                        <button class="btn" onclick="previewPastedFixtures()">🔍 Έλεγχος</button>
+                        <button class="btn btn-success" id="applyFixturesBtn"
+                                onclick="applyPastedFixtures()" style="display:none;">✅ Εφαρμογή</button>
+                    </div>
+                    <div id="fixturesPreview" style="margin-top:10px;"></div>
+
+                    <details style="margin-top:12px;">
+                        <summary style="cursor:pointer; font-size:0.82rem; color:#666;">
+                            Δεν βγήκε ακόμα το πρόγραμμα; Φτιάξε προσωρινό σκελετό
+                        </summary>
+                        <p style="font-size:0.78rem; color:#666; margin:6px 0;">
+                            Παράγει διπλό γύρο (όλοι με όλους) για να έχεις κάτι να δουλέψεις.
+                            <strong>Η σειρά των αγωνιστικών ΔΕΝ θα είναι της ΕΠΣΜ.</strong>
+                            Όταν βγει το επίσημο, κάν' το επικόλληση παραπάνω.
+                        </p>
+                        <button class="btn btn-secondary" onclick="generateFixtures()">🗓️ Προσωρινός σκελετός</button>
+                    </details>
+                </div>
+
+
+                        <div class="form-group" style="padding:4px 2px; border-top:1px dashed #bbb; padding-top:12px;">
+                            <label style="font-weight:800; color:#1a472a;">📦 Αρχειοθέτηση Σεζόν</label>
+                            <p style="font-size:0.78rem; color:#666; margin:4px 0 8px;">
+                                Πάτα το στο <strong>τέλος</strong> της σεζόν, πριν στήσεις την επόμενη.
+                                Κατεβάζει δύο έτοιμα αρχεία που τα ρίχνεις στον φάκελο
+                                <code>seasons/</code> του repo. Δεν πειράζει τίποτα από τα τρέχοντα.
+                            </p>
+                            <button class="btn" onclick="archiveSeason()">📦 Αρχειοθέτηση τρέχουσας σεζόν</button>
+                            <div id="archiveResult" style="margin-top:8px;"></div>
+                        </div>
+
+                        <div class="form-group" style="padding:4px 2px; border-top:1px dashed #bbb; padding-top:12px;">
+                            <label style="font-weight:800; color:#1a472a;">🔎 Έλεγχος Δεδομένων</label>
+                            <p style="font-size:0.78rem; color:#666; margin:4px 0 8px;">
+                                Σαρώνει όλες τις αγωνιστικές και ψάχνει λάθη που <em>δεν φαίνονται</em>:
+                                αγώνες μαρκαρισμένους ως αναβληθέντες ενώ έχουν σκορ (δεν μετράνε στη βαθμολογία!),
+                                μισοσυμπληρωμένα σκορ, σκόρερ που δεν υπάρχουν στο ρόστερ,
+                                clean sheet σε ματς με γκολ, ομάδα που παίζει δύο φορές στην ίδια αγωνιστική.
+                                Καλό είναι να το πατάς μια φορά τον μήνα.
+                            </p>
+                            <button class="btn" onclick="runDataCheck()">Έλεγχος τώρα</button>
+                            <div id="dataCheckResult" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </details>
 
                 <div class="modal-buttons" style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #ddd;">
                     <button class="btn btn-secondary" onclick="closeAdminPanel()">Κλείσιμο</button>
@@ -3539,8 +3662,29 @@ function showToast(message, type = 'success') {
     </div>
 </div>
     <script>
-        const MY_TEAM = 'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ';
+        // =========================================================
+        // ΡΥΘΜΙΣΕΙΣ ΣΕΖΟΝ — άλλαξε ΜΟΝΟ εδώ κάθε καλοκαίρι.
+        // (Αν τα ίδια πεδία υπάρχουν και στο olympos-backup.json,
+        //  το JSON υπερισχύει, ώστε να μην ξαναγγίζεις τον κώδικα.)
+        // =========================================================
+        const SEASON_DEFAULTS = {
+            team:         'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ',
+            season:       '2026-27',
+            category:     'Κ15',
+            nextCategory: 'Κ16',
+            group:        '',
+            league:       'ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ'
+        };
+        let SEASON = { ...SEASON_DEFAULTS };
+
+        const MY_TEAM = SEASON_DEFAULTS.team;
         const ADMIN_PASSWORD = 'olympos';
+
+        // Η κεντρική μεταβλητή δεδομένων (δηλωμένη ρητά — όχι implicit global)
+        let data = null;
+
+        // Ο πίνακας ομάδων ΔΕΝ είναι πια καρφωμένος: προκύπτει από τα δεδομένα.
+        let TEAMS = [];
         // ===== FIREBASE INITIALIZATION =====
 const firebaseConfig = {
   apiKey: "AIzaSyAUWrhdHAwK3tsYRSpA3oLaUBJw89lVY8U",
@@ -3555,22 +3699,75 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-        const TEAMS = [
-            'ΟΛΥΜΠΟΣ ΔΕΝΔΡΟΠΟΤΑΜΟΥ',
-            'ΜΑΚΕΔΟΝΙΚΟΣ (4)',
-            'ΠΡΩΤΑΘΛΗΤΕΣ ΠΕΥΚΩΝ',
-            'ΑΜΣ ΝΙΚΟΠΟΛΗ',
-            'ΦΟΙΝΙΚΑΣ ΠΟΛΙΧΝΗΣ',
-            'ΑΕ ΦΙΛΥΡΟΥ',
-            'ΝΕΑ ΠΟΛΙΤΕΙΑ ΕΥΟΣΜΟΥ',
-            'ΔΟΞΑ ΡΕΤΖΙΚΙΟΥ (2)',
-            'ΑΟ ΝΕΑΣ ΕΥΚΑΡΠΙΑΣ',
-            'ΕΣΠΕΡΟΣ ΤΕΡΨΙΘΕΑΣ',
-            'ΑΟ ΜΕΣΗΜΒΡΙΑΣ',
-            'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ'
-        ];
-
         const FIXTURES = [];
+
+        // --- Ασφαλής εμφάνιση κειμένου μέσα σε HTML / attributes ---
+        function esc(v) {
+            return String(v ?? '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // --- Εφαρμογή ετικετών σεζόν στο UI ---
+        function applySeasonLabels() {
+            const cat = SEASON.category || '';
+            const grp = SEASON.group ? ' - ' + SEASON.group : '';
+            const h = document.getElementById('seasonHeaderLabel');
+            if (h) h.textContent = [cat, SEASON.league, 'Σεζόν ' + SEASON.season]
+                                   .filter(Boolean).join(' | ');
+            const st = document.getElementById('standingsHeaderLabel');
+            if (st) st.textContent = `📊 Βαθμολογία ${cat}${grp}`.trim();
+            const ft = document.getElementById('footerLabel');
+            if (ft) ft.textContent = `© ${SEASON.season.split('-')[0]} Olympos FC — ${cat}`;
+            document.title = `Όλυμπος Δενδροποτάμου | ${cat} ${SEASON.season}`;
+        }
+
+        // --- Ομάδες: από το JSON, αλλιώς παράγονται από τα ίδια τα fixtures ---
+        function resolveTeams(d) {
+            if (d && Array.isArray(d.teams) && d.teams.length) return [...d.teams];
+            const set = new Set();
+            (d && d.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+                if (m.home) set.add(m.home);
+                if (m.away) set.add(m.away);
+            }));
+            return [...set].sort((a, b) => a.localeCompare(b, 'el'));
+        }
+
+        // --- Κάθε φορά που αλλάζουν τα δεδομένα, ξανακουρδίζουμε τα παράγωγα ---
+        function syncDerived() {
+            if (!data) return;
+            if (!Array.isArray(data.fixtures)) data.fixtures = [];
+            if (!Array.isArray(data.roster))   data.roster   = [];
+            if (!Array.isArray(data.news))     data.news     = [];
+            SEASON = {
+                team:         SEASON_DEFAULTS.team,
+                season:       data.season       || SEASON_DEFAULTS.season,
+                category:     data.category     || SEASON_DEFAULTS.category,
+                nextCategory: data.nextCategory || SEASON_DEFAULTS.nextCategory,
+                group:        data.group        ?? SEASON_DEFAULTS.group,
+                league:       data.league       || SEASON_DEFAULTS.league
+            };
+            TEAMS = resolveTeams(data);
+            recomputePlayerStats();
+            applySeasonLabels();
+        }
+
+        // --- ΜΙΑ πηγή αλήθειας: τα γκολ/clean sheets προκύπτουν από τα ματς ---
+        function recomputePlayerStats() {
+            if (!data || !Array.isArray(data.roster)) return;
+            const goals = {}, cs = {};
+            const clean = v => String(v || '').replace(/[⚽🧤]/g, '').trim();
+            // Δεν φιλτράρουμε με isPostponed: ένας πραγματικά αναβληθείς αγώνας
+            // δεν έχει σκόρερ. Αν έχει, σημαίνει ότι παίχτηκε και ξέχασαν το τικ.
+            (data.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+                (m.scorers || []).forEach(x => { const k = clean(x); if (k) goals[k] = (goals[k] || 0) + 1; });
+                (m.cleanSheetHolders || []).forEach(x => { const k = clean(x); if (k) cs[k] = (cs[k] || 0) + 1; });
+            }));
+            data.roster.forEach(p => {
+                p.goals = goals[clean(p.name)] || 0;
+                p.cleanSheets = cs[clean(p.name)] || 0;
+            });
+        }
 async function loadData() {
     // 1️⃣ ΕΛΕΓΧΟΣ: Είμαι σε Admin Mode;
     const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
@@ -3585,21 +3782,20 @@ async function loadData() {
     }
     
     // 3️⃣ ΦΟΡΤΩΣΗ ΑΠΟ GITHUB (default για όλους)
+    // cache:'no-cache' -> ο browser ρωτάει με ETag. Αν το αρχείο δεν άλλαξε
+    // γυρίζει 304 και ΔΕΝ κατεβαίνει ξανά. (Το παλιό '?t=' κατέβαζε τα πάντα, κάθε φορά.)
     try {
-        const response = await fetch('olympos-backup.json?t=' + new Date().getTime());
-        if (response.ok) {
-            console.log('☁️ Φόρτωση από GitHub.');
-            return await response.json();
-        }
+        const response = await fetch('olympos-backup.json', { cache: 'no-cache' });
+        if (response.ok) return await response.json();
     } catch (e) {
         console.warn('⚠️ Πρόβλημα σύνδεσης...', e);
     }
 
     // 4️⃣ FALLBACK
-    return { 
-        fixtures: JSON.parse(JSON.stringify(FIXTURES)), 
-        roster: [], 
-        news: [] 
+    return {
+        fixtures: JSON.parse(JSON.stringify(FIXTURES)),
+        roster: [],
+        news: []
     };
 }
         function calculateLiveMinute(startTime, half, duration) {
@@ -3632,14 +3828,51 @@ async function loadData() {
     return currentMatchMinute + "'";
 }
         function saveData(dataToSave) {
-    // Προσθέτουμε την τρέχουσα ώρα ως "υπογραφή" (Timestamp)
     dataToSave.lastUpdated = new Date().getTime();
-    localStorage.setItem('footballData', JSON.stringify(dataToSave));
+    const payload = JSON.stringify(dataToSave);
+
+    // Το localStorage κρατάει ~5MB και μετρά σε UTF-16 (2 bytes/χαρακτήρα).
+    const usedMB = (payload.length * 2) / 1048576;
+    updateStorageMeter(usedMB);
+
+    try {
+        localStorage.setItem('footballData', payload);
+        return true;
+    } catch (err) {
+        // ΠΡΙΝ: το exception πετούσε σιωπηλά και η δουλειά χανόταν.
+        console.error('Αποτυχία αποθήκευσης:', err);
+        showToast(
+            `❌ ΓΕΜΙΣΕ Η ΜΝΗΜΗ (${usedMB.toFixed(1)} MB)! Οι αλλαγές ΔΕΝ αποθηκεύτηκαν. ` +
+            `Κάνε Export ΤΩΡΑ και σβήσε παλιές φωτογραφίες.`, 'error');
+        return false;
+    }
+}
+
+// Μπάρα «πόσο γεμάτη είναι η μνήμη» στο admin panel
+function updateStorageMeter(usedMB) {
+    const el = document.getElementById('storageMeter');
+    if (!el) return;
+    const pct = Math.min(100, (usedMB / 5) * 100);
+    const color = pct > 80 ? '#c62828' : (pct > 60 ? '#ef6c00' : '#2e7d32');
+    el.innerHTML =
+        `<div style="font-size:0.8rem;color:#666;margin-bottom:4px;">
+            Μνήμη προχείρου: <strong style="color:${color}">${usedMB.toFixed(2)} MB / ~5 MB</strong>
+         </div>
+         <div style="height:8px;background:#eee;border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${color};"></div>
+         </div>`;
 }
 
        function exportData() {
     // 🔝 ΑΝΑΔΙΑΤΑΞΗ: Live Score & Settings πρώτα, μετά fixtures, roster, news
     const sortedData = {
+        // 🏷️ ΤΑΥΤΟΤΗΤΑ ΣΕΖΟΝ
+        season:   data.season   || SEASON.season,
+        category: data.category || SEASON.category,
+        group:    data.group    ?? SEASON.group,
+        league:   data.league   || SEASON.league,
+        teams:    Array.isArray(data.teams) && data.teams.length ? data.teams : TEAMS,
+
         // 🔴 LIVE SCORE (ΠΡΩΤΟ ΓΙΑ ΕΥΚΟΛΟ EDITING)
         liveScore: data.liveScore || null,
         
@@ -3682,22 +3915,10 @@ async function loadData() {
                         throw new Error('Μη έγκυρη δομή δεδομένων');
                     }
 
-                    // Μετατροπή παλιών null (ΡΕΠΟ) σε ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ
-                    importedData.fixtures.forEach(round => {
-                        if (round.matches) {
-                            round.matches.forEach(match => {
-                                if (match.home === null) {
-                                    match.home = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
-                                }
-                                if (match.away === null) {
-                                    match.away = 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
-                                }
-                            });
-                        }
-                    });
 
                     if (confirm('⚠️ ΠΡΟΣΟΧΗ!\n\nΤα τρέχοντα δεδομένα θα αντικατασταθούν.\nΕίσαι σίγουρος;')) {
                         data = importedData;
+                        syncDerived();
                         
                         // Εξασφάλιση ότι υπάρχει το news array
                         if (!data.news) {
@@ -3731,9 +3952,16 @@ async function loadData() {
 
   function calculateStandings() {
     const standings = {};
-    
-    // Αρχικοποίηση ομάδων
-    TEAMS.forEach(team => {
+
+    // Αρχικοποίηση: ό,τι ομάδα υπάρχει στο TEAMS *ή* εμφανίζεται στα fixtures.
+    // (ΠΡΙΝ: αν ένα όνομα δεν ήταν στον καρφωτό πίνακα -> undefined -> έσκαγε όλη η βαθμολογία.)
+    const allTeams = new Set(TEAMS);
+    (data.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+        if (m.home) allTeams.add(m.home);
+        if (m.away) allTeams.add(m.away);
+    }));
+
+    allTeams.forEach(team => {
         standings[team] = {
             team: team,
             played: 0,
@@ -3755,6 +3983,10 @@ async function loadData() {
             if (match.home && match.away && match.homeScore !== null && match.awayScore !== null && !match.isPostponed) {
                 const home = standings[match.home];
                 const away = standings[match.away];
+                if (!home || !away) {
+                    console.warn('Άγνωστη ομάδα στα fixtures:', match.home, 'vs', match.away);
+                    return;
+                }
 
                 home.played++;
                 away.played++;
@@ -3793,14 +4025,35 @@ async function loadData() {
         team.gd = team.gf - team.ga;
     });
 
-    // Ταξινόμηση
+    // --- Ταξινόμηση κατά κανονισμό ΕΠΣ ---
+    // 1) Βαθμοί  2) Αποτελέσματα ΜΕΤΑΞΥ ΤΟΥΣ  3) Διαφορά τερμάτων  4) Τέρματα υπέρ
     const sorted = Object.values(standings).sort((a, b) => {
         if (b.points !== a.points) return b.points - a.points;
+        const h2h = headToHead(a.team, b.team);
+        if (h2h !== 0) return h2h;
         if (b.gd !== a.gd) return b.gd - a.gd;
         return b.gf - a.gf;
     });
 
     return sorted;
+}
+
+// Μίνι-βαθμολογία μόνο ανάμεσα σε δύο ομάδες (για ισοβαθμία)
+function headToHead(teamA, teamB) {
+    let pa = 0, pb = 0, ga = 0, gb = 0;
+    (data.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+        if (m.isPostponed || m.homeScore === null || m.awayScore === null) return;
+        const pair = (m.home === teamA && m.away === teamB) || (m.home === teamB && m.away === teamA);
+        if (!pair) return;
+        const aIsHome = m.home === teamA;
+        const sa = aIsHome ? m.homeScore : m.awayScore;
+        const sb = aIsHome ? m.awayScore : m.homeScore;
+        ga += sa; gb += sb;
+        if (sa > sb) pa += 3; else if (sa < sb) pb += 3; else { pa++; pb++; }
+    }));
+    if (pa !== pb) return pb - pa;
+    if (ga !== gb) return gb - ga;
+    return 0;
 }
 
 function displayStandings() {
@@ -3855,7 +4108,7 @@ function displayStandings() {
         // ΔΕΔΟΜΕΝΑ: Αφαιρέσαμε το γκρι φόντο και το bold από τους βαθμούς
         row.innerHTML = `
             <td class="pos-cell ${indicatorClass}">${index + 1}</td>
-            <td>${team.team}</td>
+            <td>${esc(team.team)}</td>
             <td style="font-size: 1.1rem;">${team.points}</td> <td>${team.played}</td>
             <td>${team.won}</td>
             <td>${team.drawn}</td>
@@ -3903,9 +4156,9 @@ function displayStandings() {
 
                 let mainMatchHTML = `
                     <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; padding: 1rem;">
-                        <div class="team-left">${match.home}</div>
+                        <div class="team-left">${esc(match.home)}</div>
                         <div>${centerContent}</div>
-                        <div class="team-right">${match.away}</div>
+                        <div class="team-right">${esc(match.away)}</div>
                     </div>`;
 
                 // --- ΕΜΦΑΝΙΣΗ ΣΤΑΤΙΣΤΙΚΩΝ ---
@@ -3981,13 +4234,13 @@ function displayFixtures() {
                     div.style.background = '#fffdf0';
                 }
 
-                const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
-                const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+                const homeTeam = match.home || '—';
+                const awayTeam = match.away || '—';
 
                 div.innerHTML = `
-                    <div class="team-left">${homeTeam}</div>
+                    <div class="team-left">${esc(homeTeam)}</div>
                     <div class="match-vs-box">VS</div>
-                    <div class="team-right">${awayTeam}</div>
+                    <div class="team-right">${esc(awayTeam)}</div>
                 `;
                 section.appendChild(div);
             });
@@ -4065,7 +4318,8 @@ function displayRoster() {
         { title: 'ΑΜΥΝΤΙΚΟΙ', keywords: ['(cb)', '(lb)', '(rb)', '(sw)', '(lwb)', '(rwb)', '(wb)'], icon: '🛡️' },
         { title: 'ΜΕΣΟΙ', keywords: ['(cm)', '(dm)', '(am)', '(lm)', '(rm)'], icon: '⚙️' },
         { title: 'ΕΠΙΘΕΤΙΚΟΙ', keywords: ['(cf)', '(ss)', '(lw)', '(rw)', '(st)'], icon: '⚡' },
-        { title: 'TECHNICAL STAFF', keywords: ['προπονητής', 'coach'], icon: '👨‍🏫' }
+        { title: 'TECHNICAL STAFF', keywords: ['προπονητής', 'coach'], icon: '👨‍🏫' },
+        { title: 'ΛΟΙΠΟΙ', keywords: ['*'], icon: '👤' }   // δίχτυ ασφαλείας: κανείς δεν χάνεται
     ];
 
     let availablePlayers = [...data.roster];
@@ -4074,6 +4328,7 @@ function displayRoster() {
         const groupPlayers = availablePlayers.filter(p => {
             const posFull = (p.position || '').toLowerCase();
             const primaryPos = posFull.split('/')[0]; 
+            if (category.keywords[0] === '*') return true;   // ό,τι περίσσεψε
             return category.keywords.some(keyword => primaryPos.includes(keyword));
         });
 
@@ -4089,7 +4344,9 @@ function displayRoster() {
 
             groupPlayers.forEach(player => {
                 const stats = getPlayerDetailedStats(player.name);
-                const isGoalKeeper = player.position.toLowerCase().includes('gk');
+                // ΠΡΙΝ: player.position χωρίς guard -> παίκτης χωρίς θέση έσκαγε ΟΛΟ το ρόστερ.
+                const posText = player.position || '';
+                const isGoalKeeper = posText.toLowerCase().includes('gk');
                 const card = document.createElement('div');
                 card.className = 'player-card';
                 card.setAttribute('onclick', "this.classList.toggle('flipped')");
@@ -4149,13 +4406,13 @@ function displayRoster() {
                                 <div class="player-number">${displayNumber}</div>
                                 ${captainBadge}
                             </div>
-                            <div class="player-name">${player.name}</div>
-                            <div class="player-position">${player.position}</div>
+                            <div class="player-name">${esc(player.name)}</div>
+                            <div class="player-position">${esc(posText)}</div>
                             ${ageHTML}
                         </div>
                         <div class="card-back">
                             <div style="position:relative; z-index:10; width:100%; padding: 8px;">
-                                <h4 style="font-size: 0.85rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 8px; color: var(--primary-color); text-align: center;">${player.name}</h4>
+                                <h4 style="font-size: 0.85rem; font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 8px; color: var(--primary-color); text-align: center;">${esc(player.name)}</h4>
                                 ${backContent}
                             </div>
                         </div>
@@ -4317,69 +4574,173 @@ function updateRosterList() {
                 </div>
             </div>
 
-            <button class="btn btn-danger btn-small" 
-                    style="margin-left: 10px; height: 35px !important; width: 35px !important; padding: 0 !important; display: flex; align-items: center; justify-content: center;" 
-                    onclick="deletePlayer('${player.number || player.name}')">🗑️</button>
+            <button class="btn btn-danger btn-small"
+                    style="margin-left: 10px; height: 35px !important; width: 35px !important; padding: 0 !important; display: flex; align-items: center; justify-content: center;"
+                    data-name="${esc(player.name)}"
+                    onclick="deletePlayer(this.dataset.name)">🗑️</button>
         `;
         container.appendChild(div);
     });
 }
-function deletePlayer(identifier) {
-    if (confirm('⚠️ Θέλεις να διαγράψεις αυτόν τον παίκτη;')) {
-        data.roster = data.roster.filter(p => 
-            p.number !== identifier && p.name !== identifier
-        );
-        saveData(data);
-        displayRoster();
-        displayTopScorers();
-        updateRosterList();
-        showToast(' Ο παίκτης διαγράφηκε!');
-    }
-}
-// ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Αλλαγή γκολ από το Admin
-function changeGoals(playerName, change) {
+// ΠΡΙΝ: το κουμπί έστελνε το νούμερο ως string ('21') και συγκρινόταν με number (21).
+// 21 !== '21' -> ΤΙΠΟΤΑ δεν διαγραφόταν ποτέ. Τώρα δουλεύει με το όνομα.
+function deletePlayer(playerName) {
     const player = data.roster.find(p => p.name === playerName);
-    if (player) {
-        if (!player.goals) player.goals = 0;
-        player.goals += change;
-        if (player.goals < 0) player.goals = 0; // Όχι αρνητικά γκολ
-        
-        saveData(data);
-        updateRosterList(); // Ενημέρωση λίστας admin
-        displayTopScorers(); // Ενημέρωση πίνακα σκόρερ
-    }
+    if (!player) { showToast('Δεν βρέθηκε ο παίκτης.', 'error'); return; }
+
+    // Προειδοποίηση αν ο παίκτης έχει στατιστικά καταγεγραμμένα σε αγώνες
+    const appearances = (data.fixtures || []).reduce((acc, r) => acc +
+        (r.matches || []).filter(m =>
+            (m.scorers || []).includes(playerName) ||
+            (m.cleanSheetHolders || []).includes(playerName)).length, 0);
+
+    const extra = appearances
+        ? `\n\nΠΡΟΣΟΧΗ: έχει καταγραφές σε ${appearances} αγώνα(ες). ` +
+          `Θα αφαιρεθεί και από εκεί.`
+        : '';
+
+    if (!confirm(`⚠️ Διαγραφή του «${playerName}»;${extra}`)) return;
+
+    data.roster = data.roster.filter(p => p.name !== playerName);
+
+    // Καθάρισμα ορφανών εγγραφών ώστε να μη μείνουν γκολ «φαντάσματα»
+    (data.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+        if (m.scorers) m.scorers = m.scorers.filter(x => x !== playerName);
+        if (m.cleanSheetHolders) m.cleanSheetHolders = m.cleanSheetHolders.filter(x => x !== playerName);
+    }));
+
+    recomputePlayerStats();
+    saveData(data);
+    displayRoster();
+    displayTopScorers();
+    displayResults();
+    updateRosterList();
+    showToast('Ο παίκτης διαγράφηκε.');
 }
 
         // ===== ΔΙΑΧΕΙΡΙΣΗ ΝΕΩΝ - ΕΙΔΗΣΕΩΝ =====
-        let newsPhotoBase64 = null;
+        let newsPhotoBase64 = null;   // μόνο για την προεπισκόπηση
+let newsPhotoPath   = null;   // η διαδρομή που μπαίνει στο JSON
+let newsPhotoBlob   = null;   // το αρχείο, για (ξανα)κατέβασμα
 
-function previewNewsPhoto(event) {
+// Συμπίεση εικόνας πριν το base64.
+// ΠΡΙΝ: μια φωτό 5MB γινόταν ~6.7MB κείμενο και γέμιζε μόνη της τη μνήμη.
+// ΤΩΡΑ: max 1280px, JPEG ~78% -> τυπικά 80-200 KB.
+const PHOTO_MAX_SIDE = 1280;
+const PHOTO_QUALITY  = 0.78;
+
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Αποτυχία ανάγνωσης αρχείου'));
+        reader.onload = e => {
+            const img = new Image();
+            img.onerror = () => reject(new Error('Μη αναγνώσιμη εικόνα'));
+            img.onload = () => {
+                let { width: w, height: h } = img;
+                if (Math.max(w, h) > PHOTO_MAX_SIDE) {
+                    const sc = PHOTO_MAX_SIDE / Math.max(w, h);
+                    w = Math.round(w * sc);
+                    h = Math.round(h * sc);
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, w, h);           // λευκό φόντο για διαφανή PNG
+                ctx.drawImage(img, 0, 0, w, h);
+                resolve(canvas.toDataURL('image/jpeg', PHOTO_QUALITY));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+async function previewNewsPhoto(event) {
     const file = event.target.files[0];
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-        showToast(' Παρακαλώ επίλεξε μόνο εικόνες!');
+        showToast('Παρακαλώ επίλεξε μόνο εικόνες!', 'error');
         event.target.value = '';
         return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-        showToast(' Η φωτογραφία είναι πολύ μεγάλη! Μέγιστο μέγεθος: 5MB');
+    if (file.size > 12 * 1024 * 1024) {
+        showToast('Η φωτογραφία είναι υπερβολικά μεγάλη (>12MB).', 'error');
         event.target.value = '';
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        newsPhotoBase64 = e.target.result;
+    try {
+        newsPhotoBase64 = await compressImage(file);
+        newsPhotoBlob   = dataUrlToBlob(newsPhotoBase64);
+        newsPhotoPath   = buildPhotoPath();
+
         document.getElementById('newsPhotoPreview').style.display = 'block';
         document.getElementById('newsPhotoPreviewImg').src = newsPhotoBase64;
-    };
-    reader.readAsDataURL(file);
+
+        // Κατεβαίνει ΑΜΕΣΩΣ, ώστε το αρχείο να είναι ασφαλές στον υπολογιστή
+        // ακόμα κι αν κλείσεις τη σελίδα κατά λάθος.
+        downloadPhotoFile();
+        renderPhotoReminder();
+
+        const kb = Math.round(newsPhotoBlob.size / 1024);
+        showToast(`Φωτογραφία έτοιμη: ${Math.round(file.size/1024)} KB → ${kb} KB. Κατέβηκε το αρχείο.`);
+    } catch (err) {
+        console.error(err);
+        showToast('Πρόβλημα στην επεξεργασία της εικόνας.', 'error');
+        event.target.value = '';
+    }
+}
+
+// Όνομα αρχείου με χρονοσφραγίδα — δεν συγκρούεται ποτέ με άλλο
+function buildPhotoPath() {
+    const d = new Date(), z = v => String(v).padStart(2, '0');
+    return `photos/${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}` +
+           `-${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}.jpg`;
+}
+
+function dataUrlToBlob(dataUrl) {
+    const [head, b64] = dataUrl.split(',');
+    const mime = head.match(/:(.*?);/)[1];
+    const bin = atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+}
+
+function downloadPhotoFile() {
+    if (!newsPhotoBlob || !newsPhotoPath) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(newsPhotoBlob);
+    a.download = newsPhotoPath.split('/').pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+// Κίτρινη υπενθύμιση με το ακριβές όνομα αρχείου
+function renderPhotoReminder() {
+    const box = document.getElementById('photoUploadReminder');
+    if (!box) return;
+    if (!newsPhotoPath) { box.innerHTML = ''; return; }
+    box.innerHTML = `
+        <div style="background:#fff8e1; border-left:4px solid #f9a825; padding:10px; font-size:0.82rem; margin-top:8px;">
+            <strong>📤 Μην ξεχάσεις να το ανεβάσεις στο GitHub:</strong><br>
+            <code style="background:#fff; padding:2px 6px; border-radius:3px; display:inline-block; margin:4px 0;">${esc(newsPhotoPath)}</code><br>
+            Βάλ' το στον φάκελο <code>photos/</code> μαζί με το <code>olympos-backup.json</code>, στο ίδιο commit.
+            <button class="btn btn-small" style="margin-top:6px;" onclick="downloadPhotoFile()">⬇️ Ξανακατέβασέ το</button>
+        </div>`;
 }
 
 function removeNewsPhoto() {
     newsPhotoBase64 = null;
+    newsPhotoPath   = null;
+    newsPhotoBlob   = null;
+    renderPhotoReminder();
     document.getElementById('newsPhoto').value = '';
     document.getElementById('newsPhotoPreview').style.display = 'none';
     document.getElementById('newsPhotoPreviewImg').src = '';
@@ -4397,6 +4758,10 @@ function removeNewsPhoto() {
 
     const sortedNews = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    // ΠΡΙΝ: 21 σειριακά await στο Firebase, ένα ανά είδηση.
+    // ΤΩΡΑ: ένα read για όλα τα likes μαζί.
+    const allLikes = await getAllLikes();
+
     for (const newsItem of sortedNews) {
         // Βεβαιώσου ότι υπάρχει ID
         if (!newsItem.id) {
@@ -4413,36 +4778,39 @@ function removeNewsPhoto() {
         
         let imageHTML = '';
         if (newsItem.photo) {
-            imageHTML = `<img src="${newsItem.photo}" class="news-image" alt="News Photo">`;
+            // Δέχεται και base64 (παλιές ειδήσεις) και διαδρομή αρχείου (νέες).
+            // Αν το αρχείο λείπει, η εικόνα κρύβεται αντί να δείχνει σπασμένο εικονίδιο.
+            imageHTML = `<img src="${esc(newsItem.photo)}" class="news-image" alt="Φωτογραφία είδησης"
+                              loading="lazy" onerror="this.style.display='none';">`;
         }
 
-        // Φόρτωση likes
-        const likes = await getLikes(newsItem.id);
+        const likes = allLikes[newsItem.id] || 0;
         const hasLiked = localStorage.getItem('liked_' + newsItem.id);
         const likeIcon = hasLiked ? '❤️' : '🤍';
-        
+        const safeId = esc(newsItem.id);
+
         div.innerHTML = `
             <div class="news-header">
                 <div>
-                    <h3 class="news-title">${newsItem.title} <span class="news-toggle">🔽</span></h3>
+                    <h3 class="news-title">${esc(newsItem.title)} <span class="news-toggle">🔽</span></h3>
                     <span class="news-date">${formattedDate}</span>
                 </div>
-                <button class="btn-share" onclick="event.stopPropagation(); openShareModal(${newsItem.id})">
+                <button class="btn-share" data-id="${safeId}"
+                        onclick="event.stopPropagation(); openShareModal(this.dataset.id)">
                     📤 Share
                 </button>
             </div>
-            <div class="news-content">${newsItem.content}</div>
+            <div class="news-content">${esc(newsItem.content).replace(/\n/g, '<br>')}</div>
             ${imageHTML}
-            
+
           <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px;">
-             <button onclick="event.stopPropagation(); toggleLike('${newsItem.id}')" 
-            style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px 8px; transition: transform 0.2s;"
-            onmouseover="this.style.transform='scale(1.2)'" 
-            onmouseout="this.style.transform='scale(1)'">
-        ${likeIcon}
-    </button>
-    <span style="color: #999; font-size: 0.8rem;">${likes}</span>
-    </div>
+             <button class="like-btn" data-id="${safeId}"
+                onclick="event.stopPropagation(); toggleLike(this.dataset.id)"
+                style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px 8px; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.2)'"
+                onmouseout="this.style.transform='scale(1)'">${likeIcon}</button>
+             <span class="like-count" style="color: #999; font-size: 0.8rem;">${likes}</span>
+          </div>
         `;
         
         // Λογική για άνοιγμα/κλείσιμο
@@ -4471,7 +4839,7 @@ function removeNewsPhoto() {
     title: title,
     content: content,
     date: new Date().toISOString(),
-    photo: newsPhotoBase64
+    photo: newsPhotoPath
 };
 
             data.news.push(newsItem);
@@ -4484,7 +4852,7 @@ function removeNewsPhoto() {
 
         function deleteNews(id) {
             if (confirm('⚠️ Θέλεις να διαγράψεις αυτή την είδηση;')) {
-                data.news = data.news.filter(n => n.id !== id);
+                data.news = data.news.filter(n => String(n.id) !== String(id));
                 saveData(data);
                 displayNews();
                 updateNewsList();
@@ -4522,10 +4890,10 @@ function removeNewsPhoto() {
                 
                 div.innerHTML = `
                     <div>
-                        <strong>${newsItem.title}</strong><br>
-                        <span style="color: #666; font-size: 0.85rem;">${shortContent}</span>
+                        <strong>${esc(newsItem.title)}</strong><br>
+                        <span style="color: #666; font-size: 0.85rem;">${esc(shortContent)}</span>
                     </div>
-                    <button class="btn btn-danger btn-small" onclick="deleteNews(${newsItem.id})">🗑️</button>
+                    <button class="btn btn-danger btn-small" data-id="${esc(newsItem.id)}" onclick="deleteNews(this.dataset.id)">🗑️</button>
                 `;
                 container.appendChild(div);
             });
@@ -4553,6 +4921,8 @@ document.querySelectorAll('.nav-link').forEach(link => {
         this.classList.add('active');
         const targetPage = this.getAttribute('href').substring(1);
         document.getElementById(targetPage).classList.add('active');
+
+        if (targetPage === 'history') initHistory();   // lazy: μόνο εδώ κατεβαίνει
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -4621,67 +4991,25 @@ function saveGeneralSettings() {
     }
 
     // ---------------------------------------------------------
-    // 2. ΑΠΟΘΗΚΕΥΣΗ ΣΚΟΡ & ΣΚΟΡΕΡ (Το Νέο Κομμάτι)
+    // 2. [ΑΦΑΙΡΕΘΗΚΕ] Εδώ υπήρχε block που έψαχνε inputs με ids
+    //    'score-home-X-Y' — τα οποία ΔΕΝ υπάρχουν πουθενά (το admin UI
+    //    φτιάχνει 'home-X-Y'). Ήταν νεκρός κώδικας που, αν ποτέ τα ids
+    //    ταίριαζαν, θα έσβηνε ΟΛΟΥΣ τους σκόρερ. Τα σκορ αποθηκεύονται
+    //    από την saveResults().
     // ---------------------------------------------------------
-    if (data.fixtures) {
-        data.fixtures.forEach((round, roundIndex) => {
-            round.matches.forEach((match, matchIndex) => {
-                // Βρίσκουμε τα input scores
-                const homeScoreIn = document.getElementById(`score-home-${roundIndex}-${matchIndex}`);
-                const awayScoreIn = document.getElementById(`score-away-${roundIndex}-${matchIndex}`);
-                const postponeIn = document.getElementById(`postpone-${roundIndex}-${matchIndex}`);
-
-                // Α. Αποθήκευση Σκορ (Νούμερα)
-                if (homeScoreIn) {
-                    const hVal = homeScoreIn.value.trim();
-                    match.homeScore = (hVal === '') ? null : parseInt(hVal);
-                }
-                if (awayScoreIn) {
-                    const aVal = awayScoreIn.value.trim();
-                    match.awayScore = (aVal === '') ? null : parseInt(aVal);
-                }
-                if (postponeIn) {
-                    match.postponed = postponeIn.checked;
-                }
-
-                // Β. Αποθήκευση Σκόρερ (ΑΥΤΟ ΕΛΕΙΠΕ!)
-                // Βρίσκουμε τη γραμμή (row) του αγώνα
-                if (homeScoreIn) {
-                    // Πάμε στον γονέα (τη γραμμή) για να ψάξουμε μέσα της
-                    const row = homeScoreIn.closest('.match-input-row') || homeScoreIn.parentElement.parentElement;
-                    
-                    if (row) {
-                        // Ψάχνουμε όλα τα ταμπελάκια με την κλάση .scorer-tag μέσα σε αυτή τη γραμμή
-                        const scorerTags = row.querySelectorAll('.scorer-tag');
-                        
-                        // Φτιάχνουμε μια νέα λίστα και βάζουμε τα ονόματα
-                        const currentScorers = [];
-                        scorerTags.forEach(tag => {
-                            // Παίρνουμε το κείμενο και καθαρίζουμε τυχόν κενά ή το "x"
-                            // (Υποθέτουμε ότι το όνομα είναι το κείμενο του tag)
-                            let name = tag.innerText.replace('×', '').trim(); // Αφαιρούμε το x κλεισίματος αν υπάρχει στο text
-                            if(name) currentScorers.push(name);
-                        });
-
-                        // Ενημερώνουμε τα δεδομένα!
-                        match.scorers = currentScorers;
-                    }
-                }
-            });
-        });
-    }
 
     // ---------------------------------------------------------
     // 3. ΛΗΨΗ ΑΡΧΕΙΟΥ
     // ---------------------------------------------------------
-    saveData(data); 
-    
+    saveData(data);
+
     displayNextMatch();
-    displayStandings() 
+    displayStandings();
 
     showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
 }
         let countdownInterval = null; // Μεταβλητή για να σταματάμε το χρονόμετρο αν χρειαστεί
+let currentNextMatch = null;  // Ο τρέχων επόμενος αγώνας (για το share του squad)
 function displayNextMatch() {
     const container = document.getElementById('nextMatchContainer');
     if (!container || !data) return;
@@ -4709,20 +5037,27 @@ if (data.specialMatch && data.specialMatch.home) {
     }
 }
 
-// 3.Αν δεν υπάρχει επόμενος αγώνας (π.χ. τέλος σεζόν)
+// 3. Αν δεν υπάρχει επόμενος αγώνας
 if (!nextMatch) {
-    container.innerHTML = `
-        <div class="card" style="text-align: center; padding: 30px; border-top: 5px solid var(--accent-color);">
-            <h2 style="color: var(--primary-color); margin-bottom: 10px;">🏁 Τέλος Αγωνιστικής Περιόδου</h2>
-            <p style="font-size: 1.1rem; color: #555; font-weight: 500;">
-                Ραντεβού του χρόνου με τους αγώνες της <strong>Κ15</strong>! 💚🖤
-            </p>
-        </div>
-    `;
+    currentNextMatch = null;
+    const noFixturesYet = !data.fixtures || data.fixtures.length === 0;
+    container.innerHTML = noFixturesYet
+        ? `<div class="card" style="text-align: center; padding: 30px; border-top: 5px solid var(--accent-color);">
+               <h2 style="color: var(--primary-color); margin-bottom: 10px;">⚽ Η νέα σεζόν έρχεται</h2>
+               <p style="font-size: 1.1rem; color: #555; font-weight: 500;">
+                   Το πρόγραμμα της <strong>${esc(SEASON.category)}</strong> ${esc(SEASON.season)} ανεβαίνει σύντομα. 💚🖤
+               </p>
+           </div>`
+        : `<div class="card" style="text-align: center; padding: 30px; border-top: 5px solid var(--accent-color);">
+               <h2 style="color: var(--primary-color); margin-bottom: 10px;">🏁 Τέλος Αγωνιστικής Περιόδου</h2>
+               <p style="font-size: 1.1rem; color: #555; font-weight: 500;">
+                   Ραντεβού του χρόνου με τους αγώνες της <strong>${esc(SEASON.nextCategory)}</strong>! 💚🖤
+               </p>
+           </div>`;
     return;
 }
 
-    if (!nextMatch) return;
+    currentNextMatch = nextMatch;
 
     // Logic για Live Score
     const isLive = data.liveScore && data.liveScore.active;
@@ -4741,16 +5076,16 @@ if (!nextMatch) {
     container.innerHTML = `
         <div class="next-match-card" style="${isLive ? 'border: 2px solid #ff0046;' : ''}">
             <div class="nm-header" style="${isLive ? 'background:#fff0f3; color:#ff0046;' : ''}">
-                <span>📅 ${data.matchDate || ''}</span>
+                <span>📅 ${esc(data.matchDate || '')}</span>
                 <span style="font-weight:800; text-transform: uppercase;">${isLive ? '🔴 LIVE NOW' : matchType}</span>
-                <span>⏰ ${data.matchTime || ''}</span>
+                <span>⏰ ${esc(data.matchTime || '')}</span>
             </div>
             
             <div id="countdown-display" style="background: var(--primary-color); color: #fff; text-align: center; padding: 5px; font-size: 0.9rem; font-weight: bold; ${countdownStyle}">
             </div>
 
             <div class="nm-body">
-                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${nextMatch.home}</div>
+                <div class="nm-team home ${nextMatch.home === MY_TEAM ? 'my-team' : ''}">${esc(nextMatch.home)}</div>
                 
                 <div class="center-area">
                     ${isLive ? `
@@ -4764,20 +5099,20 @@ if (!nextMatch) {
                     ` : `<div class="nm-vs">VS</div>`}
                 </div>
 
-                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${nextMatch.away}</div>
+                <div class="nm-team away ${nextMatch.away === MY_TEAM ? 'my-team' : ''}">${esc(nextMatch.away)}</div>
             </div>
-            <div class="nm-stadium">🏟️ ${data.matchStadium || ''}</div>
+            <div class="nm-stadium">🏟️ ${esc(data.matchStadium || '')}</div>
             
             <div class="nm-footer" style="display: flex; padding: 0; align-items: stretch; height: 50px;">
                 
-                <a href="${data.matchMapLink || '#'}" target="_blank" 
+                <a href="${esc(data.matchMapLink || '#')}" target="_blank" rel="noopener" 
                    style="flex: 1; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px;">
                     📍 ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΓΗΠΕΔΟ
                 </a>
 
                 <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 10px 0;"></div>
 
-                <div onclick="openSquadModal('${nextMatch.home}', '${nextMatch.away}', '${data.matchDate}', '${data.matchTime}', '${data.matchStadium}', '${data.matchMapLink}')" 
+                <div onclick="openSquadModal()" 
                      style="width: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(0,0,0,0.1); transition: background 0.3s;"
                      onmouseover="this.style.background='rgba(0,0,0,0.2)'" 
                      onmouseout="this.style.background='rgba(0,0,0,0.1)'">
@@ -4867,16 +5202,19 @@ async function checkPassword() {
             if (userChoice) {
                 // Κράτα τα drafts
                 data = JSON.parse(localDraft);
+                syncDerived();
                 console.log('✏️ Admin: Χρήση τοπικών Drafts.');
             } else {
                 // Διέγραψε τα drafts και ξαναφόρτωσε από GitHub
                 localStorage.removeItem('footballData');
                 data = await loadData(); // Τώρα θα φορτώσει GitHub
+                syncDerived();
                 console.log('☁️ Admin: Φόρτωση Live δεδομένων. Drafts διαγράφηκαν.');
             }
         } else {
             // Δεν υπάρχουν drafts, φόρτωσε από GitHub
             data = await loadData();
+            syncDerived();
             console.log('☁️ Admin: Φόρτωση από GitHub (δεν υπάρχουν drafts).');
         }
         
@@ -4887,11 +5225,573 @@ async function checkPassword() {
         showToast('❌ Λάθος κωδικός!', 'error');
     }
 }
-// Βοηθητική συνάρτηση για να γεμίσουν τα κουτάκια (για να μην γράφουμε τον ίδιο κώδικα 2 φορές)
+// ================= ΣΤΗΣΙΜΟ ΝΕΑΣ ΣΕΖΟΝ =================
+function saveSeasonSetup() {
+    const teams = document.getElementById('teamsInput').value
+        .split('\n').map(t => t.trim()).filter(Boolean);
+
+    // Έλεγχος διπλών ονομάτων — το κλασικό λάθος του copy-paste
+    const dups = teams.filter((t, i) => teams.indexOf(t) !== i);
+    if (dups.length) {
+        showToast('Διπλή ομάδα: ' + [...new Set(dups)].join(', '), 'error');
+        return;
+    }
+    if (teams.length && !teams.includes(MY_TEAM)) {
+        if (!confirm(`Η λίστα δεν περιέχει «${MY_TEAM}». Να συνεχίσω;`)) return;
+    }
+
+    data.season       = document.getElementById('seasonInput').value.trim()       || SEASON_DEFAULTS.season;
+    data.category     = document.getElementById('categoryInput').value.trim()     || SEASON_DEFAULTS.category;
+    data.group        = document.getElementById('groupInput').value.trim();
+    data.nextCategory = document.getElementById('nextCategoryInput').value.trim() || SEASON_DEFAULTS.nextCategory;
+    data.teams        = teams;
+
+    syncDerived();
+    saveData(data);
+    displayStandings();
+    showToast(`Αποθηκεύτηκαν ${teams.length} ομάδες.`);
+}
+
+// ============ ΑΡΧΕΙΟΘΕΤΗΣΗ ΣΕΖΟΝ ============
+function downloadJSON(obj, filename) {
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+async function archiveSeason() {
+    const box = document.getElementById('archiveResult');
+
+    if (!data.fixtures || !data.fixtures.length) {
+        showToast('Δεν υπάρχει πρόγραμμα για αρχειοθέτηση.', 'error');
+        return;
+    }
+    const issues = findDataIssues();
+    if (issues.length && !confirm(
+        `⚠️ Ο έλεγχος βρήκε ${issues.length} θέματα στα δεδομένα.\n\n` +
+        `Αν αρχειοθετήσεις τώρα, θα μείνουν εκεί για πάντα.\nΣυνέχεια;`)) return;
+
+    const label = data.season || SEASON.season;
+    const file  = label.replace(/[^0-9A-Za-z\-]/g, '') + '.json';
+
+    // Το αρχείο σεζόν: χωρίς ειδήσεις/φωτό — μόνο ό,τι δείχνει το Ιστορικό
+    const archive = {
+        season:   label,
+        category: data.category || SEASON.category,
+        group:    data.group    || SEASON.group || '',
+        league:   data.league   || SEASON.league,
+        teams:    (data.teams && data.teams.length) ? data.teams : TEAMS,
+        fixtures: data.fixtures,
+        roster:   data.roster,
+        archivedAt: new Date().toISOString()
+    };
+
+    // Το index: διαβάζουμε το υπάρχον και προσθέτουμε, δεν το ξαναγράφουμε από το μηδέν
+    let idx = { seasons: [] };
+    try {
+        const res = await fetch('seasons/index.json', { cache: 'no-cache' });
+        if (res.ok) idx = await res.json();
+    } catch (e) { /* πρώτη φορά — ξεκινάμε με άδειο */ }
+    if (!Array.isArray(idx.seasons)) idx.seasons = [];
+
+    const entry = { file, label, category: archive.category, group: archive.group };
+    const at = idx.seasons.findIndex(x => x.file === file);
+    if (at >= 0) {
+        if (!confirm(`Η σεζόν ${label} υπάρχει ήδη στο αρχείο. Να αντικατασταθεί;`)) return;
+        idx.seasons[at] = entry;
+    } else {
+        idx.seasons.push(entry);
+    }
+    idx.seasons.sort((a, b) => String(a.label).localeCompare(String(b.label)));
+
+    downloadJSON(archive, file);
+    setTimeout(() => downloadJSON(idx, 'index.json'), 400);   // ο browser θέλει ανάσα
+
+    box.innerHTML = `
+      <div style="background:#e8f5e9; border-left:3px solid #2e7d32; padding:10px; font-size:0.82rem;">
+        <strong>Κατέβηκαν 2 αρχεία.</strong> Ανέβασέ τα και τα δύο στον φάκελο
+        <code>seasons/</code> του repo:<br>
+        • <code>${esc(file)}</code> — η σεζόν<br>
+        • <code>index.json</code> — η λίστα (αντικαθιστά την παλιά)<br>
+        <span style="color:#666;">Μετά μπορείς να στήσεις τη νέα σεζόν από πάνω.</span>
+      </div>`;
+    showToast(`Η σεζόν ${label} αρχειοθετήθηκε.`);
+}
+
+// ============ ΙΣΤΟΡΙΚΟ ΣΕΖΟΝ ============
+// Τα παλιά αρχεία κατεβαίνουν ΜΟΝΟ όταν ανοίξει κάποιος την καρτέλα.
+// Όποιος μπαίνει για το σκορ δεν πληρώνει ούτε ένα byte γι' αυτά.
+let historyIndexLoaded = false;
+const historyCache = {};
+
+async function initHistory() {
+    if (historyIndexLoaded) return;
+    const sel = document.getElementById('historySeasonSelect');
+    try {
+        const res = await fetch('seasons/index.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error('index.json ' + res.status);
+        const idx = await res.json();
+        const list = (idx.seasons || []).slice().reverse();   // νεότερη πρώτη
+
+        if (!list.length) {
+            sel.innerHTML = '<option value="">Δεν υπάρχουν αρχειοθετημένες σεζόν</option>';
+            historyIndexLoaded = true;
+            return;
+        }
+        sel.innerHTML = '<option value="">— Διάλεξε σεζόν —</option>' +
+            list.map(x => `<option value="${esc(x.file)}">${esc(x.label)}` +
+                          `${x.category ? ' · ' + esc(x.category) : ''}` +
+                          `${x.group ? ' · ' + esc(x.group) : ''}</option>`).join('');
+        historyIndexLoaded = true;
+    } catch (e) {
+        console.warn('Ιστορικό:', e);
+        sel.innerHTML = '<option value="">Το αρχείο δεν βρέθηκε</option>';
+        document.getElementById('historyContent').innerHTML =
+            `<div style="padding:10px; background:#fff3e0; border-left:3px solid #ef6c00; font-size:0.85rem;">
+                Δεν βρέθηκε ο φάκελος <code>seasons/</code> στο repo.
+             </div>`;
+    }
+}
+
+async function loadHistorySeason() {
+    const file = document.getElementById('historySeasonSelect').value;
+    const box  = document.getElementById('historyContent');
+    if (!file) { box.innerHTML = ''; return; }
+
+    box.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Φόρτωση…</div>';
+    try {
+        if (!historyCache[file]) {
+            const res = await fetch('seasons/' + file, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(res.status);
+            historyCache[file] = await res.json();
+        }
+        renderHistorySeason(historyCache[file]);
+    } catch (e) {
+        console.warn('Ιστορικό:', e);
+        box.innerHTML = '<div style="padding:10px; color:#c62828;">Δεν φορτώθηκε αυτή η σεζόν.</div>';
+    }
+}
+
+// Υπολογισμοί πάνω σε ΠΑΛΙΑ δεδομένα — ανεξάρτητοι από το τρέχον `data`
+function computeArchiveTable(d) {
+    const st = {};
+    const ensure = t => (st[t] = st[t] || { team:t, played:0, won:0, drawn:0, lost:0, gf:0, ga:0, points:0 });
+    (d.fixtures || []).forEach(r => (r.matches || []).forEach(m => {
+        if (m.isPostponed || m.homeScore === null || m.awayScore === null) return;
+        if (!m.home || !m.away) return;
+        const h = ensure(m.home), a = ensure(m.away);
+        h.played++; a.played++;
+        h.gf += m.homeScore; h.ga += m.awayScore;
+        a.gf += m.awayScore; a.ga += m.homeScore;
+        if (m.homeScore > m.awayScore)      { h.won++;  a.lost++; h.points += 3; }
+        else if (m.homeScore < m.awayScore) { a.won++;  h.lost++; a.points += 3; }
+        else                                { h.drawn++; a.drawn++; h.points++; a.points++; }
+    }));
+    return Object.values(st).sort((x, y) =>
+        y.points - x.points || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf);
+}
+
+function renderHistorySeason(d) {
+    const table = computeArchiveTable(d);
+    const myPos = table.findIndex(t => t.team === MY_TEAM) + 1;
+
+    const goals = {};
+    (d.fixtures || []).forEach(r => (r.matches || []).forEach(m =>
+        (m.scorers || []).forEach(x => {
+            const k = String(x).replace(/[⚽🧤]/g, '').trim();
+            if (k) goals[k] = (goals[k] || 0) + 1;
+        })));
+    const scorers = Object.entries(goals).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    const medal = p => p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '';
+    const me = table[myPos - 1];
+
+    let html = `
+      <div style="background:linear-gradient(135deg,#1a472a,#2d6a4f); color:#fff; padding:16px; border-radius:8px; text-align:center;">
+        <div style="font-size:1.4rem; font-weight:800;">${esc(d.category || '')} · ${esc(d.season || '')}</div>
+        ${d.group ? `<div style="opacity:.85; font-size:0.85rem;">Όμιλος ${esc(d.group)}</div>` : ''}
+        ${me ? `<div style="margin-top:10px; font-size:1.1rem;">
+                  ${medal(myPos)} <strong>${myPos}η θέση</strong> · ${me.points} βαθμοί
+                </div>
+                <div style="font-size:0.82rem; opacity:.9;">
+                  ${me.played} αγώνες · ${me.won}Ν ${me.drawn}Ι ${me.lost}Η · ${me.gf}-${me.ga} τέρματα
+                </div>` : ''}
+      </div>`;
+
+    html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">📊 Τελική Βαθμολογία</h3>
+      <div style="overflow-x:auto;"><table class="standings-table" style="width:100%;">
+        <thead><tr><th>#</th><th style="text-align:left;">Ομάδα</th><th>Αγ</th><th>Ν</th><th>Ι</th><th>Η</th><th>Τέρ</th><th>Β</th></tr></thead><tbody>`;
+    table.forEach((t, i) => {
+        const mine = t.team === MY_TEAM;
+        html += `<tr style="${mine ? 'background:#e8f5e9; font-weight:700;' : ''}">
+            <td>${i + 1}</td><td style="text-align:left;">${esc(t.team)}</td>
+            <td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td>
+            <td>${t.gf}-${t.ga}</td><td><strong>${t.points}</strong></td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+
+    if (scorers.length) {
+        html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">⚽ Σκόρερ</h3>
+                 <div style="background:#fafafa; border-radius:8px; padding:8px;">`;
+        scorers.forEach(([name, g], i) => {
+            html += `<div style="display:flex; justify-content:space-between; padding:6px 8px;
+                                 ${i ? 'border-top:1px solid #eee;' : ''}">
+                        <span>${i === 0 ? '👑 ' : ''}${esc(name)}</span>
+                        <strong>${g}</strong></div>`;
+        });
+        html += `</div>`;
+    }
+
+    if ((d.roster || []).length) {
+        html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">👥 Το ρόστερ εκείνης της χρονιάς</h3>
+                 <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
+        [...d.roster].sort((a, b) => (a.number || 999) - (b.number || 999)).forEach(p => {
+            html += `<span style="background:#f0f0f0; border-radius:14px; padding:4px 10px; font-size:0.8rem;">
+                       ${p.number ? '<strong>' + p.number + '</strong> ' : ''}${esc(p.name)}
+                       ${p.isCaptain ? ' ©' : ''}</span>`;
+        });
+        html += `</div>`;
+    }
+
+    document.getElementById('historyContent').innerHTML = html;
+}
+
+// ============ ΕΛΕΓΧΟΣ ΣΥΝΕΠΕΙΑΣ ΔΕΔΟΜΕΝΩΝ ============
+// Πιάνει τα σιωπηλά λάθη που αλλοιώνουν τη βαθμολογία χωρίς να φαίνονται.
+function findDataIssues() {
+    const issues = [];
+    const names = new Set((data.roster || []).map(p => p.name));
+
+    (data.fixtures || []).forEach(r => (r.matches || []).forEach((m, i) => {
+        const label = `Αγ.${r.round}: ${m.home} - ${m.away}`;
+
+        // 1. Μαρκαρισμένο ως αναβληθέν αλλά έχει σκορ ή σκόρερ
+        if (m.isPostponed && (m.homeScore !== null || (m.scorers || []).length)) {
+            issues.push({ type: 'ghost', round: r.round, index: i, label,
+                text: `${label} — μαρκαρισμένο ΑΝΑΒΟΛΗ αλλά έχει ` +
+                      `${m.homeScore !== null ? `σκορ ${m.homeScore}-${m.awayScore}` : ''}` +
+                      `${(m.scorers||[]).length ? ` και ${m.scorers.length} σκόρερ` : ''}. ` +
+                      `ΔΕΝ μετράει στη βαθμολογία.` });
+        }
+        // 2. Μισοσυμπληρωμένο σκορ
+        if (!m.isPostponed && ((m.homeScore === null) !== (m.awayScore === null))) {
+            issues.push({ type: 'half', round: r.round, index: i, label,
+                text: `${label} — συμπληρωμένο μόνο το ένα σκορ.` });
+        }
+        // 3. Σκόρερ που δεν υπάρχει στο ρόστερ
+        (m.scorers || []).concat(m.cleanSheetHolders || []).forEach(x => {
+            if (!names.has(x)) issues.push({ type: 'orphan', round: r.round, index: i, label,
+                text: `${label} — «${x}» δεν υπάρχει στο ρόστερ.` });
+        });
+        // 4. Clean sheet ενώ δέχτηκε γκολ
+        if ((m.cleanSheetHolders || []).length && !m.isPostponed) {
+            const conceded = m.home === MY_TEAM ? m.awayScore : (m.away === MY_TEAM ? m.homeScore : null);
+            if (conceded > 0) issues.push({ type: 'cs', round: r.round, index: i, label,
+                text: `${label} — clean sheet ενώ δέχτηκε ${conceded} γκολ.` });
+        }
+    }));
+
+    // 5. Ομάδα δύο φορές στην ίδια αγωνιστική
+    (data.fixtures || []).forEach(r => {
+        const c = {};
+        (r.matches || []).forEach(m => { c[m.home] = (c[m.home]||0)+1; c[m.away] = (c[m.away]||0)+1; });
+        Object.entries(c).filter(([, v]) => v > 1).forEach(([t]) =>
+            issues.push({ type: 'clash', round: r.round, text: `Αγ.${r.round}: η ${t} παίζει ${c[t]} φορές.` }));
+    });
+
+    return issues;
+}
+
+function runDataCheck() {
+    const box = document.getElementById('dataCheckResult');
+    const issues = findDataIssues();
+
+    if (!issues.length) {
+        box.innerHTML = `<div style="padding:8px; background:#e8f5e9; border-left:3px solid #2e7d32; font-size:0.82rem;">
+            ✅ Όλα καθαρά — ${(data.fixtures||[]).length} αγωνιστικές ελέγχθηκαν.</div>`;
+        showToast('Κανένα πρόβλημα στα δεδομένα.');
+        return;
+    }
+
+    const ghosts = issues.filter(i => i.type === 'ghost');
+    box.innerHTML =
+        `<div style="padding:8px; background:#fff3e0; border-left:3px solid #ef6c00; font-size:0.8rem; max-height:240px; overflow:auto;">
+            <strong>Βρέθηκαν ${issues.length} θέματα:</strong><br>
+            ${issues.map(i => '• ' + esc(i.text)).join('<br>')}
+         </div>` +
+        (ghosts.length ? `<button class="btn btn-success btn-small" style="margin-top:8px;"
+             onclick="fixGhostMatches()">🔧 Διόρθωση ${ghosts.length} «φαντασμάτων» (ξετικάρισμα ΑΝΑΒΟΛΗΣ)</button>` : '');
+
+    showToast(`${issues.length} θέματα στα δεδομένα.`, 'error');
+}
+
+// Ξετικάρει την ΑΝΑΒΟΛΗ σε ματς που προφανώς παίχτηκαν
+function fixGhostMatches() {
+    const ghosts = findDataIssues().filter(i => i.type === 'ghost');
+    if (!ghosts.length) return;
+    if (!confirm(`Θα ξετικαριστεί η ΑΝΑΒΟΛΗ σε ${ghosts.length} αγώνα(ες) που έχουν σκορ.\n\nΗ βαθμολογία θα αλλάξει. Συνέχεια;`)) return;
+
+    let fixed = 0;
+    ghosts.forEach(g => {
+        const round = data.fixtures.find(r => r.round === g.round);
+        const m = round && round.matches[g.index];
+        if (m && m.homeScore !== null && m.awayScore !== null) { m.isPostponed = false; fixed++; }
+    });
+
+    syncDerived();
+    saveData(data);
+    displayStandings(); displayResults(); displayFixtures();
+    displayTopScorers(); displayRoster(); displayNextMatch();
+    runDataCheck();
+    showToast(`Διορθώθηκαν ${fixed} αγώνες. Μην ξεχάσεις Export!`);
+}
+
+// ============ ΑΝΑΓΝΩΣΗ ΠΡΟΓΡΑΜΜΑΤΟΣ ΑΠΟ ΕΠΙΚΟΛΛΗΣΗ ============
+// Το πρόγραμμα το βγάζει η ΕΠΣΜ, όχι εμείς. Αυτό εδώ απλώς το διαβάζει.
+const _norm = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                    .toUpperCase().replace(/\s+/g, ' ').trim();
+
+const RE_ROUND     = /^(?:(\d+)\s*(?:Η|ΗΣ)?\s*ΑΓΩΝΙΣΤΙΚΗ|ΑΓΩΝΙΣΤΙΚΗ\s*(\d+)\s*(?:Η)?|ΑΓΩΝ\.?\s*(\d+)|(\d+))$/;
+const RE_SEP       = /\s+(?:-|–|—|VS\.?|ΜΕ)\s+/i;
+const RE_MIDSCORE  = /^(.+?)\s+(\d{1,2})\s*[-–]\s*(\d{1,2})\s+(.+)$/;
+const RE_ENDSCORE  = /^(.*?)[\s(]+(\d{1,2})\s*[-–]\s*(\d{1,2})\s*\)?\s*$/;
+const RE_POSTPONED = /ΑΝΑΒΛ|ΑΝΑΒΟΛ|ΔΙΑΚΟΠ|ΜΗ ΤΕΛΕΣΘ/;
+
+function parseFixturesText(text, teams) {
+    const index = new Map();
+    teams.forEach(t => index.set(_norm(t), t));
+
+    // Ταιριάζει ονόματα ακόμα κι αν γράφτηκαν συντομευμένα ή με τόνους
+    const resolve = raw => {
+        const k = _norm(raw);
+        if (!k) return null;
+        if (index.has(k)) return index.get(k);
+        let h = [...index.keys()].filter(x => x.startsWith(k) || k.startsWith(x));
+        if (h.length === 1) return index.get(h[0]);
+        h = [...index.keys()].filter(x => x.includes(k) || k.includes(x));
+        if (h.length === 1) return index.get(h[0]);
+        const f = k.split(' ')[0];
+        if (f.length >= 4) {
+            h = [...index.keys()].filter(x => x.split(' ')[0] === f);
+            if (h.length === 1) return index.get(h[0]);
+        }
+        return null;
+    };
+
+    const rounds = [], problems = [];
+    let cur = null;
+
+    text.split('\n').forEach((rawLine, i) => {
+        let line = rawLine.trim();
+        if (!line) return;
+        const ln = i + 1;
+
+        const rm = _norm(line).match(RE_ROUND);
+        if (rm) {
+            const num = parseInt(rm[1] || rm[2] || rm[3] || rm[4], 10);
+            cur = rounds.find(r => r.round === num);
+            if (!cur) { cur = { round: num, matches: [] }; rounds.push(cur); }
+            return;
+        }
+
+        const postponed = RE_POSTPONED.test(_norm(line));
+        line = line
+            .replace(/^\d+[.)]\s+/, '')
+            .replace(/^(?:ΔΕΥ|ΤΡΙ|ΤΕΤ|ΠΕΜ|ΠΑΡ|ΣΑΒ|ΚΥΡ)[ΤΑΕΗΆ]*\.?\s*/i, '')
+            .replace(/^\d{1,2}[\/.]\d{1,2}(?:[\/.]\d{2,4})?\s*/, '')
+            .replace(/^\d{1,2}[:.]\d{2}\s*/, '')
+            .replace(/\s*\((?:ΑΝΑΒΛ[^)]*|ΑΝΑΒΟΛΗ)\)\s*/i, ' ')
+            .trim();
+
+        if (!cur) { problems.push(`γρ.${ln}: αγώνας πριν από επικεφαλίδα αγωνιστικής → «${rawLine.trim()}»`); return; }
+
+        let hs = null, as = null, body = line;
+        let m = body.match(RE_MIDSCORE);
+        if (m) { body = m[1] + ' - ' + m[4]; hs = +m[2]; as = +m[3]; }
+        else {
+            m = body.match(RE_ENDSCORE);
+            if (m && RE_SEP.test(m[1])) { body = m[1]; hs = +m[2]; as = +m[3]; }
+        }
+
+        const parts = body.split(RE_SEP);
+        if (parts.length !== 2) { problems.push(`γρ.${ln}: δεν διαβάζεται → «${rawLine.trim()}»`); return; }
+
+        const home = resolve(parts[0]), away = resolve(parts[1]);
+        if (!home) problems.push(`γρ.${ln}: άγνωστη ομάδα → «${parts[0].trim()}»`);
+        if (!away) problems.push(`γρ.${ln}: άγνωστη ομάδα → «${parts[1].trim()}»`);
+        if (!home || !away) return;
+        if (home === away) { problems.push(`γρ.${ln}: ίδια ομάδα και στις δύο πλευρές`); return; }
+
+        cur.matches.push({
+            home, away,
+            homeScore: postponed ? null : hs,
+            awayScore: postponed ? null : as,
+            isPostponed: postponed
+        });
+    });
+
+    rounds.sort((a, b) => a.round - b.round);
+    return { rounds: rounds.filter(r => r.matches.length), problems };
+}
+
+let _pendingFixtures = null;
+
+function previewPastedFixtures() {
+    const box = document.getElementById('fixturesPreview');
+    const btn = document.getElementById('applyFixturesBtn');
+    const text = document.getElementById('fixturesPasteInput').value;
+
+    btn.style.display = 'none';
+    _pendingFixtures = null;
+
+    if (!text.trim()) { box.innerHTML = ''; showToast('Δεν έβαλες κείμενο.', 'error'); return; }
+    if (!TEAMS.length) { box.innerHTML = ''; showToast('Δήλωσε πρώτα τις ομάδες και πάτα Αποθήκευση.', 'error'); return; }
+
+    const { rounds, problems } = parseFixturesText(text, TEAMS);
+
+    // Ποιες ομάδες λείπουν τελείως / ποια ζευγάρια γράφτηκαν δύο φορές
+    const seen = new Set(), pairs = new Map();
+    rounds.forEach(r => r.matches.forEach(m => {
+        seen.add(m.home); seen.add(m.away);
+        const k = m.home + ' | ' + m.away;
+        pairs.set(k, (pairs.get(k) || 0) + 1);
+    }));
+    const missing = TEAMS.filter(t => !seen.has(t));
+    const dupes = [...pairs.entries()].filter(([, v]) => v > 1).map(([k]) => k);
+
+    // Ομάδα δύο φορές στην ίδια αγωνιστική
+    const clashes = [];
+    rounds.forEach(r => {
+        const c = {};
+        r.matches.forEach(m => { c[m.home] = (c[m.home]||0)+1; c[m.away] = (c[m.away]||0)+1; });
+        Object.entries(c).filter(([, v]) => v > 1)
+              .forEach(([t]) => clashes.push(`Αγ.${r.round}: ${t}`));
+    });
+
+    const total = rounds.reduce((a, r) => a + r.matches.length, 0);
+
+    let html = `<div style="border:1px solid #ddd; border-radius:6px; padding:10px; background:#fff; max-height:320px; overflow:auto;">
+        <div style="font-weight:800; margin-bottom:6px;">
+            Διαβάστηκαν ${rounds.length} αγωνιστικές / ${total} αγώνες
+        </div>`;
+
+    rounds.forEach(r => {
+        html += `<div style="margin-top:6px; font-weight:700; font-size:0.82rem; color:#1a472a;">Αγωνιστική ${r.round}</div>`;
+        r.matches.forEach(m => {
+            const res = m.isPostponed ? '<span style="color:#ef6c00;">ΑΝΑΒΟΛΗ</span>'
+                      : (m.homeScore !== null ? `<strong>${m.homeScore}-${m.awayScore}</strong>` : 'vs');
+            html += `<div style="font-size:0.8rem; padding-left:8px;">${esc(m.home)} ${res} ${esc(m.away)}</div>`;
+        });
+    });
+
+    const warn = (title, items, color) => items.length
+        ? `<div style="margin-top:10px; padding:8px; background:${color}1a; border-left:3px solid ${color}; font-size:0.8rem;">
+             <strong>${title}</strong><br>${items.map(esc).join('<br>')}</div>` : '';
+
+    html += warn('⚠️ Γραμμές που δεν διαβάστηκαν', problems, '#c62828');
+    html += warn('⚠️ Ομάδα δύο φορές στην ίδια αγωνιστική', clashes, '#c62828');
+    html += warn('⚠️ Ζευγάρι που γράφτηκε δύο φορές', dupes, '#ef6c00');
+    html += warn('ℹ️ Ομάδες που δεν εμφανίστηκαν πουθενά', missing, '#ef6c00');
+    html += '</div>';
+
+    box.innerHTML = html;
+
+    if (total === 0) { showToast('Δεν αναγνωρίστηκε κανένας αγώνας.', 'error'); return; }
+
+    _pendingFixtures = rounds;
+    btn.style.display = 'inline-block';
+    showToast(problems.length ? `${total} αγώνες, αλλά ${problems.length} γραμμές θέλουν ματάκι.`
+                              : `${total} αγώνες, όλα καθαρά.`);
+}
+
+function applyPastedFixtures() {
+    if (!_pendingFixtures) { showToast('Πάτα πρώτα Έλεγχο.', 'error'); return; }
+
+    if (data.fixtures && data.fixtures.length) {
+        if (!confirm('⚠️ Θα αντικατασταθεί το υπάρχον πρόγραμμα (μαζί με σκορ και σκόρερ).\n\nΈκανες Export πρώτα;')) return;
+    }
+
+    data.fixtures = _pendingFixtures;
+    _pendingFixtures = null;
+    document.getElementById('applyFixturesBtn').style.display = 'none';
+    document.getElementById('fixturesPreview').innerHTML = '';
+
+    syncDerived();
+    saveData(data);
+    loadRoundSelector();
+    displayStandings();
+    displayResults();
+    displayFixtures();
+    displayNextMatch();
+    showToast(`Το πρόγραμμα μπήκε: ${data.fixtures.length} αγωνιστικές.`);
+}
+
+// Προσωρινός σκελετός (round-robin, μέθοδος Berger) — ΟΧΙ το επίσημο πρόγραμμα.
+function generateFixtures() {
+    const teams = [...(data.teams || [])];
+    if (teams.length < 2) { showToast('Βάλε πρώτα τις ομάδες και πάτα Αποθήκευση.', 'error'); return; }
+
+    if (data.fixtures && data.fixtures.length) {
+        if (!confirm('⚠️ Υπάρχει ήδη πρόγραμμα. Θα ΣΒΗΣΤΕΙ μαζί με σκορ και σκόρερ.\n\nΣυνέχεια;')) return;
+        if (!confirm('Τελευταία επιβεβαίωση — έκανες Export πρώτα;')) return;
+    }
+
+    const list = [...teams];
+    if (list.length % 2 !== 0) list.push(null);   // ρεπό
+    const half = list.length / 2;
+    const rounds = [];
+
+    let arr = [...list];
+    for (let r = 0; r < list.length - 1; r++) {
+        const matches = [];
+        for (let i = 0; i < half; i++) {
+            const a = arr[i], b = arr[list.length - 1 - i];
+            if (!a || !b) continue;                       // ρεπό: δεν γράφεται αγώνας
+            const swap = r % 2 === 1;                     // εναλλαγή έδρας ανά αγωνιστική
+            matches.push({
+                home: swap ? b : a,
+                away: swap ? a : b,
+                homeScore: null, awayScore: null, isPostponed: false
+            });
+        }
+        rounds.push(matches);
+        // περιστροφή: το πρώτο μένει σταθερό
+        arr = [arr[0], arr[arr.length - 1], ...arr.slice(1, arr.length - 1)];
+    }
+
+    const fixtures = [];
+    rounds.forEach((m, i) => fixtures.push({ round: i + 1, matches: m }));
+    rounds.forEach((m, i) => fixtures.push({
+        round: rounds.length + i + 1,
+        matches: m.map(x => ({ home: x.away, away: x.home, homeScore: null, awayScore: null, isPostponed: false }))
+    }));
+
+    data.fixtures = fixtures;
+    syncDerived();
+    saveData(data);
+    loadRoundSelector();
+    displayStandings();
+    displayResults();
+    displayFixtures();
+    displayNextMatch();
+    showToast(`Δημιουργήθηκαν ${fixtures.length} αγωνιστικές.`);
+}
+
+// Βοηθητική συνάρτηση για να γεμίσουν τα κουτάκια
 function refreshAdminForms() {
     loadRoundSelector();
     updateRosterList();
     updateNewsList();
+    updateStorageMeter((JSON.stringify(data).length * 2) / 1048576);
+
+    document.getElementById('seasonInput').value       = data.season       || SEASON.season;
+    document.getElementById('categoryInput').value     = data.category     || SEASON.category;
+    document.getElementById('groupInput').value        = data.group        || '';
+    document.getElementById('nextCategoryInput').value = data.nextCategory || SEASON.nextCategory;
+    document.getElementById('teamsInput').value        = (TEAMS || []).join('\n');
     
     if (data) {
         // Γενικά
@@ -4951,8 +5851,8 @@ function refreshAdminForms() {
         div.className = 'match-input-row';
         div.style.flexDirection = 'column'; 
 
-        const homeTeam = match.home || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
-        const awayTeam = match.away || 'ΚΥΨΕΛΗ ΝΕΑΠΟΛΗΣ';
+        const homeTeam = match.home || '—';
+        const awayTeam = match.away || '—';
         const isPostponed = match.isPostponed ? 'checked' : '';
         const bgStyle = match.isPostponed ? 'background: #eee;' : '';
 
@@ -4988,8 +5888,8 @@ function refreshAdminForms() {
             // Dropdown παικτών
             let playerOptions = '<option value="">-- Επέλεξε Παίκτη --</option>';
             if (data.roster) {
-                data.roster.sort((a,b) => a.name.localeCompare(b.name)).forEach(p => {
-                    playerOptions += `<option value="${p.name}">${p.name}</option>`;
+                [...data.roster].sort((a,b) => a.name.localeCompare(b.name, 'el')).forEach(p => {
+                    playerOptions += `<option value="${esc(p.name)}">${esc(p.name)}</option>`;
                 });
             }
 
@@ -5021,7 +5921,7 @@ function refreshAdminForms() {
 
         div.innerHTML = `
             <div style="display: grid; grid-template-columns: 1fr 140px 1fr; gap: 1rem; align-items: center; width:100%;">
-                <div><input type="text" value="${homeTeam}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
+                <div><input type="text" value="${esc(homeTeam)}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
                 <div class="score-inputs-wrapper">
                     <div class="score-inputs">
                         <input type="number" class="score-input" id="home-${roundNum}-${index}" value="${match.homeScore !== null ? match.homeScore : ''}" min="0" placeholder="0" style="${bgStyle}">
@@ -5030,7 +5930,7 @@ function refreshAdminForms() {
                     </div>
                     <label class="postpone-label"><input type="checkbox" id="postponed-${roundNum}-${index}" ${isPostponed}> Αναβλήθηκε</label>
                 </div>
-                <div><input type="text" value="${awayTeam}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
+                <div><input type="text" value="${esc(awayTeam)}" disabled style="font-weight: 600; background: #f5f5f5; width: 100%;"></div>
             </div>
             ${statsHTML}
         `;
@@ -5047,34 +5947,8 @@ function toggleScorerPanel(index) {
     }
 }
 
-function addScorerToMatch(roundNum, matchIndex) {
-    const select = document.getElementById(`new-scorer-select-${matchIndex}`);
-    const playerName = select.value;
-    
-    if (!playerName) return;
-
-    // Βρίσκουμε το ματς και προσθέτουμε τον σκόρερ
-    const round = data.fixtures.find(r => r.round === roundNum);
-    const match = round.matches[matchIndex];
-
-    if (!match.scorers) match.scorers = [];
-    match.scorers.push(playerName);
-
-    // Ανανεώνουμε ΜΟΝΟ το Admin UI (δεν σώζουμε ακόμα)
-    saveData(data); // Σώζουμε προσωρινά για να μην χαθεί στο refresh του UI
-    loadMatchesForRound(); // Ξαναφορτώνουμε για να φανεί η αλλαγή
-}
-
-function removeScorer(roundNum, matchIndex, scorerIndex) {
-    const round = data.fixtures.find(r => r.round === roundNum);
-    const match = round.matches[matchIndex];
-    
-    if (match.scorers) {
-        match.scorers.splice(scorerIndex, 1);
-        saveData(data);
-        loadMatchesForRound();
-    }
-}
+// [ΑΦΑΙΡΕΘΗΚΑΝ] Εδώ υπήρχαν παλιές, διπλές εκδόσεις των addScorerToMatch /
+// removeScorer που ΔΕΝ ενημέρωναν τα στατιστικά. Οι σωστές είναι πιο κάτω.
 
 function saveResults() {
     const roundNum = parseInt(document.getElementById('roundSelect').value);
@@ -5084,7 +5958,8 @@ function saveResults() {
     }
 
     const round = data.fixtures.find(r => r.round === roundNum);
-    
+    if (!round) { showToast('Η αγωνιστική δεν βρέθηκε.', 'error'); return; }
+
     round.matches.forEach((match, index) => {
         if (!match.home || !match.away) return;
         
@@ -5113,11 +5988,15 @@ function saveResults() {
         }
     });
 
+    recomputePlayerStats();
     saveData(data);
-    
+
     displayStandings();
     displayResults();
     displayFixtures();
+    displayTopScorers();
+    displayRoster();
+    displayNextMatch();
 
     showToast('Οι αλλαγές αποθηκεύτηκαν επιτυχώς!');
 }
@@ -5126,7 +6005,8 @@ function saveResults() {
             if (confirm('⚠️ ΠΡΟΣΟΧΗ! Θα διαγραφούν ΟΛΑ τα δεδομένα (αποτελέσματα & ρόστερ). Είσαι σίγουρος;')) {
                 if (confirm('Τελευταία επιβεβαίωση - Θα χαθούν όλα τα δεδομένα!')) {
                     localStorage.removeItem('footballData');
-                    data = { fixtures: JSON.parse(JSON.stringify(FIXTURES)), roster: [], news: [] };
+                    data = { fixtures: [], roster: [], news: [], teams: [] };
+                    syncDerived();
                     displayStandings();
                     displayResults();
                     displayFixtures();
@@ -5141,13 +6021,10 @@ function saveResults() {
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
-    // Περίμενε να φορτώσουν τα δεδομένα (είτε από localStorage, είτε από fetch, είτε από fallback)
-    data = await loadData(); 
+    data = await loadData();
 
-    // Έλεγχος αν υπάρχει το news array, αν όχι το προσθέτουμε
-    if (!data.news) {
-        data.news = [];
-    }
+    // Κανονικοποίηση + παραγωγή TEAMS/SEASON/στατιστικών από τα δεδομένα
+    syncDerived();
 // (NEO) --- Φόρτωση και εμφάνιση του Ticker ---
         const tickerBar = document.getElementById('announcement-ticker');
         const tickerText = document.getElementById('announcement-text');
@@ -5156,8 +6033,48 @@ function saveResults() {
             tickerText.textContent = data.announcement;
             tickerBar.style.display = 'block';
         }
-// --- SMART AUTO-REFRESH (Χωρίς Τρεμόπαιγμα) ---
-setInterval(async () => {
+// --- SMART AUTO-REFRESH ---
+// ΠΡΙΝ: κάθε 20" τραβούσε ΟΛΟ το JSON με '?t=' -> ~285 MB/ώρα ανά ανοιχτή καρτέλα,
+// ακόμα κι όταν το κινητό ήταν στην τσέπη.
+// ΤΩΡΑ: 20" όταν παίζει ματς, 3 λεπτά αλλιώς, τίποτα όταν η σελίδα είναι κρυφή.
+const REFRESH_LIVE_MS = 20000;
+const REFRESH_IDLE_MS = 180000;
+let refreshTimer = null;
+let refreshing = false;
+
+function currentRefreshInterval() {
+    return (data && data.liveScore && data.liveScore.active) ? REFRESH_LIVE_MS : REFRESH_IDLE_MS;
+}
+
+function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(runRefresh, currentRefreshInterval());
+}
+
+async function runRefresh() {
+    // Κρυφή καρτέλα, ή ήδη τρέχει, ή admin με drafts -> μην κάνεις τίποτα
+    if (document.visibilityState === 'hidden' || refreshing ||
+        sessionStorage.getItem('isAdmin') === 'true') {
+        scheduleRefresh();
+        return;
+    }
+    refreshing = true;
+    try {
+        await refreshFromServer();
+    } catch (e) {
+        console.warn('Auto-refresh:', e);
+    } finally {
+        refreshing = false;
+        scheduleRefresh();
+    }
+}
+
+// Μόλις ο χρήστης ξαναδεί τη σελίδα, ανανέωσε αμέσως
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') runRefresh();
+});
+
+async function refreshFromServer() {
     const newData = await loadData();
 
     if (newData) {
@@ -5180,6 +6097,7 @@ setInterval(async () => {
 
         // 2. ΕΝΗΜΕΡΩΣΗ ΜΝΗΜΗΣ
         data = newData;
+        syncDerived();
 
         // 3. Ανανέωση των πινάκων (μόνο αν ο χρήστης τους βλέπει εκείνη τη στιγμή)
         // Εδώ δεν μας πειράζει το refresh γιατί δεν έχουν animations που χαλάνε
@@ -5215,7 +6133,7 @@ setInterval(async () => {
         
         checkNewNews();
     }
-}, 20000); // Κάθε 20 δευτερόλεπτα
+}
         // --- Τέλος κώδικα Ticker ---
     // Τώρα που η μεταβλητή 'data' έχει τιμή, τρέξε τις συναρτήσεις εμφάνισης
     displayStandings();
@@ -5228,7 +6146,36 @@ setInterval(async () => {
     checkDeepLink();
     checkNewNews();
 
+    scheduleRefresh();   // ξεκινάει ο προσαρμοστικός κύκλος ανανέωσης
 });
+
+// ===================== OFFLINE MODE (ΑΝΕΝΕΡΓΟ) =====================
+// Είναι false ΕΠΙΤΗΔΕΣ. Δεν χρειάζεται να ανεβάσεις κανένα επιπλέον αρχείο.
+//
+// Γιατί ανενεργό:
+//  • Η εγκατάσταση στην αρχική οθόνη ΔΕΝ θέλει πια service worker
+//    (ο Chrome κατάργησε την απαίτηση: v108 κινητό, v112 desktop).
+//    Το manifest.json αρκεί, και το έχεις.
+//  • Οι ειδοποιήσεις δουλεύουν από την OneSignal, ανεξάρτητα.
+//  • Το μόνο που θα πρόσθετε είναι offline προβολή χωρίς σήμα.
+//  • Το κόστος: αντικατάσταση του OneSignalSDKWorker.js που ήδη δουλεύει.
+//    Μικρό κέρδος, υπαρκτό ρίσκο στις ειδοποιήσεις. Δεν αξίζει.
+//
+// Αν κάποια στιγμή το θελήσεις:
+//   1. Βάλε true παρακάτω.
+//   2. Ανέβασε sw.js ΚΑΙ OneSignalSDKWorker.js στη ρίζα του repo.
+//      (το OneSignalSDKWorker.js φορτώνει ΠΡΩΤΑ την OneSignal και ΜΕΤΑ
+//       το cache μέσα σε try/catch, ώστε το cache να μη σπάει ποτέ
+//       τις ειδοποιήσεις)
+// ===================================================================
+const ENABLE_OFFLINE = false;
+
+if (ENABLE_OFFLINE && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./OneSignalSDKWorker.js', { scope: './' })
+            .catch(err => console.warn('SW registration failed:', err));
+    });
+}
 
         document.getElementById('adminModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -5259,7 +6206,7 @@ navLinks.forEach(n => n.addEventListener("click", () => {
 let currentShareId = null;
 
 function openShareModal(id) {
-    const item = data.news.find(n => n.id === id);
+    const item = data.news.find(n => String(n.id) === String(id));
     if(!item) return;
     
     currentShareId = id;
@@ -5280,7 +6227,8 @@ function doShare(platform) {
     const baseUrl = window.location.href.split('#')[0];
     const deepLink = `${baseUrl}#news-${currentShareId}`;
     
-    const item = data.news.find(n => n.id === currentShareId);
+    const item = data.news.find(n => String(n.id) === String(currentShareId));
+    if (!item) return;
     const text = `🔴 ${item.title}\n\nΔείτε το εδώ: ${deepLink}`;
     
     let url = '';
@@ -5500,8 +6448,16 @@ window.onscroll = function() {
 };
 // Global μεταβλητή για να θυμόμαστε τα στοιχεία του αγώνα
 let currentMatchShareData = {};
-function openSquadModal(home, away, date, time, stadium, mapLink) {
-    currentMatchShareData = { home, away, date, time, stadium, mapLink };
+// ΠΡΙΝ: τα στοιχεία περνούσαν ως strings μέσα σε inline onclick.
+// Μία απόστροφος στο όνομα γηπέδου («Αγ. Παύλου '84») έσπαγε το κουμπί.
+// Τώρα διαβάζονται κατευθείαν από το data.
+function openSquadModal() {
+    const nm = currentNextMatch || {};
+    currentMatchShareData = {
+        home: nm.home || '', away: nm.away || '',
+        date: data.matchDate || '', time: data.matchTime || '',
+        stadium: data.matchStadium || '', mapLink: data.matchMapLink || ''
+    };
 
     const list = document.getElementById('squadList');
     list.innerHTML = ''; 
@@ -5516,14 +6472,15 @@ function openSquadModal(home, away, date, time, stadium, mapLink) {
         div.style.borderBottom = "1px solid #eee";
         div.style.display = "flex";
         div.style.alignItems = "center";
-        
-        const isCoach = p.position.includes('Προπονητής');
-        
+
+        const pos = p.position || '';
+        const isCoach = pos.includes('Προπονητής');
+
         div.innerHTML = `
             <label style="display: flex; align-items: center; width: 100%; cursor: pointer; margin: 0;">
-                <input type="checkbox" class="squad-checkbox" value="${p.name}" data-pos="${p.position}" ${!isCoach ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 10px;">
-                <span style="font-weight: 600; font-size: 0.9rem;">${p.number ? '#' + p.number : ''} ${p.name}</span>
-                <span style="font-size: 0.75rem; color: #888; margin-left: auto;">${p.position.split('/')[0]}</span>
+                <input type="checkbox" class="squad-checkbox" value="${esc(p.name)}" data-pos="${esc(pos)}" ${!isCoach ? 'checked' : ''} style="width: 20px; height: 20px; margin-right: 10px;">
+                <span style="font-weight: 600; font-size: 0.9rem;">${p.number ? '#' + p.number : ''} ${esc(p.name)}</span>
+                <span style="font-size: 0.75rem; color: #888; margin-left: auto;">${esc(pos.split('/')[0])}</span>
             </label>
         `;
         list.appendChild(div);
@@ -5726,22 +6683,30 @@ async function toggleLike(newsId) {
     }
 }
 
-// Νέα συνάρτηση: Ενημερώνει μόνο το UI του like (χωρίς reload)
+// ΠΡΙΝ: έψαχνε span[style*="color: #888"] ενώ το HTML έγραφε #999 -> ο μετρητής
+// δεν ανανεωνόταν ΠΟΤΕ. Τώρα με κανονικές κλάσεις.
 function updateLikeDisplay(newsId, count, isLiked) {
     const newsItem = document.getElementById('news-item-' + newsId);
     if (!newsItem) return;
-    
-    const likeBtn = newsItem.querySelector('[onclick*="toggleLike"]');
-    const likeCount = newsItem.querySelector('span[style*="color: #888"]');
-    
-    if (likeBtn) {
-        likeBtn.innerHTML = (isLiked ? '❤️' : '🤍') + ' Like';
-    }
-    
-    if (likeCount) {
-        likeCount.textContent = count + (count === 1 ? ' like' : ' likes');
+
+    const likeBtn   = newsItem.querySelector('.like-btn');
+    const likeCount = newsItem.querySelector('.like-count');
+
+    if (likeBtn)   likeBtn.textContent = isLiked ? '❤️' : '🤍';
+    if (likeCount) likeCount.textContent = count;
+}
+
+// Ένα read για όλα τα likes μαζί
+async function getAllLikes() {
+    try {
+        const snapshot = await database.ref('likes').once('value');
+        return snapshot.val() || {};
+    } catch (error) {
+        console.error('Σφάλμα φόρτωσης likes:', error);
+        return {};
     }
 }
+
 async function getLikes(newsId) {
     try {
         const snapshot = await database.ref('likes/' + newsId).once('value');
