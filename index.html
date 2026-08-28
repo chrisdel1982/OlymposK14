@@ -127,6 +127,17 @@
             --bg-light: #f4f4f4;
             --shadow: rgba(0, 0, 0, 0.2);
             --accent-dark: #d4af37; /* Πιο σκούρο χρυσό για contrast */
+
+            /* Επιφάνειες — προσαρμόζονται αυτόματα σε dark mode */
+            --surface:        #ffffff;
+            --surface-alt:    #fafafa;
+            --surface-chip:   #f0f0f0;
+            --surface-header: #f4f7f5;
+            --surface-hover:  #eaf1ec;
+            --line:           #e6e6e6;
+            --ink:            #333333;
+            --ink-muted:      #666666;
+            --highlight-row:  #e8f5e9;
         }
 
         body {
@@ -2103,6 +2114,17 @@ table thead th:nth-child(2) {
     :root {
         --bg-light: #121212;
         --text-dark: #e0e0e0;
+
+        /* Οι ίδιες μεταβλητές, σκοτεινές εκδοχές */
+        --surface:        #1e1e1e;
+        --surface-alt:    #252525;
+        --surface-chip:   #2e2e2e;
+        --surface-header: #23302a;
+        --surface-hover:  #2c3d34;
+        --line:           #3a3a3a;
+        --ink:            #e0e0e0;
+        --ink-muted:      #9e9e9e;
+        --highlight-row:  #1b3a24;
     }
 
     body {
@@ -2996,6 +3018,131 @@ table thead th:nth-child(2) {
         #custom-splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 999999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
         .splash-logo { max-width: 60%; height: auto; }
         .splash-hidden { opacity: 0; pointer-events: none; }
+/* ================= ΙΣΤΟΡΙΚΟ ================= */
+.hist-hero {
+    background: linear-gradient(135deg, #1a472a, #2d6a4f);
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+}
+.hist-hero-title { font-size: 1.4rem; font-weight: 800; }
+.hist-hero-sub   { opacity: .85; font-size: .85rem; }
+.hist-hero-pos   { margin-top: 10px; font-size: 1.1rem; }
+.hist-hero-line  { font-size: .82rem; opacity: .9; }
+
+.hist-h3 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+    color: var(--primary-color);
+}
+@media (prefers-color-scheme: dark) {
+    .hist-h3 { color: var(--accent-color) !important; }
+}
+
+.hist-panel {
+    background: var(--surface-alt);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px;
+}
+.hist-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    color: var(--ink);
+}
+.hist-row + .hist-row { border-top: 1px solid var(--line); }
+
+.hist-chip {
+    background: var(--surface-chip);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-size: .8rem;
+}
+.hist-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.hist-table { width: 100%; }
+.hist-table tr.is-mine {
+    background: var(--highlight-row) !important;
+    font-weight: 700;
+}
+@media (prefers-color-scheme: dark) {
+    .hist-table tr.is-mine td { color: #fff !important; }
+}
+
+.hist-news {
+    border-left: 3px solid var(--primary-color);
+    background: var(--surface-alt);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+@media (prefers-color-scheme: dark) {
+    .hist-news { border-left-color: var(--accent-color); }
+}
+.hist-news > summary { cursor: pointer; font-weight: 700; font-size: .9rem; color: var(--ink); }
+.hist-news-date { font-weight: 400; color: var(--ink-muted); font-size: .75rem; }
+.hist-news-body { font-size: .85rem; color: var(--ink); margin-top: 8px; white-space: pre-wrap; }
+.hist-news-img  { width: 100%; border-radius: 6px; margin-top: 8px; }
+.hist-note { font-size: .85rem; color: var(--ink-muted); margin-bottom: 10px; }
+.hist-warn {
+    padding: 10px;
+    background: var(--surface-alt);
+    color: var(--ink);
+    border-left: 3px solid #ef6c00;
+    border-radius: 4px;
+    font-size: .85rem;
+}
+
+#historySeasonSelect {
+    width: 100%; padding: 10px; font-size: 1rem;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px;
+}
+
+/* --- Ομαδοποίηση ειδήσεων ανά σεζόν --- */
+.season-group {
+    margin: 22px 0 10px;
+    border-top: 2px solid var(--line);
+    padding-top: 12px;
+}
+.season-group > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--surface-header);
+    color: var(--ink);
+    border-left: 4px solid var(--primary-color, #1a472a);
+    border-radius: 6px;
+    user-select: none;
+}
+.season-group > summary:hover { background: var(--surface-hover); }
+.season-group > summary::-webkit-details-marker { display: none; }
+.season-group-title {
+    font-weight: 800;
+    color: var(--primary-color, #1a472a);
+    font-size: 0.95rem;
+}
+.season-group-count { font-size: 0.78rem; color: var(--ink-muted); }
+@media (prefers-color-scheme: dark) {
+    .season-group-title { color: var(--accent-color) !important; }
+    .season-group > summary::after { color: var(--accent-color) !important; }
+}
+.season-group > summary::after {
+    content: '▸';
+    color: var(--primary-color, #1a472a);
+    margin-left: 10px;
+}
+.season-group[open] > summary::after { content: '▾'; }
+
 #seasonToolsBox summary::-webkit-details-marker { display: none; }
 #seasonToolsBox summary::before { content: '▸ '; color: #1a472a; }
 #seasonToolsBox[open] summary::before { content: '▾ '; }
@@ -3170,10 +3317,10 @@ function showToast(message, type = 'success') {
                     <h2>🏛️ Ιστορικό</h2>
                 </div>
                 <div style="padding:12px;">
-                    <p style="font-size:0.85rem; color:#666; margin-bottom:10px;">
+                    <p class="hist-note">
                         Οι περασμένες σεζόν του Ολύμπου. Μόνο για ανάγνωση — η ιστορία δεν πειράζεται.
                     </p>
-                    <select id="historySeasonSelect" onchange="loadHistorySeason()" style="width:100%; padding:10px; font-size:1rem;">
+                    <select id="historySeasonSelect" onchange="loadHistorySeason()">
                         <option value="">— Φόρτωση σεζόν… —</option>
                     </select>
                     <div id="historyContent" style="margin-top:16px;"></div>
@@ -3748,11 +3895,29 @@ const database = firebase.database();
                 league:       data.league       || SEASON_DEFAULTS.league
             };
             TEAMS = resolveTeams(data);
+            stampNewsSeasons();
             recomputePlayerStats();
             applySeasonLabels();
         }
 
-        // --- ΜΙΑ πηγή αλήθειας: τα γκολ/clean sheets προκύπτουν από τα ματς ---
+        // --- Σε ποια σεζόν ανήκει μια ημερομηνία ---
+// Η ποδοσφαιρική χρονιά ξεκινά τον Αύγουστο: 12/2025 -> "2025-26", 03/2026 -> "2025-26".
+function seasonOfDate(dateStr) {
+    const d = new Date(dateStr);
+    if (isNaN(d)) return SEASON.season;
+    const y = d.getFullYear();
+    const start = d.getMonth() >= 7 ? y : y - 1;   // 7 = Αύγουστος
+    return `${start}-${String(start + 1).slice(-2)}`;
+}
+
+// Οι παλιές ειδήσεις δεν έχουν σφραγίδα σεζόν — τη βγάζουμε από την ημερομηνία.
+function stampNewsSeasons() {
+    (data.news || []).forEach(n => {
+        if (!n.season) n.season = seasonOfDate(n.date);
+    });
+}
+
+// --- ΜΙΑ πηγή αλήθειας: τα γκολ/clean sheets προκύπτουν από τα ματς ---
         function recomputePlayerStats() {
             if (!data || !Array.isArray(data.roster)) return;
             const goals = {}, cs = {};
@@ -4762,7 +4927,29 @@ function removeNewsPhoto() {
     // ΤΩΡΑ: ένα read για όλα τα likes μαζί.
     const allLikes = await getAllLikes();
 
+    // Ομαδοποίηση ανά σεζόν: η φετινή απλωμένη, οι παλιότερες μαζεμένες σε πτυσσόμενα.
+    let lastSeason = null;
+    let target = container;
+
     for (const newsItem of sortedNews) {
+        const sn = newsItem.season || seasonOfDate(newsItem.date);
+        if (sn !== lastSeason) {
+            lastSeason = sn;
+            if (sn === SEASON.season) {
+                target = container;   // η φετινή μπαίνει κατευθείαν, χωρίς επικεφαλίδα
+            } else {
+                const cnt = sortedNews.filter(x => (x.season || seasonOfDate(x.date)) === sn).length;
+                const box = document.createElement('details');
+                box.className = 'season-group';
+                box.innerHTML = `<summary><span class="season-group-title">📚 Σεζόν ${esc(sn)}</span>` +
+                                `<span class="season-group-count">${cnt} ειδήσεις</span></summary>`;
+                container.appendChild(box);
+                target = document.createElement('div');
+                target.style.paddingTop = '8px';
+                box.appendChild(target);
+            }
+        }
+
         // Βεβαιώσου ότι υπάρχει ID
         if (!newsItem.id) {
             newsItem.id = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -4817,8 +5004,8 @@ function removeNewsPhoto() {
         div.addEventListener('click', function() {
             this.classList.toggle('collapsed');
         });
-        
-        container.appendChild(div);
+
+        target.appendChild(div);
     }
 }
         function addNews() {
@@ -4839,6 +5026,7 @@ function removeNewsPhoto() {
     title: title,
     content: content,
     date: new Date().toISOString(),
+    season: SEASON.season,
     photo: newsPhotoPath
 };
 
@@ -5286,6 +5474,9 @@ async function archiveSeason() {
         teams:    (data.teams && data.teams.length) ? data.teams : TEAMS,
         fixtures: data.fixtures,
         roster:   data.roster,
+        // Οι ειδήσεις ΕΚΕΙΝΗΣ της σεζόν. Πλέον κρατούν μόνο διαδρομές φωτογραφιών,
+        // οπότε ζυγίζουν ελάχιστα και δεν φουσκώνουν το αρχείο.
+        news: (data.news || []).filter(x => (x.season || seasonOfDate(x.date)) === label),
         archivedAt: new Date().toISOString()
     };
 
@@ -5309,6 +5500,18 @@ async function archiveSeason() {
 
     downloadJSON(archive, file);
     setTimeout(() => downloadJSON(idx, 'index.json'), 400);   // ο browser θέλει ανάσα
+
+    // Προσφορά καθαρίσματος: οι αρχειοθετημένες ειδήσεις φεύγουν από το ζωντανό αρχείο
+    const archivedCount = archive.news.length;
+    if (archivedCount && confirm(
+        `Αρχειοθετήθηκαν ${archivedCount} ειδήσεις της ${label}.\n\n` +
+        `Να αφαιρεθούν από το ζωντανό olympos-backup.json;\n` +
+        `(Θα συνεχίσουν να φαίνονται στο Ιστορικό — απλώς δεν θα κατεβαίνουν σε όλους.)`)) {
+        data.news = (data.news || []).filter(x => (x.season || seasonOfDate(x.date)) !== label);
+        saveData(data);
+        displayNews();
+        updateNewsList();
+    }
 
     box.innerHTML = `
       <div style="background:#e8f5e9; border-left:3px solid #2e7d32; padding:10px; font-size:0.82rem;">
@@ -5350,9 +5553,7 @@ async function initHistory() {
         console.warn('Ιστορικό:', e);
         sel.innerHTML = '<option value="">Το αρχείο δεν βρέθηκε</option>';
         document.getElementById('historyContent').innerHTML =
-            `<div style="padding:10px; background:#fff3e0; border-left:3px solid #ef6c00; font-size:0.85rem;">
-                Δεν βρέθηκε ο φάκελος <code>seasons/</code> στο repo.
-             </div>`;
+            `<div class="hist-warn">Δεν βρέθηκε ο φάκελος <code>seasons/</code> στο repo.</div>`;
     }
 }
 
@@ -5361,7 +5562,7 @@ async function loadHistorySeason() {
     const box  = document.getElementById('historyContent');
     if (!file) { box.innerHTML = ''; return; }
 
-    box.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Φόρτωση…</div>';
+    box.innerHTML = '<div class="hist-note" style="padding:20px; text-align:center;">Φόρτωση…</div>';
     try {
         if (!historyCache[file]) {
             const res = await fetch('seasons/' + file, { cache: 'no-cache' });
@@ -5371,7 +5572,7 @@ async function loadHistorySeason() {
         renderHistorySeason(historyCache[file]);
     } catch (e) {
         console.warn('Ιστορικό:', e);
-        box.innerHTML = '<div style="padding:10px; color:#c62828;">Δεν φορτώθηκε αυτή η σεζόν.</div>';
+        box.innerHTML = '<div class="hist-warn">Δεν φορτώθηκε αυτή η σεζόν.</div>';
     }
 }
 
@@ -5410,23 +5611,21 @@ function renderHistorySeason(d) {
     const me = table[myPos - 1];
 
     let html = `
-      <div style="background:linear-gradient(135deg,#1a472a,#2d6a4f); color:#fff; padding:16px; border-radius:8px; text-align:center;">
-        <div style="font-size:1.4rem; font-weight:800;">${esc(d.category || '')} · ${esc(d.season || '')}</div>
-        ${d.group ? `<div style="opacity:.85; font-size:0.85rem;">Όμιλος ${esc(d.group)}</div>` : ''}
-        ${me ? `<div style="margin-top:10px; font-size:1.1rem;">
-                  ${medal(myPos)} <strong>${myPos}η θέση</strong> · ${me.points} βαθμοί
-                </div>
-                <div style="font-size:0.82rem; opacity:.9;">
+      <div class="hist-hero">
+        <div class="hist-hero-title">${esc(d.category || '')} · ${esc(d.season || '')}</div>
+        ${d.group ? `<div class="hist-hero-sub">Όμιλος ${esc(d.group)}</div>` : ''}
+        ${me ? `<div class="hist-hero-pos">${medal(myPos)} <strong>${myPos}η θέση</strong> · ${me.points} βαθμοί</div>
+                <div class="hist-hero-line">
                   ${me.played} αγώνες · ${me.won}Ν ${me.drawn}Ι ${me.lost}Η · ${me.gf}-${me.ga} τέρματα
                 </div>` : ''}
       </div>`;
 
-    html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">📊 Τελική Βαθμολογία</h3>
-      <div style="overflow-x:auto;"><table class="standings-table" style="width:100%;">
+    html += `<h3 class="hist-h3">📊 Τελική Βαθμολογία</h3>
+      <div style="overflow-x:auto;"><table class="standings-table hist-table">
         <thead><tr><th>#</th><th style="text-align:left;">Ομάδα</th><th>Αγ</th><th>Ν</th><th>Ι</th><th>Η</th><th>Τέρ</th><th>Β</th></tr></thead><tbody>`;
     table.forEach((t, i) => {
         const mine = t.team === MY_TEAM;
-        html += `<tr style="${mine ? 'background:#e8f5e9; font-weight:700;' : ''}">
+        html += `<tr class="${mine ? 'is-mine' : ''}">
             <td>${i + 1}</td><td style="text-align:left;">${esc(t.team)}</td>
             <td>${t.played}</td><td>${t.won}</td><td>${t.drawn}</td><td>${t.lost}</td>
             <td>${t.gf}-${t.ga}</td><td><strong>${t.points}</strong></td></tr>`;
@@ -5434,26 +5633,40 @@ function renderHistorySeason(d) {
     html += `</tbody></table></div>`;
 
     if (scorers.length) {
-        html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">⚽ Σκόρερ</h3>
-                 <div style="background:#fafafa; border-radius:8px; padding:8px;">`;
+        html += `<h3 class="hist-h3">⚽ Σκόρερ</h3><div class="hist-panel">`;
         scorers.forEach(([name, g], i) => {
-            html += `<div style="display:flex; justify-content:space-between; padding:6px 8px;
-                                 ${i ? 'border-top:1px solid #eee;' : ''}">
-                        <span>${i === 0 ? '👑 ' : ''}${esc(name)}</span>
-                        <strong>${g}</strong></div>`;
+            html += `<div class="hist-row"><span>${i === 0 ? '👑 ' : ''}${esc(name)}</span>
+                     <strong>${g}</strong></div>`;
         });
         html += `</div>`;
     }
 
     if ((d.roster || []).length) {
-        html += `<h3 style="margin:18px 0 8px; font-size:1rem; color:var(--primary-color);">👥 Το ρόστερ εκείνης της χρονιάς</h3>
-                 <div style="display:flex; flex-wrap:wrap; gap:6px;">`;
+        html += `<h3 class="hist-h3">👥 Το ρόστερ εκείνης της χρονιάς</h3><div class="hist-chips">`;
         [...d.roster].sort((a, b) => (a.number || 999) - (b.number || 999)).forEach(p => {
-            html += `<span style="background:#f0f0f0; border-radius:14px; padding:4px 10px; font-size:0.8rem;">
-                       ${p.number ? '<strong>' + p.number + '</strong> ' : ''}${esc(p.name)}
-                       ${p.isCaptain ? ' ©' : ''}</span>`;
+            html += `<span class="hist-chip">${p.number ? '<strong>' + p.number + '</strong> ' : ''}` +
+                    `${esc(p.name)}${p.isCaptain ? ' ©' : ''}</span>`;
         });
         html += `</div>`;
+    }
+
+    if ((d.news || []).length) {
+        const sorted = [...d.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+        html += `<h3 class="hist-h3">📰 Οι ειδήσεις της χρονιάς
+                   <span class="hist-news-date">(${sorted.length})</span></h3>`;
+        sorted.forEach(item => {
+            const dt = new Date(item.date).toLocaleDateString('el-GR',
+                        { day: 'numeric', month: 'long', year: 'numeric' });
+            const img = item.photo
+                ? `<img class="hist-news-img" src="${esc(item.photo)}" loading="lazy"
+                        onerror="this.style.display='none';">` : '';
+            html += `
+              <details class="hist-news">
+                <summary>${esc(item.title)}<div class="hist-news-date">${dt}</div></summary>
+                <div class="hist-news-body">${esc(item.content)}</div>
+                ${img}
+              </details>`;
+        });
     }
 
     document.getElementById('historyContent').innerHTML = html;
