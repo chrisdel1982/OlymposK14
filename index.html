@@ -3105,43 +3105,38 @@ table thead th:nth-child(2) {
     border: 1px solid var(--line); border-radius: 6px;
 }
 
-/* --- Ομαδοποίηση ειδήσεων ανά σεζόν --- */
-.season-group {
-    margin: 22px 0 10px;
-    border-top: 2px solid var(--line);
-    padding-top: 12px;
-}
-.season-group > summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: var(--surface-header);
+/* --- Κενή καρτέλα ειδήσεων --- */
+.news-empty {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--surface-alt);
     color: var(--ink);
-    border-left: 4px solid var(--primary-color, #1a472a);
-    border-radius: 6px;
-    user-select: none;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
 }
-.season-group > summary:hover { background: var(--surface-hover); }
-.season-group > summary::-webkit-details-marker { display: none; }
-.season-group-title {
-    font-weight: 800;
-    color: var(--primary-color, #1a472a);
-    font-size: 0.95rem;
-}
-.season-group-count { font-size: 0.78rem; color: var(--ink-muted); }
+.news-empty-icon  { font-size: 2.6rem; margin-bottom: 8px; }
+.news-empty-title { font-weight: 800; font-size: 1.1rem; color: var(--primary-color); }
 @media (prefers-color-scheme: dark) {
-    .season-group-title { color: var(--accent-color) !important; }
-    .season-group > summary::after { color: var(--accent-color) !important; }
+    .news-empty-title { color: var(--accent-color); }
 }
-.season-group > summary::after {
-    content: '▸';
-    color: var(--primary-color, #1a472a);
-    margin-left: 10px;
+.news-empty-text {
+    font-size: .9rem;
+    color: var(--ink-muted);
+    margin: 8px auto 16px;
+    max-width: 380px;
+    line-height: 1.5;
 }
-.season-group[open] > summary::after { content: '▾'; }
+.news-empty-link {
+    display: inline-block;
+    padding: 10px 18px;
+    background: var(--primary-color);
+    color: #fff !important;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .88rem;
+}
+.news-empty-link:hover { background: var(--secondary-color); }
 
 #seasonToolsBox summary::-webkit-details-marker { display: none; }
 #seasonToolsBox summary::before { content: '▸ '; color: #1a472a; }
@@ -4917,7 +4912,22 @@ function removeNewsPhoto() {
     if (!data.news) { data.news = []; }
 
     if (data.news.length === 0) {
-        container.innerHTML = '<div class="no-news">📭 Δεν υπάρχουν ειδήσεις αυτή τη στιγμή</div>';
+        container.innerHTML = `
+            <div class="news-empty">
+                <div class="news-empty-icon">📭</div>
+                <div class="news-empty-title">Καμία είδηση ακόμα</div>
+                <div class="news-empty-text">
+                    Η ${esc(SEASON.category)} ${esc(SEASON.season)} μόλις ξεκινά.
+                    Οι πρώτες ειδήσεις έρχονται σύντομα. 💚🖤
+                </div>
+                <a href="#history" class="news-empty-link">🏛️ Δες τις περασμένες σεζόν</a>
+            </div>`;
+        const link = container.querySelector('.news-empty-link');
+        if (link) link.addEventListener('click', e => {
+            e.preventDefault();
+            const nav = document.querySelector('.nav-link[href="#history"]');
+            if (nav) nav.click();
+        });
         return;
     }
 
@@ -4927,29 +4937,8 @@ function removeNewsPhoto() {
     // ΤΩΡΑ: ένα read για όλα τα likes μαζί.
     const allLikes = await getAllLikes();
 
-    // Ομαδοποίηση ανά σεζόν: η φετινή απλωμένη, οι παλιότερες μαζεμένες σε πτυσσόμενα.
-    let lastSeason = null;
-    let target = container;
-
+    // Κανονική ροή, χωρίς πτυσσόμενα. Οι παλιές σεζόν ζουν στο Ιστορικό.
     for (const newsItem of sortedNews) {
-        const sn = newsItem.season || seasonOfDate(newsItem.date);
-        if (sn !== lastSeason) {
-            lastSeason = sn;
-            if (sn === SEASON.season) {
-                target = container;   // η φετινή μπαίνει κατευθείαν, χωρίς επικεφαλίδα
-            } else {
-                const cnt = sortedNews.filter(x => (x.season || seasonOfDate(x.date)) === sn).length;
-                const box = document.createElement('details');
-                box.className = 'season-group';
-                box.innerHTML = `<summary><span class="season-group-title">📚 Σεζόν ${esc(sn)}</span>` +
-                                `<span class="season-group-count">${cnt} ειδήσεις</span></summary>`;
-                container.appendChild(box);
-                target = document.createElement('div');
-                target.style.paddingTop = '8px';
-                box.appendChild(target);
-            }
-        }
-
         // Βεβαιώσου ότι υπάρχει ID
         if (!newsItem.id) {
             newsItem.id = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -5005,7 +4994,7 @@ function removeNewsPhoto() {
             this.classList.toggle('collapsed');
         });
 
-        target.appendChild(div);
+        container.appendChild(div);
     }
 }
         function addNews() {
