@@ -3542,9 +3542,6 @@ function showToast(message, type = 'success') {
                         Κάνε backup των δεδομένων σου τακτικά!
                     </p>
                 </div>
-<h3 style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
-
-
                 </div>
 
                 <details class="adm-sec" data-sec="general">
@@ -4270,22 +4267,12 @@ function updateStorageMeter(usedMB) {
 
        function exportData() {
     // 🔝 ΑΝΑΔΙΑΤΑΞΗ: Live Score & Settings πρώτα, μετά fixtures, roster, news
+    // Η σειρά ΔΕΝ είναι τυχαία: όσα αλλάζουν συχνά μπαίνουν πρώτα, ώστε να
+    // μπορείς να τα πειράξεις κατευθείαν στο GitHub χωρίς να σκρολάρεις.
     const sortedData = {
-        // 🏷️ ΤΑΥΤΟΤΗΤΑ ΣΕΖΟΝ
-        season:   data.season   || SEASON.season,
-        category: data.category || SEASON.category,
-        group:    data.group    ?? SEASON.group,
-        league:   data.league   || SEASON.league,
-        teams:    Array.isArray(data.teams) && data.teams.length ? data.teams : TEAMS,
-
-        // 🏃 ΠΡΟΠΟΝΗΣΕΙΣ
-        trainingStart:      data.trainingStart || '',
-        trainings:          data.trainings || [],
-        trainingExceptions: data.trainingExceptions || [],
-
-        // 🔴 LIVE SCORE (ΠΡΩΤΟ ΓΙΑ ΕΥΚΟΛΟ EDITING)
+        // 🔴 ΖΩΝΤΑΝΟ ΣΚΟΡ — ΠΑΝΤΑ ΠΡΩΤΟ
         liveScore: data.liveScore || null,
-        
+
         // 📅 ΕΠΟΜΕΝΟΣ ΑΓΩΝΑΣ
         announcement: data.announcement || "",
         matchDate: data.matchDate || "",
@@ -4294,8 +4281,20 @@ function updateStorageMeter(usedMB) {
         matchMapLink: data.matchMapLink || "",
         countdownTarget: data.countdownTarget || "",
         specialMatch: data.specialMatch || null,
-        
-        // ⚽ ΥΠΟΛΟΙΠΑ ΔΕΔΟΜΕΝΑ
+
+        // 🏃 ΠΡΟΠΟΝΗΣΕΙΣ
+        trainingStart:      data.trainingStart || '',
+        trainings:          data.trainings || [],
+        trainingExceptions: data.trainingExceptions || [],
+
+        // 🏷️ ΤΑΥΤΟΤΗΤΑ ΣΕΖΟΝ (αλλάζει μία φορά τον χρόνο)
+        season:   data.season   || SEASON.season,
+        category: data.category || SEASON.category,
+        group:    data.group    ?? SEASON.group,
+        league:   data.league   || SEASON.league,
+        teams:    Array.isArray(data.teams) && data.teams.length ? data.teams : TEAMS,
+
+        // ⚽ ΤΑ ΒΑΡΙΑ, ΤΕΛΕΥΤΑΙΑ
         fixtures: data.fixtures || [],
         roster: data.roster || [],
         news: data.news || []
@@ -6733,7 +6732,11 @@ function saveResults() {
 // ακόμα κι όταν το κινητό ήταν στην τσέπη.
 // ΤΩΡΑ: 20" όταν παίζει ματς, 3 λεπτά αλλιώς, τίποτα όταν η σελίδα είναι κρυφή.
 const REFRESH_LIVE_MS = 20000;
-const REFRESH_IDLE_MS = 180000;
+const REFRESH_IDLE_MS = 60000;    // ήταν 180000 όταν το JSON ζύγιζε 1.5MB.
+                                  // Τώρα είναι 6KB με ETag (304 = ~200 bytes),
+                                  // οπότε το λεπτό δεν κοστίζει τίποτα και οι
+                                  // αλλαγές που κάνεις απευθείας στο GitHub
+                                  // φαίνονται σχεδόν αμέσως.
 let refreshTimer = null;
 let refreshing = false;
 
