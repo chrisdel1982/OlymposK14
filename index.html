@@ -3105,6 +3105,71 @@ table thead th:nth-child(2) {
     border: 1px solid var(--line); border-radius: 6px;
 }
 
+/* ================= ΠΡΟΠΟΝΗΣΕΙΣ ================= */
+.tr-week {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.tr-slot {
+    background: var(--surface-alt);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+@media (prefers-color-scheme: dark) { .tr-slot { border-left-color: var(--accent-color); } }
+.tr-day   { font-weight: 800; font-size: .95rem; }
+.tr-time  { font-size: 1.05rem; font-weight: 700; color: var(--primary-color); }
+@media (prefers-color-scheme: dark) { .tr-time { color: var(--accent-color); } }
+.tr-venue { font-size: .8rem; color: var(--ink-muted); margin-top: 2px; }
+
+.tr-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-alt);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+}
+.tr-item.is-next  { border-color: var(--primary-color); border-width: 2px; }
+.tr-item.is-off   { opacity: .72; border-left: 4px solid #c62828; }
+.tr-date  { min-width: 92px; font-weight: 700; font-size: .85rem; }
+.tr-main  { flex: 1; }
+.tr-off-label {
+    display: inline-block; background: #c62828; color: #fff;
+    font-size: .7rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; margin-left: 6px;
+}
+.tr-next-label {
+    display: inline-block; background: var(--primary-color); color: #fff;
+    font-size: .7rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; margin-left: 6px;
+}
+.tr-reason { font-size: .78rem; color: #c62828; margin-top: 3px; }
+.tr-struck { text-decoration: line-through; }
+.tr-empty {
+    text-align: center; padding: 28px 16px;
+    background: var(--surface-alt); color: var(--ink-muted);
+    border: 1px dashed var(--line); border-radius: 10px;
+}
+.tr-admin-row {
+    display: grid;
+    grid-template-columns: 1.1fr .8fr .8fr 1.6fr auto;
+    gap: 6px; align-items: center; margin-bottom: 6px;
+}
+.tr-admin-row input, .tr-admin-row select {
+    padding: 7px; font-size: .85rem;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 5px;
+}
+@media (max-width: 640px) { .tr-admin-row { grid-template-columns: 1fr 1fr; } }
+
 /* --- Κενή καρτέλα ειδήσεων --- */
 .news-empty {
     text-align: center;
@@ -3227,6 +3292,7 @@ function showToast(message, type = 'success') {
         <li><a href="#fixtures" class="nav-link">Πρόγραμμα</a></li>
         <li><a href="#roster" class="nav-link">Ρόστερ</a></li>
         <li><a href="#news" class="nav-link" onclick="markNewsAsRead()">Νέα - Ειδήσεις <span id="newsBadge" class="notification-badge">NEW</span></a></li>
+        <li><a href="#training" class="nav-link">Προπονήσεις</a></li>
         <li><a href="#history" class="nav-link">Ιστορικό</a></li>
         <li><a href="#admin" class="nav-link admin-link" onclick="openAdminPanel(); return false;">⚙️</a></li>
     </ul>
@@ -3306,6 +3372,19 @@ function showToast(message, type = 'success') {
             </div>
         </div>
 
+        <div id="training" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🏃 Προπονήσεις</h2>
+                </div>
+                <div style="padding:12px;">
+                    <div id="trainingWeekly"></div>
+                    <h3 class="hist-h3">📅 Επόμενες προπονήσεις</h3>
+                    <div id="trainingUpcoming"></div>
+                </div>
+            </div>
+        </div>
+
         <div id="history" class="page">
             <div class="card">
                 <div class="card-header">
@@ -3348,6 +3427,21 @@ function showToast(message, type = 'success') {
             </div>
 
             <div id="adminContent" style="display: none;">
+
+                <div class="form-group">
+                    <label>🏃 Προπονήσεις — εβδομαδιαίο πρόγραμμα</label>
+                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
+                        Ορίζεται μία φορά τον Σεπτέμβρη. Ημέρα, ώρα, γήπεδο.
+                    </p>
+                    <div id="trainingSlotsAdmin"></div>
+                    <button class="btn btn-small" style="margin-top:6px;" onclick="addTrainingSlot()">➕ Προσθήκη ημέρας</button>
+
+                    <label style="display:block; margin-top:14px;">❌ Ακύρωση συγκεκριμένης μέρας</label>
+                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
+                        Για τις βροχερές Τρίτες. Ένα κλικ, γράφεις τον λόγο, και το βλέπουν όλοι.
+                    </p>
+                    <div id="trainingCancelAdmin" style="max-height:260px; overflow:auto;"></div>
+                </div>
 
                 <div class="form-group">
                     <label>📦 Διαχείριση Δεδομένων:</label>
@@ -3890,6 +3984,7 @@ const database = firebase.database();
                 league:       data.league       || SEASON_DEFAULTS.league
             };
             TEAMS = resolveTeams(data);
+            ensureTrainingData();
             stampNewsSeasons();
             recomputePlayerStats();
             applySeasonLabels();
@@ -4032,6 +4127,10 @@ function updateStorageMeter(usedMB) {
         group:    data.group    ?? SEASON.group,
         league:   data.league   || SEASON.league,
         teams:    Array.isArray(data.teams) && data.teams.length ? data.teams : TEAMS,
+
+        // 🏃 ΠΡΟΠΟΝΗΣΕΙΣ
+        trainings:          data.trainings || [],
+        trainingExceptions: data.trainingExceptions || [],
 
         // 🔴 LIVE SCORE (ΠΡΩΤΟ ΓΙΑ ΕΥΚΟΛΟ EDITING)
         liveScore: data.liveScore || null,
@@ -5429,6 +5528,187 @@ function saveSeasonSetup() {
     showToast(`Αποθηκεύτηκαν ${teams.length} ομάδες.`);
 }
 
+// ============ ΠΡΟΠΟΝΗΣΕΙΣ ============
+// Μοντέλο: σταθερό εβδομαδιαίο πρόγραμμα + εξαιρέσεις σε συγκεκριμένες ημερομηνίες.
+//   data.trainings          [{id, day:0..6, from:'18:00', to:'19:30', venue:'...'}]
+//   data.trainingExceptions [{date:'2026-10-14', slotId, reason:'Κακοκαιρία'}]
+const GR_DAYS = ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+const TRAINING_HORIZON_DAYS = 28;   // πόσο μπροστά δείχνουμε
+
+function ymd(d) {
+    const z = v => String(v).padStart(2, '0');
+    return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`;
+}
+
+function ensureTrainingData() {
+    if (!Array.isArray(data.trainings))          data.trainings = [];
+    if (!Array.isArray(data.trainingExceptions)) data.trainingExceptions = [];
+    // Οι παλιές ακυρώσεις δεν χρειάζονται — καθαρίζουν μόνες τους μετά από 45 μέρες
+    const limit = new Date(); limit.setDate(limit.getDate() - 45);
+    const cut = ymd(limit);
+    data.trainingExceptions = data.trainingExceptions.filter(x => x.date >= cut);
+}
+
+// Παράγει τις επόμενες προπονήσεις από το εβδομαδιαίο μοτίβο
+function upcomingTrainings(days = TRAINING_HORIZON_DAYS) {
+    ensureTrainingData();
+    if (!data.trainings.length) return [];
+
+    const out = [];
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < days; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() + i);
+        const key = ymd(d);
+        data.trainings
+            .filter(t => Number(t.day) === d.getDay())
+            .sort((a, b) => String(a.from).localeCompare(String(b.from)))
+            .forEach(t => {
+                const ex = data.trainingExceptions.find(x => x.date === key && x.slotId === t.id);
+                out.push({ date: key, dateObj: new Date(d), slot: t, cancelled: !!ex,
+                           reason: ex ? ex.reason : '' });
+            });
+    }
+    return out;
+}
+
+function displayTraining() {
+    ensureTrainingData();
+    const weekly   = document.getElementById('trainingWeekly');
+    const upcoming = document.getElementById('trainingUpcoming');
+    if (!weekly || !upcoming) return;
+
+    if (!data.trainings.length) {
+        weekly.innerHTML = '';
+        upcoming.innerHTML = `<div class="tr-empty">
+            Δεν έχει οριστεί πρόγραμμα προπονήσεων ακόμα.</div>`;
+        return;
+    }
+
+    // Το σταθερό εβδομαδιαίο
+    const sorted = [...data.trainings].sort((a, b) =>
+        (Number(a.day) || 0) - (Number(b.day) || 0) || String(a.from).localeCompare(String(b.from)));
+    weekly.innerHTML = `<h3 class="hist-h3">🗓️ Εβδομαδιαίο πρόγραμμα</h3>
+        <div class="tr-week">` + sorted.map(t => `
+            <div class="tr-slot">
+                <div class="tr-day">${esc(GR_DAYS[Number(t.day)] || '')}</div>
+                <div class="tr-time">${esc(t.from || '')}${t.to ? ' – ' + esc(t.to) : ''}</div>
+                ${t.venue ? `<div class="tr-venue">📍 ${esc(t.venue)}</div>` : ''}
+            </div>`).join('') + `</div>`;
+
+    // Οι επόμενες, με τις ακυρώσεις
+    const list = upcomingTrainings();
+    if (!list.length) { upcoming.innerHTML = `<div class="tr-empty">Καμία προπόνηση στις επόμενες εβδομάδες.</div>`; return; }
+
+    const firstActive = list.findIndex(x => !x.cancelled);
+    upcoming.innerHTML = list.map((x, i) => {
+        const dl = x.dateObj.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'short' });
+        const isNext = i === firstActive;
+        return `<div class="tr-item ${x.cancelled ? 'is-off' : ''} ${isNext ? 'is-next' : ''}">
+            <div class="tr-date ${x.cancelled ? 'tr-struck' : ''}">${esc(dl)}</div>
+            <div class="tr-main">
+                <span class="${x.cancelled ? 'tr-struck' : ''}">
+                    <strong>${esc(x.slot.from || '')}${x.slot.to ? ' – ' + esc(x.slot.to) : ''}</strong>
+                    ${x.slot.venue ? ' · ' + esc(x.slot.venue) : ''}
+                </span>
+                ${x.cancelled ? '<span class="tr-off-label">ΑΚΥΡΩΘΗΚΕ</span>' : ''}
+                ${isNext ? '<span class="tr-next-label">ΕΠΟΜΕΝΗ</span>' : ''}
+                ${x.cancelled && x.reason ? `<div class="tr-reason">${esc(x.reason)}</div>` : ''}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ---------- Admin ----------
+function updateTrainingAdmin() {
+    ensureTrainingData();
+    const box = document.getElementById('trainingSlotsAdmin');
+    if (!box) return;
+
+    const sorted = [...data.trainings].sort((a, b) =>
+        (Number(a.day) || 0) - (Number(b.day) || 0) || String(a.from).localeCompare(String(b.from)));
+
+    box.innerHTML = sorted.map(t => `
+        <div class="tr-admin-row" data-id="${esc(t.id)}">
+            <select onchange="updateTrainingSlot(this,'day')">
+                ${GR_DAYS.map((d, i) => `<option value="${i}" ${Number(t.day) === i ? 'selected' : ''}>${d}</option>`).join('')}
+            </select>
+            <input type="time" value="${esc(t.from || '')}" onchange="updateTrainingSlot(this,'from')">
+            <input type="time" value="${esc(t.to || '')}"   onchange="updateTrainingSlot(this,'to')">
+            <input type="text" value="${esc(t.venue || '')}" placeholder="Γήπεδο" onchange="updateTrainingSlot(this,'venue')">
+            <button class="btn btn-danger btn-small" onclick="deleteTrainingSlot('${esc(t.id)}')">🗑️</button>
+        </div>`).join('') || '<p style="font-size:.82rem; color:var(--ink-muted);">Καμία προπόνηση ακόμα.</p>';
+
+    // Λίστα επόμενων με κουμπί ακύρωσης — αυτό θα πατάς τις βροχερές Τρίτες
+    const up = document.getElementById('trainingCancelAdmin');
+    if (!up) return;
+    const list = upcomingTrainings(21);
+    up.innerHTML = list.length ? list.map(x => {
+        const dl = x.dateObj.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'short' });
+        return `<div class="tr-item ${x.cancelled ? 'is-off' : ''}" style="margin-bottom:5px;">
+            <div class="tr-main" style="font-size:.85rem;">
+                <span class="${x.cancelled ? 'tr-struck' : ''}">${esc(dl)} · ${esc(x.slot.from || '')}</span>
+                ${x.cancelled ? `<div class="tr-reason">${esc(x.reason || 'Ακυρώθηκε')}</div>` : ''}
+            </div>
+            ${x.cancelled
+                ? `<button class="btn btn-small" onclick="restoreTraining('${esc(x.date)}','${esc(x.slot.id)}')">↩️ Επαναφορά</button>`
+                : `<button class="btn btn-danger btn-small" onclick="cancelTraining('${esc(x.date)}','${esc(x.slot.id)}')">Ακύρωση</button>`}
+        </div>`;
+    }).join('') : '<p style="font-size:.82rem; color:var(--ink-muted);">Όρισε πρώτα εβδομαδιαίο πρόγραμμα.</p>';
+}
+
+function addTrainingSlot() {
+    ensureTrainingData();
+    data.trainings.push({
+        id: 'tr' + Date.now(),
+        day: 2, from: '18:00', to: '19:30',
+        venue: data.trainings.length ? data.trainings[0].venue : ''
+    });
+    saveData(data);
+    updateTrainingAdmin();
+    displayTraining();
+}
+
+function updateTrainingSlot(el, field) {
+    const id = el.closest('.tr-admin-row').dataset.id;
+    const slot = data.trainings.find(t => t.id === id);
+    if (!slot) return;
+    slot[field] = field === 'day' ? Number(el.value) : el.value;
+    saveData(data);
+    displayTraining();
+}
+
+function deleteTrainingSlot(id) {
+    if (!confirm('Διαγραφή αυτής της προπόνησης από το εβδομαδιαίο πρόγραμμα;')) return;
+    data.trainings = data.trainings.filter(t => t.id !== id);
+    data.trainingExceptions = data.trainingExceptions.filter(x => x.slotId !== id);
+    saveData(data);
+    updateTrainingAdmin();
+    displayTraining();
+}
+
+function cancelTraining(date, slotId) {
+    const reason = prompt('Λόγος ακύρωσης (θα φαίνεται στους γονείς):', 'Κακοκαιρία');
+    if (reason === null) return;
+    ensureTrainingData();
+    if (!data.trainingExceptions.some(x => x.date === date && x.slotId === slotId)) {
+        data.trainingExceptions.push({ date, slotId, reason: reason.trim() || 'Ακυρώθηκε' });
+    }
+    saveData(data);
+    updateTrainingAdmin();
+    displayTraining();
+    showToast('Η προπόνηση ακυρώθηκε. Μην ξεχάσεις Export + ανέβασμα!');
+}
+
+function restoreTraining(date, slotId) {
+    data.trainingExceptions = data.trainingExceptions.filter(x => !(x.date === date && x.slotId === slotId));
+    saveData(data);
+    updateTrainingAdmin();
+    displayTraining();
+    showToast('Η προπόνηση επανήλθε.');
+}
+
 // ============ ΑΡΧΕΙΟΘΕΤΗΣΗ ΣΕΖΟΝ ============
 function downloadJSON(obj, filename) {
     const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
@@ -5987,6 +6267,7 @@ function refreshAdminForms() {
     loadRoundSelector();
     updateRosterList();
     updateNewsList();
+    updateTrainingAdmin();
     updateStorageMeter((JSON.stringify(data).length * 2) / 1048576);
 
     document.getElementById('seasonInput').value       = data.season       || SEASON.season;
@@ -6334,6 +6615,7 @@ async function refreshFromServer() {
         }
         
         checkNewNews();
+        displayTraining();
     }
 }
         // --- Τέλος κώδικα Ticker ---
@@ -6345,6 +6627,7 @@ async function refreshFromServer() {
     displayFixtures();
     displayRoster();
     displayNews();
+    displayTraining();
     checkDeepLink();
     checkNewNews();
 
