@@ -1,9 +1,23 @@
 {
-  "season": "2026-27",
-  "category": "Κ15",
-  "group": "",
-  "league": "ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ",
-  "teams": [],
+  "liveScore": {
+    "active": false,
+    "home": "0",
+    "away": "0",
+    "half": "1",
+    "duration": "25",
+    "startTime": ""
+  },
+  "announcement": "",
+  "matchDate": "",
+  "matchTime": "",
+  "matchStadium": "",
+  "matchMapLink": "",
+  "countdownTarget": "",
+  "specialMatch": {
+    "type": "",
+    "home": null,
+    "away": null
+  },
   "trainingStart": "2026-09-07",
   "trainings": [
     {
@@ -29,25 +43,11 @@
     }
   ],
   "trainingExceptions": [],
-  "liveScore": {
-    "active": false,
-    "home": "0",
-    "away": "0",
-    "half": "1",
-    "duration": "25",
-    "startTime": ""
-  },
-  "announcement": "",
-  "matchDate": "",
-  "matchTime": "",
-  "matchStadium": "",
-  "matchMapLink": "",
-  "countdownTarget": "",
-  "specialMatch": {
-    "type": "",
-    "home": null,
-    "away": null
-  },
+  "season": "2026-27",
+  "category": "Κ15",
+  "group": "",
+  "league": "ΕΠΣ ΜΑΚΕΔΟΝΙΑΣ",
+  "teams": [],
   "fixtures": [],
   "roster": [
     {
