@@ -3105,6 +3105,73 @@ table thead th:nth-child(2) {
     border: 1px solid var(--line); border-radius: 6px;
 }
 
+/* ================= ADMIN — ΑΚΟΡΝΤΕΟΝ ================= */
+.adm-pinned {
+    background: var(--surface-alt);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+@media (prefers-color-scheme: dark) { .adm-pinned { border-color: var(--accent-color); } }
+
+.adm-sec {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--surface);
+    overflow: hidden;
+}
+.adm-sec > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px 14px;
+    background: var(--surface-header);
+    color: var(--ink);
+    user-select: none;
+}
+.adm-sec > summary::-webkit-details-marker { display: none; }
+.adm-sec > summary::after {
+    content: '▸';
+    margin-left: auto;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+.adm-sec[open] > summary::after { content: '▾'; }
+.adm-sec > summary:hover { background: var(--surface-hover); }
+.adm-sec-title { font-weight: 800; font-size: .98rem; color: var(--primary-color); }
+.adm-sec-sub   { font-size: .76rem; color: var(--ink-muted); font-weight: 400; }
+@media (prefers-color-scheme: dark) {
+    .adm-sec-title { color: var(--accent-color); }
+    .adm-sec > summary::after { color: var(--accent-color); }
+}
+.adm-sec[open] { border-color: var(--primary-color); }
+@media (prefers-color-scheme: dark) { .adm-sec[open] { border-color: var(--accent-color); } }
+.adm-sec-body { padding: 14px; }
+.adm-sec-body h3 { margin-top: 0; }
+.tools-head { font-weight: 800; color: var(--primary-color); display: block; }
+
+/* Χρωματιστά πλαίσια που προσαρμόζονται στο θέμα */
+.tint-warn      { background: #fff3cd; border-color: #ffc107 !important; }
+.tint-warn-text { color: #856404; }
+.tint-ok        { background: #e8f5e9; border: 1px solid #c8e6c9; }
+.tint-ok-text   { color: #1b5e20; }
+.tint-live      { background: #fff3f3; border: 1px solid #ffc1c1; }
+.tint-live-text { color: #d32f2f; }
+@media (prefers-color-scheme: dark) {
+    .tint-warn      { background: #3a3320; border-color: #8a6d1f !important; }
+    .tint-warn-text { color: #ffd76e; }
+    .tint-ok        { background: #1b3a24; border-color: #2f5d3a; }
+    .tint-ok-text   { color: #9fe0ae; }
+    .tint-live      { background: #3a2323; border-color: #7a3b3b; }
+    .tint-live-text { color: #ff8a80; }
+}
+@media (prefers-color-scheme: dark) { .tools-head { color: var(--accent-color); } }
+
 /* ================= ΠΡΟΠΟΝΗΣΕΙΣ ================= */
 .tr-week {
     display: grid;
@@ -3153,6 +3220,37 @@ table thead th:nth-child(2) {
 }
 .tr-reason { font-size: .78rem; color: #c62828; margin-top: 3px; }
 .tr-struck { text-decoration: line-through; }
+.tr-banner {
+    background: var(--surface-alt);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
+@media (prefers-color-scheme: dark) { .tr-banner { border-left-color: var(--accent-color); } }
+.tr-banner-soon { border-left-color: var(--ink-muted); color: var(--ink-muted); }
+.tr-banner-label {
+    display: inline-block; background: var(--primary-color); color: #fff;
+    font-size: .68rem; font-weight: 800; padding: 2px 8px;
+    border-radius: 10px; margin-right: 8px; vertical-align: 2px;
+}
+.tr-alerts {
+    background: #fff3f3;
+    border: 1px solid #ffc1c1;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+}
+.tr-alerts-head { font-weight: 800; color: #c62828; font-size: .88rem; margin-bottom: 6px; }
+.tr-alert { font-size: .85rem; color: var(--ink); padding: 5px 0; }
+.tr-alert + .tr-alert { border-top: 1px solid #ffd9d9; }
+@media (prefers-color-scheme: dark) {
+    .tr-alerts      { background: #3a2323; border-color: #7a3b3b; }
+    .tr-alerts-head { color: #ff8a80; }
+    .tr-alert + .tr-alert { border-top-color: #5a3030; }
+}
 .tr-empty {
     text-align: center; padding: 28px 16px;
     background: var(--surface-alt); color: var(--ink-muted);
@@ -3378,9 +3476,9 @@ function showToast(message, type = 'success') {
                     <h2>🏃 Προπονήσεις</h2>
                 </div>
                 <div style="padding:12px;">
+                    <h3 class="hist-h3" style="margin-top:0;">🗓️ Εβδομαδιαίο πρόγραμμα</h3>
                     <div id="trainingWeekly"></div>
-                    <h3 class="hist-h3">📅 Επόμενες προπονήσεις</h3>
-                    <div id="trainingUpcoming"></div>
+                    <div id="trainingUpcoming" style="margin-top:14px;"></div>
                 </div>
             </div>
         </div>
@@ -3428,21 +3526,8 @@ function showToast(message, type = 'success') {
 
             <div id="adminContent" style="display: none;">
 
-                <div class="form-group">
-                    <label>🏃 Προπονήσεις — εβδομαδιαίο πρόγραμμα</label>
-                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
-                        Ορίζεται μία φορά τον Σεπτέμβρη. Ημέρα, ώρα, γήπεδο.
-                    </p>
-                    <div id="trainingSlotsAdmin"></div>
-                    <button class="btn btn-small" style="margin-top:6px;" onclick="addTrainingSlot()">➕ Προσθήκη ημέρας</button>
-
-                    <label style="display:block; margin-top:14px;">❌ Ακύρωση συγκεκριμένης μέρας</label>
-                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
-                        Για τις βροχερές Τρίτες. Ένα κλικ, γράφεις τον λόγο, και το βλέπουν όλοι.
-                    </p>
-                    <div id="trainingCancelAdmin" style="max-height:260px; overflow:auto;"></div>
-                </div>
-
+                <!-- Καρφιτσωμένο: αυτό που χρειάζεσαι κάθε φορά -->
+                <div class="adm-pinned">
                 <div class="form-group">
                     <label>📦 Διαχείριση Δεδομένων:</label>
                     <div id="storageMeter" style="margin-bottom:10px;"></div>
@@ -3453,27 +3538,34 @@ function showToast(message, type = 'success') {
                             <label for="importFile" class="file-input-label">📥 Import Δεδομένων</label>
                         </div>
                     </div>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--ink-muted);">
                         Κάνε backup των δεδομένων σου τακτικά!
                     </p>
                 </div>
 <h3 style="margin-top: 1.5rem;">📢 Ρυθμίσεις Επόμενου Αγώνα</h3>
 
+
+                </div>
+
+                <details class="adm-sec" data-sec="general">
+                    <summary><span class="adm-sec-title">⚙️ Επόμενος αγώνας &amp; Live</span>
+                             <span class="adm-sec-sub">ανακοίνωση, ημερομηνία, σκορ</span></summary>
+                    <div class="adm-sec-body">
 <div class="form-group">
     <label>Κυλιόμενη Ανακοίνωση (Ticker):</label>
     <input type="text" id="announcementInput" placeholder="π.χ. Καλή επιτυχία...">
 </div>
 
 <!-- ΝΕΟ: Checkbox για Εμβόλιμο Αγώνα -->
-<div class="form-group" style="display: flex; align-items: center; gap: 10px; background: #fff3cd; padding: 1rem; border-radius: 8px; border: 2px solid #ffc107;">
+<div class="form-group" class="tint-warn" style="display: flex; align-items: center; gap: 10px; padding: 1rem; border-radius: 8px; border: 2px solid #ffc107;">
     <input type="checkbox" id="useSpecialMatchCheckbox" style="width: 20px; height: 20px;" onchange="toggleSpecialMatchFields()">
-    <label for="useSpecialMatchCheckbox" style="margin: 0; cursor: pointer; font-weight: 700; color: #856404;">
+    <label for="useSpecialMatchCheckbox" class="tint-warn-text" style="margin: 0; cursor: pointer; font-weight: 700;">
         🏆 Εμβόλιμος Αγώνας (Φιλικό, Κύπελλο κτλ) - Προτεραιότητα στο Banner
     </label>
 </div>
 
 <!-- ΝΕΑ ΠΕΔΙΑ ΓΙΑ ΤΟΝ ΕΜΒΟΛΙΜΟ ΑΓΩΝΑ -->
-<div id="specialMatchFields" style="display: none; background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+<div id="specialMatchFields" style="display: none; background: var(--surface-alt); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
     <div class="form-group">
         <label>Τύπος Αγώνα (π.χ. ΦΙΛΙΚΟΣ, ΚΥΠΕΛΛΟ):</label>
         <input type="text" id="specialMatchTypeInput" placeholder="π.χ. ΦΙΛΙΚΟΣ ΑΓΩΝΑΣ">
@@ -3502,10 +3594,10 @@ function showToast(message, type = 'success') {
         <input type="text" id="matchTimeInput" placeholder="π.χ. 10:45">
     </div>
 </div>
-<div class="form-group" style="background: #e8f5e9; padding: 10px; border-radius: 5px; border: 1px solid #c8e6c9; margin-top: 10px;">
-    <label style="color: #1b5e20; font-weight: bold;">⏳ Ρύθμιση Αντίστροφης Μέτρησης (Ακριβής Ώρα):</label>
+<div class="form-group" class="tint-ok" style="padding: 10px; border-radius: 5px; margin-top: 10px;">
+    <label class="tint-ok-text" style="font-weight: bold;">⏳ Ρύθμιση Αντίστροφης Μέτρησης (Ακριβής Ώρα):</label>
     <input type="datetime-local" id="countdownTargetInput" style="background: white; border: 1px solid #a5d6a7;">
-    <small style="color: #555; display: block; margin-top: 5px;">
+    <small style="color: var(--ink-muted); display: block; margin-top: 5px;">
         💡 <b>Προσοχή:</b> Αυτό ρυθμίζει <u>μόνο</u> το ρολόι που μετράει αντίστροφα.
         Η ημερομηνία/ώρα που φαίνεται στην κάρτα είναι αυτή που γράφεις στα από πάνω κουτάκια.
     </small>
@@ -3519,8 +3611,8 @@ function showToast(message, type = 'success') {
     <label>Link Χάρτη (Google Maps):</label>
     <input type="text" id="matchMapLinkInput" placeholder="Επικόλληση link...">
 </div>
-        <div class="form-group" style="background: #fff3f3; padding: 15px; border-radius: 10px; border: 1px solid #ffc1c1; margin-bottom: 20px;">
-    <label style="color: #d32f2f; font-weight: bold; display: block; margin-bottom: 10px;">🔴 ΖΩΝΤΑΝΟ ΣΚΟΡ (LIVE)</label>
+        <div class="form-group" class="tint-live" style="padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+    <label class="tint-live-text" style="font-weight: bold; display: block; margin-bottom: 10px;">🔴 ΖΩΝΤΑΝΟ ΣΚΟΡ (LIVE)</label>
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
         <input type="checkbox" id="liveModeCheckbox" style="width: 20px; height: 20px;" onchange="document.getElementById('liveInputs').style.display = this.checked ? 'block' : 'none'">
         <label for="liveModeCheckbox">Ενεργοποίηση Live Mode</label>
@@ -3531,7 +3623,7 @@ function showToast(message, type = 'success') {
         <input type="number" id="liveAwayScore" value="0" style="text-align: center;">
     </div>
     
-    <div style="background: #fff; padding: 10px; border-radius: 5px; border: 1px solid #ddd; color: #333; margin-bottom:10px;">
+    <div style="background: var(--surface); padding: 10px; border-radius: 5px; border: 1px solid var(--line); color: var(--ink); margin-bottom:10px;">
         <label style="font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">⏱️ Ρυθμίσεις Χρονομέτρου:</label>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px;">
@@ -3561,6 +3653,14 @@ function showToast(message, type = 'success') {
                  <button class="btn btn-success" onclick="saveGeneralSettings()">💾 Αποθήκευση</button>
                 </div>
                     </div>
+
+                    </div>
+                </details>
+
+                <details class="adm-sec" data-sec="results">
+                    <summary><span class="adm-sec-title">⚽ Αποτελέσματα</span>
+                             <span class="adm-sec-sub">σκορ και σκόρερ ανά αγωνιστική</span></summary>
+                    <div class="adm-sec-body">
                 <h3>⚽ Αποτελέσματα Αγώνων</h3>
 
                 <div class="form-group">
@@ -3576,6 +3676,14 @@ function showToast(message, type = 'success') {
                     <button class="btn" onclick="saveResults()">💾 Αποθήκευση Αποτελεσμάτων</button>
                 </div>
 
+
+                    </div>
+                </details>
+
+                <details class="adm-sec" data-sec="roster">
+                    <summary><span class="adm-sec-title">👥 Ρόστερ</span>
+                             <span class="adm-sec-sub">παίκτες και θέσεις</span></summary>
+                    <div class="adm-sec-body">
                 <h3>👥 Διαχείριση Ρόστερ</h3>
 
                 <div class="form-group">
@@ -3623,7 +3731,7 @@ function showToast(message, type = 'success') {
             <option value="Πλάγιος Επιθετικός - Δεξιός (RW)">Πλάγιος Επιθετικός - Δεξιός (RW)</option>
         </optgroup>
     </select>
-    <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+    <small style="color: var(--ink-muted); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
         💡 Συμβουλή: Κράτα το Ctrl (ή Cmd σε Mac) και κλικ για να επιλέξεις πολλές θέσεις
     </small>
 </div>
@@ -3643,6 +3751,14 @@ function showToast(message, type = 'success') {
                     <div id="rosterList" class="roster-list"></div>
                 </div>
 
+
+                    </div>
+                </details>
+
+                <details class="adm-sec" data-sec="news">
+                    <summary><span class="adm-sec-title">📰 Νέα - Ειδήσεις</span>
+                             <span class="adm-sec-sub">δημοσίευση και διαγραφή</span></summary>
+                    <div class="adm-sec-body">
             <h3 style="margin-top: 2rem;">📰 Διαχείριση Νέων - Ειδήσεων</h3>
 
 <div class="form-group">
@@ -3678,16 +3794,50 @@ function showToast(message, type = 'success') {
                     <div id="newsList" class="roster-list"></div>
                 </div>
 
-                <!-- ═══════ ΕΡΓΑΛΕΙΑ ΣΕΖΟΝ — κλειστά, μία φορά τον χρόνο ═══════ -->
-                <details id="seasonToolsBox" style="margin-top:2rem; border:1px solid #c8ddcd; border-radius:8px; background:#f6fbf7;">
-                    <summary style="cursor:pointer; padding:12px; font-weight:800; color:#1a472a; list-style:none;">
-                        🔧 Εργαλεία Σεζόν
-                        <span style="font-weight:400; color:#777; font-size:0.8rem;">— ομάδες, πρόγραμμα, έλεγχος</span>
-                    </summary>
-                    <div style="padding:0 12px 12px;">
+
+                    </div>
+                </details>
+
+                <details class="adm-sec" data-sec="training">
+                    <summary><span class="adm-sec-title">🏃 Προπονήσεις</span>
+                             <span class="adm-sec-sub">πρόγραμμα και ακυρώσεις</span></summary>
+                    <div class="adm-sec-body">
+                <div class="form-group">
+                    <label>🏃 Προπονήσεις — εβδομαδιαίο πρόγραμμα</label>
+                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
+                        Ορίζεται μία φορά τον Σεπτέμβρη. Ημέρα, ώρα, γήπεδο.
+                    </p>
+
+                    <label style="font-size:.85rem;">📅 Έναρξη προπονήσεων</label>
+                    <input type="date" id="trainingStartInput" onchange="saveTrainingStart()"
+                           style="width:100%; padding:8px; margin-bottom:4px;">
+                    <p style="font-size:.76rem; color:var(--ink-muted); margin:0 0 12px;">
+                        Πριν από αυτή την ημερομηνία δεν εμφανίζεται καμία προπόνηση —
+                        άφησέ το κενό αν τρέχουν ήδη. <strong>Δεν χρειάζεται να ακυρώνεις μία-μία.</strong>
+                    </p>
+
+                    <div id="trainingSlotsAdmin"></div>
+                    <button class="btn btn-small" style="margin-top:6px;" onclick="addTrainingSlot()">➕ Προσθήκη ημέρας</button>
+
+                    <label style="display:block; margin-top:14px;">❌ Ακύρωση συγκεκριμένης μέρας</label>
+                    <p style="font-size:.78rem; color:var(--ink-muted); margin:4px 0 8px;">
+                        Για τις βροχερές Τρίτες. Ένα κλικ, γράφεις τον λόγο, και το βλέπουν όλοι.
+                    </p>
+                    <div id="trainingCancelAdmin" style="max-height:260px; overflow:auto;"></div>
+                </div>
+
+
+                    </div>
+                </details>
+
+                <details class="adm-sec" data-sec="tools">
+                    <summary><span class="adm-sec-title">🔧 Εργαλεία Σεζόν</span>
+                             <span class="adm-sec-sub">ομάδες, πρόγραμμα, έλεγχος</span></summary>
+                    <div class="adm-sec-body">
+
                 
                 <div class="form-group" style="padding:4px 2px;">
-                    <label style="font-weight:800; color:#1a472a;">🆕 Στήσιμο Νέας Σεζόν</label>
+                    <label class="tools-head">🆕 Στήσιμο Νέας Σεζόν</label>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
                         <div>
@@ -3719,8 +3869,8 @@ function showToast(message, type = 'success') {
 
                     <hr style="margin:14px 0; border:none; border-top:1px dashed #bbb;">
 
-                    <label style="font-weight:800; color:#1a472a;">📋 Πρόγραμμα από ΕΠΣΜ</label>
-                    <p style="font-size:0.78rem; color:#666; margin:4px 0 6px;">
+                    <label class="tools-head">📋 Πρόγραμμα από ΕΠΣΜ</label>
+                    <p style="font-size:0.78rem; color:var(--ink-muted); margin:4px 0 6px;">
                         Κάνε επικόλληση το πρόγραμμα όπως το βρήκες. Δέχεται επικεφαλίδες
                         («1η ΑΓΩΝΙΣΤΙΚΗ», «ΑΓΩΝΙΣΤΙΚΗ 1», ή σκέτο «1»), ημερομηνίες, ώρες,
                         αρίθμηση, τόνους, πεζά, σκορ και αναβολές. Πάτα πρώτα
@@ -3738,10 +3888,10 @@ function showToast(message, type = 'success') {
                     <div id="fixturesPreview" style="margin-top:10px;"></div>
 
                     <details style="margin-top:12px;">
-                        <summary style="cursor:pointer; font-size:0.82rem; color:#666;">
+                        <summary style="cursor:pointer; font-size:0.82rem; color:var(--ink-muted);">
                             Δεν βγήκε ακόμα το πρόγραμμα; Φτιάξε προσωρινό σκελετό
                         </summary>
-                        <p style="font-size:0.78rem; color:#666; margin:6px 0;">
+                        <p style="font-size:0.78rem; color:var(--ink-muted); margin:6px 0;">
                             Παράγει διπλό γύρο (όλοι με όλους) για να έχεις κάτι να δουλέψεις.
                             <strong>Η σειρά των αγωνιστικών ΔΕΝ θα είναι της ΕΠΣΜ.</strong>
                             Όταν βγει το επίσημο, κάν' το επικόλληση παραπάνω.
@@ -3752,8 +3902,8 @@ function showToast(message, type = 'success') {
 
 
                         <div class="form-group" style="padding:4px 2px; border-top:1px dashed #bbb; padding-top:12px;">
-                            <label style="font-weight:800; color:#1a472a;">📦 Αρχειοθέτηση Σεζόν</label>
-                            <p style="font-size:0.78rem; color:#666; margin:4px 0 8px;">
+                            <label class="tools-head">📦 Αρχειοθέτηση Σεζόν</label>
+                            <p style="font-size:0.78rem; color:var(--ink-muted); margin:4px 0 8px;">
                                 Πάτα το στο <strong>τέλος</strong> της σεζόν, πριν στήσεις την επόμενη.
                                 Κατεβάζει δύο έτοιμα αρχεία που τα ρίχνεις στον φάκελο
                                 <code>seasons/</code> του repo. Δεν πειράζει τίποτα από τα τρέχοντα.
@@ -3763,8 +3913,8 @@ function showToast(message, type = 'success') {
                         </div>
 
                         <div class="form-group" style="padding:4px 2px; border-top:1px dashed #bbb; padding-top:12px;">
-                            <label style="font-weight:800; color:#1a472a;">🔎 Έλεγχος Δεδομένων</label>
-                            <p style="font-size:0.78rem; color:#666; margin:4px 0 8px;">
+                            <label class="tools-head">🔎 Έλεγχος Δεδομένων</label>
+                            <p style="font-size:0.78rem; color:var(--ink-muted); margin:4px 0 8px;">
                                 Σαρώνει όλες τις αγωνιστικές και ψάχνει λάθη που <em>δεν φαίνονται</em>:
                                 αγώνες μαρκαρισμένους ως αναβληθέντες ενώ έχουν σκορ (δεν μετράνε στη βαθμολογία!),
                                 μισοσυμπληρωμένα σκορ, σκόρερ που δεν υπάρχουν στο ρόστερ,
@@ -4129,6 +4279,7 @@ function updateStorageMeter(usedMB) {
         teams:    Array.isArray(data.teams) && data.teams.length ? data.teams : TEAMS,
 
         // 🏃 ΠΡΟΠΟΝΗΣΕΙΣ
+        trainingStart:      data.trainingStart || '',
         trainings:          data.trainings || [],
         trainingExceptions: data.trainingExceptions || [],
 
@@ -5528,6 +5679,35 @@ function saveSeasonSetup() {
     showToast(`Αποθηκεύτηκαν ${teams.length} ομάδες.`);
 }
 
+// ============ ADMIN — ΑΚΟΡΝΤΕΟΝ ============
+// Ένα τμήμα ανοιχτό τη φορά. Θυμάται ποιο ήταν, ώστε να μην το ψάχνεις ξανά.
+function initAdminAccordion() {
+    const secs = document.querySelectorAll('.adm-sec');
+    if (!secs.length) return;
+
+    const last = sessionStorage.getItem('adminOpenSection');
+    secs.forEach(sec => {
+        if (sec.dataset.wired) return;
+        sec.dataset.wired = '1';
+
+        sec.addEventListener('toggle', () => {
+            if (!sec.open) {
+                if (sessionStorage.getItem('adminOpenSection') === sec.dataset.sec) {
+                    sessionStorage.removeItem('adminOpenSection');
+                }
+                return;
+            }
+            // Κλείσε τα υπόλοιπα
+            secs.forEach(o => { if (o !== sec) o.open = false; });
+            sessionStorage.setItem('adminOpenSection', sec.dataset.sec);
+            // Φέρ' το στο οπτικό πεδίο — στο κινητό αλλιώς μένει εκτός οθόνης
+            setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+        });
+
+        if (last && sec.dataset.sec === last) sec.open = true;
+    });
+}
+
 // ============ ΠΡΟΠΟΝΗΣΕΙΣ ============
 // Μοντέλο: σταθερό εβδομαδιαίο πρόγραμμα + εξαιρέσεις σε συγκεκριμένες ημερομηνίες.
 //   data.trainings          [{id, day:0..6, from:'18:00', to:'19:30', venue:'...'}]
@@ -5543,6 +5723,7 @@ function ymd(d) {
 function ensureTrainingData() {
     if (!Array.isArray(data.trainings))          data.trainings = [];
     if (!Array.isArray(data.trainingExceptions)) data.trainingExceptions = [];
+    if (typeof data.trainingStart !== 'string')  data.trainingStart = '';
     // Οι παλιές ακυρώσεις δεν χρειάζονται — καθαρίζουν μόνες τους μετά από 45 μέρες
     const limit = new Date(); limit.setDate(limit.getDate() - 45);
     const cut = ymd(limit);
@@ -5556,11 +5737,13 @@ function upcomingTrainings(days = TRAINING_HORIZON_DAYS) {
 
     const out = [];
     const today = new Date(); today.setHours(0, 0, 0, 0);
+    const startKey = data.trainingStart || '';   // πριν από αυτήν, τίποτα
 
     for (let i = 0; i < days; i++) {
         const d = new Date(today);
         d.setDate(d.getDate() + i);
         const key = ymd(d);
+        if (startKey && key < startKey) continue;
         data.trainings
             .filter(t => Number(t.day) === d.getDay())
             .sort((a, b) => String(a.from).localeCompare(String(b.from)))
@@ -5581,48 +5764,67 @@ function displayTraining() {
 
     if (!data.trainings.length) {
         weekly.innerHTML = '';
-        upcoming.innerHTML = `<div class="tr-empty">
-            Δεν έχει οριστεί πρόγραμμα προπονήσεων ακόμα.</div>`;
+        upcoming.innerHTML = `<div class="tr-empty">Δεν έχει οριστεί πρόγραμμα προπονήσεων ακόμα.</div>`;
         return;
     }
 
-    // Το σταθερό εβδομαδιαίο
+    // --- Το σταθερό εβδομαδιαίο (η κύρια εικόνα) ---
     const sorted = [...data.trainings].sort((a, b) =>
         (Number(a.day) || 0) - (Number(b.day) || 0) || String(a.from).localeCompare(String(b.from)));
-    weekly.innerHTML = `<h3 class="hist-h3">🗓️ Εβδομαδιαίο πρόγραμμα</h3>
-        <div class="tr-week">` + sorted.map(t => `
+    weekly.innerHTML = `<div class="tr-week">` + sorted.map(t => `
             <div class="tr-slot">
                 <div class="tr-day">${esc(GR_DAYS[Number(t.day)] || '')}</div>
                 <div class="tr-time">${esc(t.from || '')}${t.to ? ' – ' + esc(t.to) : ''}</div>
                 ${t.venue ? `<div class="tr-venue">📍 ${esc(t.venue)}</div>` : ''}
             </div>`).join('') + `</div>`;
 
-    // Οι επόμενες, με τις ακυρώσεις
-    const list = upcomingTrainings();
-    if (!list.length) { upcoming.innerHTML = `<div class="tr-empty">Καμία προπόνηση στις επόμενες εβδομάδες.</div>`; return; }
+    // --- Δεν ξεκίνησαν ακόμα ---
+    const todayKey = ymd(new Date());
+    if (data.trainingStart && todayKey < data.trainingStart) {
+        const d = new Date(data.trainingStart + 'T00:00:00');
+        upcoming.innerHTML = `<div class="tr-banner tr-banner-soon">
+            🗓️ Οι προπονήσεις ξεκινούν <strong>${d.toLocaleDateString('el-GR',
+                { weekday:'long', day:'numeric', month:'long' })}</strong></div>`;
+        return;
+    }
 
-    const firstActive = list.findIndex(x => !x.cancelled);
-    upcoming.innerHTML = list.map((x, i) => {
-        const dl = x.dateObj.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'short' });
-        const isNext = i === firstActive;
-        return `<div class="tr-item ${x.cancelled ? 'is-off' : ''} ${isNext ? 'is-next' : ''}">
-            <div class="tr-date ${x.cancelled ? 'tr-struck' : ''}">${esc(dl)}</div>
-            <div class="tr-main">
-                <span class="${x.cancelled ? 'tr-struck' : ''}">
-                    <strong>${esc(x.slot.from || '')}${x.slot.to ? ' – ' + esc(x.slot.to) : ''}</strong>
-                    ${x.slot.venue ? ' · ' + esc(x.slot.venue) : ''}
-                </span>
-                ${x.cancelled ? '<span class="tr-off-label">ΑΚΥΡΩΘΗΚΕ</span>' : ''}
-                ${isNext ? '<span class="tr-next-label">ΕΠΟΜΕΝΗ</span>' : ''}
-                ${x.cancelled && x.reason ? `<div class="tr-reason">${esc(x.reason)}</div>` : ''}
-            </div>
+    // --- Μία γραμμή για την επόμενη + ειδοποιήσεις μόνο αν υπάρχουν ---
+    const list = upcomingTrainings();
+    const next = list.find(x => !x.cancelled);
+    const offs = list.filter(x => x.cancelled);
+
+    let html = '';
+    if (next) {
+        const dl = next.dateObj.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'long' });
+        html += `<div class="tr-banner tr-banner-next">
+            <span class="tr-banner-label">ΕΠΟΜΕΝΗ</span>
+            <strong>${esc(dl)}</strong> · ${esc(next.slot.from || '')}${next.slot.to ? '–' + esc(next.slot.to) : ''}
+            ${next.slot.venue ? `<div class="tr-venue">📍 ${esc(next.slot.venue)}</div>` : ''}
         </div>`;
-    }).join('');
+    } else {
+        html += `<div class="tr-banner tr-banner-soon">Καμία προπόνηση στις επόμενες εβδομάδες.</div>`;
+    }
+
+    if (offs.length) {
+        html += `<div class="tr-alerts"><div class="tr-alerts-head">⚠️ Ακυρώσεις</div>` +
+            offs.map(x => {
+                const dl = x.dateObj.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'short' });
+                return `<div class="tr-alert">
+                    <strong>${esc(dl)}</strong> · ${esc(x.slot.from || '')}
+                    ${x.reason ? `<div class="tr-reason">${esc(x.reason)}</div>` : ''}
+                </div>`;
+            }).join('') + `</div>`;
+    }
+
+    upcoming.innerHTML = html;
 }
 
 // ---------- Admin ----------
 function updateTrainingAdmin() {
     ensureTrainingData();
+    const startEl = document.getElementById('trainingStartInput');
+    if (startEl) startEl.value = data.trainingStart || '';
+
     const box = document.getElementById('trainingSlotsAdmin');
     if (!box) return;
 
@@ -5656,6 +5858,15 @@ function updateTrainingAdmin() {
                 : `<button class="btn btn-danger btn-small" onclick="cancelTraining('${esc(x.date)}','${esc(x.slot.id)}')">Ακύρωση</button>`}
         </div>`;
     }).join('') : '<p style="font-size:.82rem; color:var(--ink-muted);">Όρισε πρώτα εβδομαδιαίο πρόγραμμα.</p>';
+}
+
+function saveTrainingStart() {
+    ensureTrainingData();
+    data.trainingStart = document.getElementById('trainingStartInput').value || '';
+    saveData(data);
+    updateTrainingAdmin();
+    displayTraining();
+    showToast(data.trainingStart ? 'Ημερομηνία έναρξης αποθηκεύτηκε.' : 'Η έναρξη καθαρίστηκε.');
 }
 
 function addTrainingSlot() {
@@ -6268,6 +6479,7 @@ function refreshAdminForms() {
     updateRosterList();
     updateNewsList();
     updateTrainingAdmin();
+    initAdminAccordion();
     updateStorageMeter((JSON.stringify(data).length * 2) / 1048576);
 
     document.getElementById('seasonInput').value       = data.season       || SEASON.season;
