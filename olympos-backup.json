@@ -116,14 +116,6 @@
       "cleanSheets": 0
     },
     {
-      "number": 10,
-      "name": "Μάνος Σαράτσογλου",
-      "birthYear": 2012,
-      "position": "Πλάγιος Επιθετικός - Δεξιός (RW)/ Κεντρικός Επιθετικός (CF)",
-      "goals": 0,
-      "cleanSheets": 0
-    },
-    {
       "number": 11,
       "name": "Βασίλης Ανδριτσούδης",
       "birthYear": 2012,
@@ -187,32 +179,6 @@
       "name": "Άγγελος Μπατσακίδης",
       "birthYear": 2015,
       "position": "Επιθετικός Μέσος (AM)/ Αμυντικός Μέσος (DM)",
-      "goals": 0,
-      "cleanSheets": 0
-    },
-    {
-      "number": 44,
-      "name": "Φάνης Καμπέρης",
-      "birthYear": 2011,
-      "position": "Κεντρικός Αμυντικός (CB)",
-      "isCaptain": false,
-      "goals": 0,
-      "cleanSheets": 0
-    },
-    {
-      "number": 90,
-      "name": "Χρήστος Κατσιγιάννης",
-      "birthYear": 2011,
-      "position": "Κεντρικός Επιθετικός (CF) / Πλάγιος Επιθετικός - Αριστερός (LW) / Πλάγιος Επιθετικός - Δεξιός (RW)",
-      "isCaptain": false,
-      "goals": 0,
-      "cleanSheets": 0
-    },
-    {
-      "number": 94,
-      "name": "Νίκος Τσοτουλίδης",
-      "birthYear": 2014,
-      "position": "Πλάγιος Αμυντικός - Αριστερός (LB)",
       "goals": 0,
       "cleanSheets": 0
     },
